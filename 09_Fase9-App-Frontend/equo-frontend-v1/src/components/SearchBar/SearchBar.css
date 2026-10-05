@@ -1,0 +1,11 @@
+.search {
+  background: #1A365D;
+  border: 1px solid #2D4A7A;
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+.search::placeholder { color: #A0AEC0; }
+.search:focus { outline: 2px solid #38A169; border-color: #38A169; }

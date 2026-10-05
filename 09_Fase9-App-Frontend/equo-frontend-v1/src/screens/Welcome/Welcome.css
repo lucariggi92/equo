@@ -1,0 +1,45 @@
+.screen { display: flex; flex-direction: column; gap: 16px; padding: 16px 16px 24px; }
+.h1 { font-size: 22px; line-height: 28px; font-weight: 700; margin: 0; color: #fff; }
+.muted { color: #A0AEC0; font-size: 14px; line-height: 20px; margin: 0; }
+.white { color: #fff; }
+.mission { font-size: 14px; font-weight: 600; color: #fff; margin: 0; }
+.points { margin: 0; padding-left: 16px; color: #A0AEC0; font-size: 12px; display: flex; flex-direction: column; gap: 6px; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat { background: #1A365D; border: 1px solid #2D4A7A; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; }
+.stat-label { font-size: 12px; color: #A0AEC0; }
+.stat-value { font-size: 18px; font-weight: 700; color: #fff; margin-top: 4px; }
+.stat-value.mint { color: #38A169; }
+.list-wrap { background: #1A365D; border: 1px solid #2D4A7A; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.recap { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #A0AEC0; }
+.recap strong { color: #fff; }
+.amount { font-size: 36px; font-weight: 800; color: #fff; text-align: center; }
+.msg-label { font-size: 12px; font-weight: 700; color: #A0AEC0; text-transform: uppercase; letter-spacing: 1px; }
+.verdict-title { font-size: 22px; font-weight: 700; margin: 0; text-align: center; }
+.center { display: flex; justify-content: center; }
+.note-input { background: #1A365D; border: 1px solid #2D4A7A; border-radius: 10px; color: #fff; padding: 12px; min-height: 96px; resize: vertical; }
+.note-input:focus { outline: 2px solid #38A169; border-color: #38A169; }
+
+/* Tablet (768–1023): margini 24, gutter 16 */
+@media (min-width: 768px) {
+  .screen { gap: 20px; padding: 24px 24px 32px; }
+  .h1 { font-size: 26px; line-height: 32px; }
+  .verdict-title { font-size: 26px; }
+  .amount { font-size: 42px; }
+  .stats { gap: 16px; }
+  .list-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .list-wrap .row:nth-child(odd) { border-right: 1px solid #2D4A7A; }
+}
+
+/* Desktop (>=1024): margini 32, gutter 24 */
+@media (min-width: 1024px) {
+  .screen { gap: 24px; padding: 32px 32px 40px; max-width: 100%; }
+  .h1 { font-size: 28px; line-height: 36px; }
+  .muted { font-size: 16px; line-height: 24px; }
+  .amount { font-size: 44px; }
+  .stats { gap: 24px; }
+  .recap { font-size: 14px; }
+}

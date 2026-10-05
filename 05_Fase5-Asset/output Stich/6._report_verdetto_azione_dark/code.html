@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EQUO - Report Verdetto</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            eqDark: "#0B0F19",
+            eqBlue: "#1A365D",
+            eqBorder: "#2D4A7A",
+            eqWarning: "#ECC94B",
+            eqGreen: "#38A169",
+            eqGreenHover: "#2F855A",
+            eqGreenActive: "#276749",
+            eqMuted: "#A0AEC0",
+            eqWhite: "#FFFFFF"
+          },
+          fontFamily: {
+            sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-[#FFFFFF] flex justify-center items-start min-h-screen p-0 sm:py-6 antialiased">
+<!-- Mobile Viewport Container: strictly 360px x 800px constraint -->
+<div class="w-[360px] h-[800px] max-h-[800px] bg-[#0B0F19] flex flex-col relative border border-[#2D4A7A] overflow-hidden shadow-none">
+<!-- Top App Bar (Header: 56px fixed height) -->
+<header class="fixed top-0 left-0 w-[360px] h-14 z-50 flex items-center justify-between px-4 bg-[#0B0F19] border-b border-[#2D4A7A]">
+<div class="flex items-center">
+<img alt="EQUO" src="https://lh3.googleusercontent.com/aida/AEtjO1X44r7KlntOmMlWn71_N-YAp1yRsU6M5YFjf97kCPTrdwjN7p5MjpRmHodG9h6lUzxbB702M4TIdPGw6ACpXc-GUw2hNvkmLI3VIoMwOh0QstSqKRz6ocGKPlqojWIsxbbgLC8vL3S6L6zkyj5TWG6e1PP_e-ViWqsXYwJ-ayHW1W-IzTGPNCssf07t320eekVCtby2EYze86E1PN1leXqougvwMA9J8kWgASwuryyBw9KMZxNbFdm58hw" style="height: 22px; width: auto; display: block;"/>
+</div>
+<div class="flex items-center">
+<span class="text-[11px] font-semibold text-[#A0AEC0] bg-[#0B0F19] px-3 py-1 rounded-full border border-[#2D4A7A]">Verdetto Finale</span>
+</div>
+</header>
+<!-- Scrollable Viewport Body: Between 56px header and sticky footer -->
+<main class="flex-1 overflow-y-auto pt-[70px] pb-[136px] px-4 flex flex-col gap-4">
+<!-- Main Verdict Block -->
+<section class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-4 flex flex-col items-center text-center">
+<!-- Semaforo / Indicatore circolare con accento warning #ECC94B -->
+<div class="relative w-14 h-14 rounded-full bg-[#0B0F19] border-2 border-[#ECC94B] flex items-center justify-center mb-3">
+<div class="w-10 h-10 rounded-full bg-[#ECC94B]/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[#ECC94B] text-[24px]" data-icon="priority_high">priority_high</span>
+</div>
+</div>
+<!-- H1 Title Verdetto -->
+<h1 class="text-[20px] leading-[26px] font-bold text-[#FFFFFF] tracking-tight mb-1">
+      Preventivo Sopra la Media
+    </h1>
+<p class="text-[13px] leading-[18px] text-[#A0AEC0] mb-3">
+      Analisi comparativa tariffe e ricambi
+    </p>
+<!-- Pill di scostamento quantitativo: bordo 1.5px #ECC94B, sfondo dark con testo #FFFFFF, radius 999px -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-[#ECC94B] bg-[#0B0F19] text-[#FFFFFF] text-[12px] font-medium">
+<span class="material-symbols-outlined text-[15px] text-[#ECC94B]" data-icon="trending_up">trending_up</span>
+<span>+65,00 € rispetto alla stima equa</span>
+</div>
+</section>
+<!-- Voci di Confronto (2 righe spaccato) -->
+<section class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between pb-2 border-b border-[#2D4A7A]">
+<span class="text-[11px] font-semibold text-[#A0AEC0] tracking-wider">VOCI DI CONFRONTO</span>
+<span class="text-[11px] font-semibold text-[#A0AEC0] tracking-wider">STIMA MEDIA</span>
+</div>
+<!-- Riga 1: Manodopera -->
+<div class="flex items-start justify-between gap-2 pt-1">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] mt-[2px]" data-icon="build">build</span>
+<div class="flex flex-col">
+<span class="text-[13px] font-semibold text-[#FFFFFF]">Manodopera stimata: 120,00 €</span>
+<span class="text-[12px] text-[#A0AEC0]">3h x 40€/h in Lombardia</span>
+</div>
+</div>
+<span class="text-[11px] font-medium text-[#38A169] border border-[#38A169] bg-transparent px-2 py-[2px] rounded-full whitespace-nowrap">Ref. OK</span>
+</div>
+<!-- Linea separatore interna -->
+<div class="w-full border-t border-[#2D4A7A] my-0.5"></div>
+<!-- Riga 2: Ricambi -->
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] mt-[2px]" data-icon="inventory_2">inventory_2</span>
+<div class="flex flex-col">
+<span class="text-[13px] font-semibold text-[#FFFFFF]">Ricambi e materiali: 95,00 €</span>
+<span class="text-[12px] text-[#A0AEC0]">listino medio compatibile</span>
+</div>
+</div>
+<span class="text-[11px] font-medium text-[#38A169] border border-[#38A169] bg-transparent px-2 py-[2px] rounded-full whitespace-nowrap">Ref. OK</span>
+</div>
+</section>
+<!-- Box Messaggio WhatsApp/SMS -->
+<section class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[#A0AEC0] text-[17px]" data-icon="chat">chat</span>
+<span class="text-[13px] font-medium text-[#FFFFFF]">Bozza messaggio pronta da inviare:</span>
+</div>
+<span class="text-[11px] text-[#A0AEC0]">SMS / WhatsApp</span>
+</div>
+<div class="bg-[#0B0F19] border border-[#2D4A7A] rounded-[8px] p-3 mt-1">
+<p class="text-[12px] leading-[18px] text-[#FFFFFF] italic select-all" id="messageText">
+        "Salve, ho verificato i parametri medi per il tagliando della mia Fiat Panda in Lombardia: la manodopera e i ricambi standard risultano inferiori di circa 65€. È possibile verificare il dettaglio delle voci applicate?"
+      </p>
+</div>
+<div class="flex items-center justify-between text-[#A0AEC0] pt-1">
+<span class="text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="info">info</span>
+        Tono cordiale e orientato al riscontro
+      </span>
+<span class="text-[11px] font-medium text-[#A0AEC0]" id="copyStatusBadge">Pronto</span>
+</div>
+</section>
+</main>
+<!-- Sticky Footer Action Bar -->
+<footer class="fixed bottom-0 left-0 w-[360px] z-50 flex flex-col gap-2 p-4 bg-[#0B0F19] border-t border-[#2D4A7A]">
+<!-- Primary CTA Button -->
+<button class="flex items-center justify-center gap-2 bg-[#38A169] hover:bg-[#2F855A] active:bg-[#276749] text-[#0B0F19] font-bold rounded-[10px] h-11 w-full text-[14px] transition-colors" id="copyBtn" onclick="copyMessage()" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+<span id="copyBtnLabel">Copia messaggio per il meccanico</span>
+</button>
+<!-- Secondary CTA Button -->
+<button class="flex items-center justify-center gap-2 bg-transparent border border-[#2D4A7A] text-[#A0AEC0] hover:text-[#FFFFFF] rounded-[10px] h-11 w-full text-[14px] transition-colors" onclick="resetCheck()" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+<span>Nuova verifica</span>
+</button>
+</footer>
+</div>
+<script>
+  function copyMessage() {
+    const text = document.getElementById('messageText').innerText.replace(/^"|"$/g, '');
+    navigator.clipboard.writeText(text).then(() => {
+      const btnLabel = document.getElementById('copyBtnLabel');
+      const badge = document.getElementById('copyStatusBadge');
+      btnLabel.innerText = "Messaggio Copiato!";
+      badge.innerText = "Copiato";
+      badge.classList.remove('text-[#A0AEC0]');
+      badge.classList.add('text-[#38A169]');
+      setTimeout(() => {
+        btnLabel.innerText = "Copia messaggio per il meccanico";
+        badge.innerText = "Pronto";
+        badge.classList.remove('text-[#38A169]');
+        badge.classList.add('text-[#A0AEC0]');
+      }, 2000);
+    }).catch(() => {
+      const btnLabel = document.getElementById('copyBtnLabel');
+      btnLabel.innerText = "Seleziona testo sopra";
+    });
+  }
+
+  function resetCheck() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body></html>

@@ -1,0 +1,5 @@
+.semaforo { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+.semaforo-large { width: 56px; height: 56px; }
+.semaforo-ok { background: #38A169; }
+.semaforo-warn { background: #ECC94B; }
+.semaforo-err { background: #FC8181; }

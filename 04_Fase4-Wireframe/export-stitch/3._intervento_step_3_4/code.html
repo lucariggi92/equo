@@ -1,0 +1,297 @@
+<!DOCTYPE html><html class="light" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PreventivoCheck.web - Step 3/4</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#46464e",
+            "on-primary-container": "#858387",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#e2e2e6",
+            "tertiary-fixed-dim": "#c6c6ca",
+            "surface-tint": "#5f5e61",
+            "secondary": "#5d5e66",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f9f9fa",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#e4e1e6",
+            "surface-container-low": "#f3f3f4",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#63646c",
+            "primary-fixed-dim": "#c8c5ca",
+            "secondary-fixed": "#e3e1ec",
+            "on-primary-fixed-variant": "#47464a",
+            "surface-container-high": "#e8e8e9",
+            "surface-variant": "#e2e2e3",
+            "inverse-primary": "#c8c5ca",
+            "secondary-fixed-dim": "#c6c5cf",
+            "surface-container-highest": "#e2e2e3",
+            "primary-container": "#1b1b1e",
+            "primary": "#000000",
+            "on-tertiary-fixed": "#1a1c1f",
+            "on-surface": "#1a1c1d",
+            "secondary-container": "#e3e1ec",
+            "outline-variant": "#c8c5cb",
+            "surface": "#f9f9fa",
+            "on-secondary-fixed": "#1a1b22",
+            "on-tertiary-fixed-variant": "#45474a",
+            "surface-container": "#eeeeef",
+            "tertiary-container": "#1a1c1f",
+            "inverse-surface": "#2f3132",
+            "outline": "#77767b",
+            "inverse-on-surface": "#f0f1f2",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#838487",
+            "on-primary-fixed": "#1b1b1e",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#dadadb",
+            "tertiary": "#000000",
+            "on-surface-variant": "#47464b",
+            "background": "#f9f9fa",
+            "on-background": "#1a1c1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "headline-lg": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9fa;
+      color: #1a1c1d;
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex justify-center selection:bg-surface-container-highest">
+<!-- Mobile Viewport Frame (360px x 800px constraint) -->
+<div class="w-full max-w-[360px] min-h-[800px] flex flex-col relative bg-surface-container-lowest border-x border-outline-variant shadow-none">
+<!-- TopAppBar Component (from Shared JSON specification) -->
+<header class="fixed top-0 left-0 w-full max-w-[360px] h-14 z-50 flex items-center justify-between px-margin bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="car_repair">car_repair</span>
+<span class="text-headline-sm font-headline-sm text-primary tracking-tight">EQUO</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-space-sm py-space-xs rounded">Step 3/4</span>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 pt-14 pb-[76px] px-margin flex flex-col">
+<!-- Section Header -->
+<section class="mt-space-lg mb-space-lg"><h1 class="text-headline-lg font-headline-lg text-primary tracking-tight">Che intervento devi fare?</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">Scegli uno dei principali interventi previsti o cercalo nel catalogo</p></section>
+<!-- 5 Wireframe Cards Stack (Targeting exact 72px height, bordered rectangle with light gray surface) -->
+<div class="flex flex-col gap-3 flex-1">
+  <!-- Search Bar 48px -->
+  <div class="relative w-full">
+    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+      <span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+    </div>
+    <input id="search-input" type="text" placeholder="Cerca intervento (es. frizione, cinghia...)" oninput="filterInterventions(this.value)" class="w-full h-12 pl-10 pr-3 text-body-sm font-body-sm bg-surface-container-lowest border rounded-xl text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent transition-all" style="border-color: #E5E7EB; border-radius: 10px;">
+  </div>
+
+  <!-- Scrollable Results List (56px rows) -->
+  <div id="interventions-list" class="flex flex-col gap-1.5 overflow-y-auto max-h-[224px] pr-0.5" role="radiogroup" aria-label="Lista interventi">
+    <!-- Selected Row -->
+    <div role="radio" aria-checked="true" tabindex="0" onclick="selectRow(this)" data-name="Tagliando Completo" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-primary bg-surface-container" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-primary" data-icon="build">build</span>
+        <span class="text-body-md font-headline-sm text-primary truncate">Tagliando Completo</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-primary flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 2 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Sostituzione Pastiglie e Dischi Freno" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="trip_origin">trip_origin</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Pastiglie e Dischi Freno</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 3 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Cinghia di Distribuzione" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="settings">settings</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Cinghia di Distribuzione</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 4 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Sostituzione Frizione" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="tune">tune</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Sostituzione Frizione</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 5 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Cambio Batteria" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="battery_charging_full">battery_charging_full</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Cambio Batteria</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 6 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Sostituzione Ammortizzatori" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="swap_vertical_circle">swap_vertical_circle</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Sostituzione Ammortizzatori</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 7 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Ricarica Climatizzatore" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="ac_unit">ac_unit</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Ricarica Climatizzatore</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 8 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Cambio Liquido Freni" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="water_drop">water_drop</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Cambio Liquido Freni</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+
+    <!-- Row 9 -->
+    <div role="radio" aria-checked="false" tabindex="0" onclick="selectRow(this)" data-name="Sostituzione Alternatore" class="intervention-row h-14 min-h-[56px] w-full px-3.5 flex items-center justify-between cursor-pointer transition-all border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low" style="border-radius: 12px;">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="material-symbols-outlined text-[20px] text-outline" data-icon="bolt">bolt</span>
+        <span class="text-body-md font-body-md text-on-surface truncate">Sostituzione Alternatore</span>
+      </div>
+      <span class="check-icon material-symbols-outlined text-[20px] text-outline-variant opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+    </div>
+  </div>
+
+  <!-- Empty State (Hidden initially, appears if search yields no results) -->
+  <div id="empty-state" class="hidden flex-col items-center justify-center p-3 text-center bg-surface-container-low border border-outline-variant rounded-xl my-1">
+    <span class="material-symbols-outlined text-[24px] text-outline mb-1" data-icon="search_off">search_off</span>
+    <p class="text-label-sm font-label-sm text-on-surface font-medium">Nessun risultato trovato?</p>
+    <p class="text-body-sm font-body-sm text-on-surface-variant">Descrivi sotto l'intervento</p>
+  </div>
+
+  <!-- Textarea 96px with character count -->
+  <div class="flex flex-col gap-1 mt-1">
+    <label for="custom-notes" class="text-label-sm font-label-sm text-on-surface-variant flex justify-between">
+      <span class="">Altro intervento o note preventivo</span>
+      <span id="char-counter" class="text-outline">0 / 250</span>
+    </label>
+    <textarea id="custom-notes" maxlength="250" oninput="onNotesInput(this)" placeholder="Descrivi il lavoro come sul preventivo" class="w-full h-24 p-2.5 text-body-sm font-body-sm bg-surface-container-lowest border text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent transition-all resize-none" style="border-color: #E5E7EB; border-radius: 10px;"></textarea>
+    <span id="char-error" class="hidden text-[11px] text-error">Inserisci almeno 3 caratteri per procedere con la descrizione personalizzata.</span>
+  </div>
+</div>
+<!-- Structural Wireframe Helper Label -->
+
+</main>
+<!-- BottomNavBar Component (from Shared JSON specification) -->
+<nav class="fixed bottom-0 left-0 w-full max-w-[360px] z-50 flex items-center justify-between gap-space-md p-margin min-h-[64px] bg-surface border-t border-outline-variant">
+<!-- Destination 1: Indietro (style_inactive_navigation) -->
+<button class="flex items-center justify-center bg-surface border border-outline text-on-surface rounded px-space-lg py-space-sm h-11 w-full text-label-lg font-label-lg hover:opacity-90 active:opacity-75 transition-opacity gap-1" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
+<span class="">Indietro</span>
+</button>
+<!-- Destination 2: Avanti (style_active_navigation) -->
+<button id="btn-avanti" class="flex items-center justify-center bg-[#111827] text-on-primary rounded-xl px-space-lg py-space-sm h-11 w-full text-label-lg font-label-lg hover:opacity-90 active:opacity-75 transition-all gap-1 shadow-none" type="button" style="border-radius: 10px;">
+  <span class="">Avanti</span>
+  <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</nav>
+</div>
+<script>
+    function selectCard(element) {
+      const allCards = document.querySelectorAll('[role="radio"]');
+      allCards.forEach(card => {
+        card.setAttribute('aria-checked', 'false');
+        card.className = "h-[72px] w-full bg-surface-container-low border border-outline-variant rounded p-space-md flex items-center justify-between cursor-pointer transition-colors hover:bg-surface-container";
+        const iconWrap = card.querySelector('div:last-child');
+        if (iconWrap) {
+          iconWrap.className = "flex items-center pl-space-xs text-outline";
+        }
+      });
+
+      element.setAttribute('aria-checked', 'true');
+      element.className = "h-[72px] w-full bg-surface-container-low border-2 border-primary rounded p-space-md flex items-center justify-between cursor-pointer transition-colors";
+      const iconWrap = element.querySelector('div:last-child');
+      if (iconWrap) {
+        iconWrap.className = "flex items-center pl-space-xs text-primary";
+      }
+    }
+  </script>
+
+
+
+
+</body></html>

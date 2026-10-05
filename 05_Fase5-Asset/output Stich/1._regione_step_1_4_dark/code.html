@@ -1,0 +1,344 @@
+<!DOCTYPE html><html class="dark" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>EQUO - Step 1/4</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brandDark: "#0B0F19",
+            brandBorder: "#2D4A7A",
+            brandCard: "#1A365D",
+            brandMuted: "#A0AEC0",
+            brandGreen: "#38A169",
+            brandDisabledBg: "#2D3748",
+            brandDisabledText: "#718096"
+          },
+          fontFamily: {
+            sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-[#FFFFFF] antialiased min-h-screen flex justify-center selection:bg-[#2D4A7A]">
+<!-- Mobile Screen Shell Container (360px baseline) -->
+<div class="w-full max-w-[360px] min-h-screen bg-[#0B0F19] border-x border-[#2D4A7A] flex flex-col relative pb-[80px]">
+<!-- TopAppBar Component (56px fisso) -->
+<header class="fixed top-0 left-0 w-full max-w-[360px] mx-auto right-0 h-14 z-50 flex items-center justify-between px-4 bg-[#0B0F19] border-b border-[#2D4A7A]">
+<div class="flex items-center">
+<img alt="EQUO" src="https://lh3.googleusercontent.com/aida/AEtjO1X44r7KlntOmMlWn71_N-YAp1yRsU6M5YFjf97kCPTrdwjN7p5MjpRmHodG9h6lUzxbB702M4TIdPGw6ACpXc-GUw2hNvkmLI3VIoMwOh0QstSqKRz6ocGKPlqojWIsxbbgLC8vL3S6L6zkyj5TWG6e1PP_e-ViWqsXYwJ-ayHW1W-IzTGPNCssf07t320eekVCtby2EYze86E1PN1leXqougvwMA9J8kWgASwuryyBw9KMZxNbFdm58hw" style="height: 22px; width: auto; display: block;">
+</div>
+
+</header>
+<!-- Main Scrollable Content Canvas -->
+<main class="flex-1 w-full pt-14 px-4">
+<!-- Title Block -->
+<section class="pt-6 pb-4">
+<div class="inline-block mb-1">
+<span class="text-[11px] font-semibold text-[#A0AEC0] uppercase tracking-wider">CONFIGURATORE MANODOPERA</span>
+</div>
+<h1 class="text-[22px] leading-7 font-bold text-[#FFFFFF] tracking-tight mb-1 font-sans">
+  Qual è la tua Regione?
+</h1>
+<p class="text-[14px] leading-5 text-[#A0AEC0]">
+  Seleziona per calcolare la tariffa oraria media regionale
+</p>
+</section>
+<!-- Searchbar -->
+<div class="mb-4">
+<div class="relative flex items-center w-full">
+<span class="material-symbols-outlined absolute left-3.5 text-[#A0AEC0] text-[18px] pointer-events-none" data-icon="search">search</span>
+<input class="h-11 w-full pl-10 pr-3.5 bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] text-[14px] text-[#FFFFFF] placeholder-[#A0AEC0] focus:outline-none focus:ring-2 focus:ring-[#38A169] focus:border-transparent transition-all" id="region-search" placeholder="Cerca regione..." type="text">
+</div>
+</div>
+<!-- 20 Italian Regions List (Righe alte 56px, raggio 12px) -->
+<section aria-label="Elenco regioni" class="flex flex-col gap-2" role="radiogroup">
+<!-- 1. Abruzzo -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Abruzzo</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 2. Basilicata -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Basilicata</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 3. Calabria -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Calabria</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 4. Campania -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Campania</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 5. Emilia-Romagna -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Emilia-Romagna</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 6. Friuli Venezia Giulia -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Friuli Venezia Giulia</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 7. Lazio -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Lazio</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 8. Liguria -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Liguria</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 9. Lombardia -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Lombardia</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 10. Marche -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Marche</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 11. Molise -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Molise</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 12. Piemonte -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Piemonte</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 13. Puglia -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Puglia</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 14. Sardegna -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Sardegna</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 15. Sicilia -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Sicilia</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 16. Toscana -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Toscana</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 17. Trentino-Alto Adige -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Trentino-Alto Adige</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 18. Umbria -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Umbria</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 19. Valle d'Aosta -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Valle d'Aosta</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- 20. Veneto -->
+<div aria-checked="false" class="region-row h-14 bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] flex items-center justify-between px-3.5 cursor-pointer transition-all hover:border-[#38A169]/50" role="radio" tabindex="0">
+<div class="flex items-center gap-3">
+<div class="w-5 h-5 rounded-full border border-[#2D4A7A] flex items-center justify-center region-bullet bg-transparent flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-[#38A169] hidden bullet-icon font-bold" data-icon="check">check</span>
+</div>
+<span class="text-[14px] text-[#FFFFFF] font-medium region-name">Regione Veneto</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px] arrow-icon" data-icon="chevron_right">chevron_right</span>
+</div>
+</section>
+<!-- Contextual wireframe info footer note -->
+<div class="py-6 flex items-center justify-center">
+<span class="text-[11px] font-semibold text-[#A0AEC0] tracking-wider">EQUO PROTOCOL V1.0</span>
+</div>
+</main>
+<!-- Sticky Footer Action Bar (64px) -->
+<footer class="fixed bottom-0 left-0 w-full max-w-[360px] mx-auto right-0 z-50 flex items-center px-4 h-16 bg-[#0B0F19] border-t border-[#2D4A7A]">
+<button aria-disabled="true" class="w-full h-11 flex items-center justify-center gap-1.5 bg-[#2D3748] text-[#718096] rounded-[10px] cursor-not-allowed text-[14px] font-bold transition-all" disabled="" id="cta-continue">
+<span class="">Avanti →</span>
+</button>
+</footer>
+</div>
+<!-- Interactive Row Selection Logic & Filter Search -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const rows = document.querySelectorAll('.region-row');
+      const ctaBtn = document.getElementById('cta-continue');
+      const searchInput = document.getElementById('region-search');
+
+      // Filter search
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const val = e.target.value.toLowerCase().trim();
+          rows.forEach(r => {
+            const text = r.querySelector('.region-name')?.textContent.toLowerCase() || '';
+            if (text.includes(val)) {
+              r.style.display = 'flex';
+            } else {
+              r.style.display = 'none';
+            }
+          });
+        });
+      }
+
+      // Selection
+      rows.forEach(row => {
+        row.addEventListener('click', () => {
+          // Deselect all
+          rows.forEach(r => {
+            r.classList.remove('border-[2px]', 'border-[#38A169]');
+            r.classList.add('border', 'border-[#2D4A7A]');
+            r.setAttribute('aria-checked', 'false');
+            const bullet = r.querySelector('.bullet-icon');
+            const ring = r.querySelector('.region-bullet');
+            if (bullet) bullet.classList.add('hidden');
+            if (ring) {
+              ring.classList.remove('border-[#38A169]');
+              ring.classList.add('border-[#2D4A7A]');
+            }
+          });
+
+          // Select current
+          row.classList.remove('border', 'border-[#2D4A7A]');
+          row.classList.add('border-[2px]', 'border-[#38A169]');
+          row.setAttribute('aria-checked', 'true');
+          const activeBullet = row.querySelector('.bullet-icon');
+          const activeRing = row.querySelector('.region-bullet');
+          if (activeBullet) activeBullet.classList.remove('hidden');
+          if (activeRing) {
+            activeRing.classList.remove('border-[#2D4A7A]');
+            activeRing.classList.add('border-[#38A169]');
+          }
+
+          // Enable CTA Button
+          ctaBtn.disabled = false;
+          ctaBtn.removeAttribute('aria-disabled');
+          ctaBtn.className = "w-full h-11 flex items-center justify-center gap-1.5 bg-[#38A169] text-[#FFFFFF] rounded-[10px] cursor-pointer text-[14px] font-bold hover:bg-[#2f855a] active:opacity-80 transition-colors";
+        });
+      });
+    });
+  </script>
+
+
+</body></html>

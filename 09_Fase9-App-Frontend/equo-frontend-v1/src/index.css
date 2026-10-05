@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --night: #0B0F19;
+  --steel: #1A365D;
+  --line: #2D4A7A;
+  --text: #FFFFFF;
+  --muted: #A0AEC0;
+  --mint: #38A169;
+  --mint-hover: #2F855A;
+  --mint-active: #276749;
+  --warn: #ECC94B;
+  --danger: #FC8181;
+  --radius-card: 12px;
+  --radius-ctl: 10px;
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}

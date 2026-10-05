@@ -1,0 +1,207 @@
+<!DOCTYPE html><html class="h-full" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PreventivoCheck.web - Step 4/4</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#46464e",
+            "on-primary-container": "#858387",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#e2e2e6",
+            "tertiary-fixed-dim": "#c6c6ca",
+            "surface-tint": "#5f5e61",
+            "secondary": "#5d5e66",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f9f9fa",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#e4e1e6",
+            "surface-container-low": "#f3f3f4",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#63646c",
+            "primary-fixed-dim": "#c8c5ca",
+            "secondary-fixed": "#e3e1ec",
+            "on-primary-fixed-variant": "#47464a",
+            "surface-container-high": "#e8e8e9",
+            "surface-variant": "#e2e2e3",
+            "inverse-primary": "#c8c5ca",
+            "secondary-fixed-dim": "#c6c5cf",
+            "surface-container-highest": "#e2e2e3",
+            "primary-container": "#1b1b1e",
+            "primary": "#000000",
+            "on-tertiary-fixed": "#1a1c1f",
+            "on-surface": "#1a1c1d",
+            "secondary-container": "#e3e1ec",
+            "outline-variant": "#c8c5cb",
+            "surface": "#f9f9fa",
+            "on-secondary-fixed": "#1a1b22",
+            "on-tertiary-fixed-variant": "#45474a",
+            "surface-container": "#eeeeef",
+            "tertiary-container": "#1a1c1f",
+            "inverse-surface": "#2f3132",
+            "outline": "#77767b",
+            "inverse-on-surface": "#f0f1f2",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#838487",
+            "on-primary-fixed": "#1b1b1e",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#dadadb",
+            "tertiary": "#000000",
+            "on-surface-variant": "#47464b",
+            "background": "#f9f9fa",
+            "on-background": "#1a1c1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "headline-lg": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .cursor-blink {
+      animation: blink 1s step-start infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-low text-on-surface antialiased min-h-full flex justify-center selection:bg-surface-container-highest">
+<!-- Mobile Viewport Canvas Container (360px targeted baseline) -->
+<div class="w-full max-w-[360px] min-h-screen bg-surface flex flex-col relative border-x border-outline-variant">
+<!-- TopAppBar (Shared Component) -->
+<header class="fixed top-0 max-w-[360px] w-full h-14 z-50 flex items-center justify-between px-margin bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="car_repair">car_repair</span>
+<span class="text-headline-sm font-headline-sm text-primary tracking-tight">EQUO</span>
+</div>
+<div class="flex items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">Step 4/4</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 pt-14 pb-[84px] px-margin flex flex-col gap-space-lg">
+<!-- Screen Header Section -->
+<section class="mt-space-md flex flex-col gap-1">
+<h1 class="text-headline-lg font-headline-lg text-primary tracking-tight">
+          Quanto ti ha chiesto il meccanico?
+        </h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+          Inserisci il totale IVA inclusa indicato nel tuo preventivo cartaceo o digitale
+        </p>
+</section>
+<!-- Previous Steps Recap Box (Wireframe Summary Card) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between py-1 border-b border-surface-container-high">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Regione:</span>
+<span class="text-body-sm font-body-sm font-semibold text-primary">Lombardia</span>
+</div>
+<div class="flex items-center justify-between py-1 border-b border-surface-container-high">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Veicolo:</span>
+<span class="text-body-sm font-body-sm font-semibold text-primary">Fiat Panda (1.2 Benzina)</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Intervento:</span>
+<span class="text-body-sm font-body-sm font-semibold text-primary">Tagliando Completo</span>
+</div>
+</section>
+<!-- Currency Input Display Box -->
+<section class="flex flex-col gap-1">
+<label class="text-label-md font-label-md text-on-surface">Totale Preventivo (€)</label>
+<div class="h-16 w-full bg-surface-container-lowest border-2 border-primary rounded flex items-center justify-between px-space-md shadow-none">
+<div class="flex items-baseline gap-1 overflow-hidden">
+<span class="text-2xl font-bold tracking-tight text-primary">€ 280,00</span>
+<span class="inline-block w-0.5 h-6 bg-primary cursor-blink translate-y-0.5"></span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">EUR</span>
+</div>
+</section>
+<!-- Numeric Keypad (Tastierino Numerico Wireframe 3x4) -->
+<section class="w-full flex-1 flex flex-col justify-end">
+<div class="grid grid-cols-3 gap-1.5 p-1.5 bg-surface-container rounded border border-outline-variant">
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">1</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">2</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">3</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">4</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">5</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">6</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">7</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">8</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">9</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">,</button>
+<button class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-headline-sm font-headline-sm text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">0</button>
+<button aria-label="Cancella" class="h-11 bg-surface-container-lowest border border-outline-variant rounded flex items-center justify-center text-primary active:bg-surface-container-high hover:bg-surface-bright transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="backspace">backspace</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Sticky Footer Action Bar -->
+<footer class="fixed bottom-0 max-w-[360px] w-full z-50 flex items-center justify-between gap-space-md px-margin min-h-[64px] bg-surface border-t border-outline-variant">
+<!-- Outlined Secondary CTA: Indietro -->
+<button class="flex items-center justify-center gap-1 bg-surface border border-outline text-on-surface rounded px-space-md py-space-sm h-11 w-1/3 hover:bg-surface-container active:opacity-75 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_back">arrow_back</span>
+<span class="text-label-lg font-label-lg">Indietro</span>
+</button>
+<!-- Prominent Primary CTA: Verifica Preventivo -->
+<button class="flex-1 flex items-center justify-center gap-1 bg-primary text-on-primary rounded px-space-md py-space-sm h-11 hover:opacity-90 active:opacity-80 transition-opacity" type="button">
+<span class="text-label-lg font-label-lg whitespace-nowrap">Verifica Preventivo</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</footer>
+</div>
+
+
+</body></html>

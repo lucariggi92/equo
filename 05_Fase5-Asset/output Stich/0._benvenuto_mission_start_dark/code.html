@@ -1,0 +1,256 @@
+<!DOCTYPE html><html class="dark" lang="it" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>EQUO - Benvenuto</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#93000a",
+            "error": "#ffb4ab",
+            "outline-variant": "#3e4941",
+            "tertiary-container": "#dc707b",
+            "secondary-container": "#2f4a72",
+            "secondary-fixed": "#d6e3ff",
+            "on-tertiary-fixed": "#40000f",
+            "surface-variant": "#313540",
+            "surface-bright": "#353944",
+            "on-secondary-fixed-variant": "#2d476f",
+            "surface-container-lowest": "#0a0e18",
+            "background": "#0f131d",
+            "tertiary": "#ffb2b8",
+            "primary-fixed": "#91f8b8",
+            "secondary": "#adc7f7",
+            "surface": "#0f131d",
+            "surface-dim": "#0f131d",
+            "primary-container": "#3aa36b",
+            "primary-fixed-dim": "#74db9d",
+            "primary": "#74db9d",
+            "on-secondary-fixed": "#001b3c",
+            "surface-tint": "#74db9d",
+            "on-surface-variant": "#bdcabe",
+            "on-secondary-container": "#9fb9e8",
+            "inverse-surface": "#dfe2f1",
+            "on-background": "#dfe2f1",
+            "on-tertiary-container": "#57081a",
+            "inverse-on-surface": "#2c303b",
+            "on-error": "#690005",
+            "on-tertiary": "#601020",
+            "surface-container-high": "#262a35",
+            "on-surface": "#dfe2f1",
+            "on-primary": "#00391f",
+            "on-tertiary-fixed-variant": "#7f2835",
+            "tertiary-fixed-dim": "#ffb2b8",
+            "surface-container-highest": "#313540",
+            "on-primary-fixed-variant": "#00522f",
+            "surface-container": "#1c1f2a",
+            "outline": "#889489",
+            "tertiary-fixed": "#ffdadb",
+            "on-error-container": "#ffdad6",
+            "on-primary-container": "#00311a",
+            "secondary-fixed-dim": "#adc7f7",
+            "on-primary-fixed": "#002110",
+            "inverse-primary": "#006d40",
+            "surface-container-low": "#171b26",
+            "on-secondary": "#133057"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "margin-md": "1.5rem",
+            "gutter-lg": "1.5rem",
+            "margin-lg": "2rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "body-lg": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "body-md": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "body-sm": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "headline-lg-mobile": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "headline-xl": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "headline-md": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "headline-sm": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "label-lg": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "label-md": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "headline-xl-mobile": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "label-sm": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ],
+            "headline-lg": [
+              "\"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\""
+            ]
+          },
+          "fontSize": {
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "400"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "400"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-lg-mobile": [
+              "24px",
+              {
+                "lineHeight": "30px",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-xl": [
+              "36px",
+              {
+                "lineHeight": "44px",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-md": [
+              "22px",
+              {
+                "lineHeight": "28px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-sm": [
+              "18px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "600"
+              }
+            ],
+            "label-lg": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "700"
+              }
+            ],
+            "label-md": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-xl-mobile": [
+              "28px",
+              {
+                "lineHeight": "34px",
+                "fontWeight": "700"
+              }
+            ],
+            "label-sm": [
+              "11px",
+              {
+                "lineHeight": "14px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg": [
+              "28px",
+              {
+                "lineHeight": "36px",
+                "fontWeight": "700"
+              }
+            ]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+    }
+  </style>
+<link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"><style>* { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important; }</style></head>
+<body class="bg-[#0B0F19] text-[#FFFFFF] antialiased selection:bg-primary-container selection:text-white flex justify-center min-h-screen" style="font-family: Inter, system-ui, -apple-system, sans-serif;">
+<div class="w-full max-w-[360px] min-h-[800px] flex flex-col bg-[#0B0F19] relative border-x border-[#2D4A7A]/30 font-sans">
+<header class="fixed top-0 w-full max-w-[360px] h-14 z-50 flex items-center justify-between px-4 bg-[#0B0F19] border-b border-[#2D4A7A]">
+<div class="flex items-center gap-2"><span class="text-[20px] font-bold tracking-tight text-white">EQUO</span></div>
+
+</header>
+<main class="flex-1 pt-18 pb-28 px-4 flex flex-col gap-5 mt-14 overflow-y-auto">
+<section class="flex flex-col gap-3 pt-2">
+<div class="inline-flex items-center self-start gap-1.5 px-2.5 py-1 rounded-full border border-[#2D4A7A] bg-[#1A365D] text-[#74db9d] font-label-sm text-label-sm"><span class="">Zero registrazioni • Gratuito • 60 secondi</span></div>
+<h1 class="text-headline-md font-headline-md text-white font-bold tracking-tight mb-2 font-sans">Il tuo preventivo auto è davvero equo?</h1>
+<p class="text-body-sm font-body-sm text-[#A0AEC0] leading-relaxed font-sans">Confronta all'istante i costi di ricambi e manodopera con i listini ufficiali e i benchmark regionali della tua zona.</p>
+</section>
+<section class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-4 flex flex-col gap-3 font-sans" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;">
+<div class="flex items-center justify-between border-b border-[#2D4A7A] pb-2" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;">
+<span class="text-[11px] font-bold tracking-wider uppercase text-[#38A169] font-sans" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;">
+  LA NOSTRA MISSION
+</span>
+
+</div>
+<p class="text-sm font-semibold text-white font-sans leading-snug" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;">
+  Riequilibriamo la trasparenza tra officina e automobilista. Nessun dato personale richiesto, zero complessità: solo numeri chiari per permetterti di decidere e dialogare con serenità.
+</p>
+<div class="flex flex-col gap-2.5 pt-1" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;"><div class="flex items-start gap-2.5"><div class="w-1.5 h-1.5 rounded-full bg-[#74db9d] shrink-0 mt-2"></div><span class="text-xs text-[#A0AEC0] font-normal leading-relaxed font-sans" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;">Tariffe orarie certificate per ogni regione italiana</span></div><div class="flex items-start gap-2.5"><div class="w-1.5 h-1.5 rounded-full bg-[#74db9d] shrink-0 mt-2"></div><span class="text-xs text-[#A0AEC0] font-normal leading-relaxed font-sans" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;">Prezzi medi ricambi OEM e compatibili di concorrenza</span></div><div class="flex items-start gap-2.5"><div class="w-1.5 h-1.5 rounded-full bg-[#74db9d] shrink-0 mt-2"></div><span class="text-xs text-[#A0AEC0] font-normal leading-relaxed font-sans" style="font-family: 'Inter', system-ui, -apple-system, sans-serif !important;">Bozza messaggio cordiale per chiedere chiarimenti al meccanico</span></div></div>
+</section>
+<section class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-4 flex items-center gap-3"><p class="text-body-sm font-body-sm text-[#A0AEC0] leading-snug"><strong class="text-white font-semibold">100% Anonimo.</strong> Nessun documento PDF da caricare, nessuna targa o accesso GPS.</p></section>
+<div class="grid grid-cols-2 gap-2.5"><div class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-4 flex flex-col justify-between"><span class="text-label-sm font-label-sm text-[#A0AEC0]">Tempo medio</span><span class="text-headline-sm font-headline-sm text-white font-bold tracking-tight mt-1">60 sec</span></div><div class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-4 flex flex-col justify-between"><span class="text-label-sm font-label-sm text-[#A0AEC0]">Database</span><span class="text-headline-sm font-headline-sm text-[#38A169] font-bold tracking-tight mt-1">2024 AGG.</span></div></div>
+</main>
+<footer class="fixed bottom-0 w-full max-w-[360px] z-50 bg-[#0B0F19] border-t border-[#2D4A7A] px-4 py-3 flex flex-col items-center gap-1.5">
+<a class="w-full h-[48px] bg-[#38A169] hover:bg-[#2F855A] active:bg-[#276749] text-[#0B0F19] rounded-[10px] font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 transition-colors" href="#step-1">
+<span class="">Inizia la Verifica (60 sec)</span>
+
+</a>
+
+</footer>
+</div>
+
+
+
+
+</body></html>

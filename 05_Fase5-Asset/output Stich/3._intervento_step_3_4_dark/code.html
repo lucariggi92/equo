@@ -1,0 +1,202 @@
+<!DOCTYPE html><html class="dark" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PreventivoCheck.web - Step 3/4</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "dark-bg": "#0B0F19",
+            "dark-card": "#1A365D",
+            "dark-border": "#2D4A7A",
+            "dark-muted": "#A0AEC0",
+            "brand-green": "#38A169"
+          },
+          fontFamily: {
+            sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0B0F19;
+      color: #FFFFFF;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-[#FFFFFF] min-h-screen flex justify-center">
+<!-- Mobile Viewport Frame (360px constraint) -->
+<div class="w-full max-w-[360px] min-h-[800px] flex flex-col relative bg-[#0B0F19] border-x border-[#2D4A7A] shadow-none">
+<!-- TopAppBar Component (56px fisso) -->
+<header class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[360px] h-14 z-50 flex items-center justify-between px-4 bg-[#0B0F19] border-b border-[#2D4A7A]">
+<div class="flex items-center">
+<img alt="EQUO" src="https://lh3.googleusercontent.com/aida/AEtjO1X44r7KlntOmMlWn71_N-YAp1yRsU6M5YFjf97kCPTrdwjN7p5MjpRmHodG9h6lUzxbB702M4TIdPGw6ACpXc-GUw2hNvkmLI3VIoMwOh0QstSqKRz6ocGKPlqojWIsxbbgLC8vL3S6L6zkyj5TWG6e1PP_e-ViWqsXYwJ-ayHW1W-IzTGPNCssf07t320eekVCtby2EYze86E1PN1leXqougvwMA9J8kWgASwuryyBw9KMZxNbFdm58hw" style="height: 22px; width: auto; display: block;">
+</div>
+
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 pt-14 pb-[80px] px-4 flex flex-col">
+<!-- Section Header -->
+<section class="mt-4 mb-4">
+<h1 class="text-[22px] font-bold text-[#FFFFFF] tracking-tight leading-tight">Che intervento devi fare?</h1>
+<p class="text-[13px] text-[#A0AEC0] mt-1 leading-normal">Scegli uno dei principali interventi previsti o cercalo nel catalogo</p>
+</section>
+<!-- Content Elements Stack -->
+<div class="flex flex-col gap-3 flex-1">
+<!-- Search Bar 48px -->
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#A0AEC0]">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+</div>
+<input class="w-full h-12 pl-10 pr-3 text-[14px] bg-[#1A365D] border border-[#2D4A7A] text-[#FFFFFF] placeholder:text-[#A0AEC0] focus:outline-none focus:ring-2 focus:ring-[#38A169] focus:border-transparent transition-all" id="search-input" oninput="filterInterventions(this.value)" placeholder="Cerca intervento..." style="border-radius: 10px;" type="text">
+</div>
+<!-- 5 Card Interventi (72px) -->
+<div aria-label="Lista interventi" class="flex flex-col gap-2.5" id="interventions-list" role="radiogroup">
+<!-- Card 1 (Attiva/Selezionata: Tagliando Completo) -->
+<div aria-checked="true" class="intervention-row h-[72px] min-h-[72px] w-full px-4 flex items-center justify-between cursor-pointer transition-all border-2 border-[#38A169] bg-[#1A365D]" data-name="Tagliando Completo" onclick="selectRow(this)" role="radio" style="border-radius: 12px;" tabindex="0">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[22px] text-[#38A169]" data-icon="build">build</span>
+<span class="text-[15px] font-semibold text-[#FFFFFF] truncate">Tagliando Completo</span>
+</div>
+<span class="check-icon material-symbols-outlined text-[22px] text-[#38A169] flex-shrink-0" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Card 2 -->
+<div aria-checked="false" class="intervention-row h-[72px] min-h-[72px] w-full px-4 flex items-center justify-between cursor-pointer transition-all border border-[#2D4A7A] bg-[#1A365D]" data-name="Pastiglie e Dischi Freno" onclick="selectRow(this)" role="radio" style="border-radius: 12px;" tabindex="0">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[22px] text-[#A0AEC0]" data-icon="trip_origin">trip_origin</span>
+<span class="text-[15px] font-medium text-[#FFFFFF] truncate">Pastiglie e Dischi Freno</span>
+</div>
+<span class="check-icon material-symbols-outlined text-[22px] text-[#38A169] opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Card 3 -->
+<div aria-checked="false" class="intervention-row h-[72px] min-h-[72px] w-full px-4 flex items-center justify-between cursor-pointer transition-all border border-[#2D4A7A] bg-[#1A365D]" data-name="Cinghia di Distribuzione" onclick="selectRow(this)" role="radio" style="border-radius: 12px;" tabindex="0">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[22px] text-[#A0AEC0]" data-icon="settings">settings</span>
+<span class="text-[15px] font-medium text-[#FFFFFF] truncate">Cinghia di Distribuzione</span>
+</div>
+<span class="check-icon material-symbols-outlined text-[22px] text-[#38A169] opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Card 4 -->
+<div aria-checked="false" class="intervention-row h-[72px] min-h-[72px] w-full px-4 flex items-center justify-between cursor-pointer transition-all border border-[#2D4A7A] bg-[#1A365D]" data-name="Sostituzione Frizione" onclick="selectRow(this)" role="radio" style="border-radius: 12px;" tabindex="0">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[22px] text-[#A0AEC0]" data-icon="tune">tune</span>
+<span class="text-[15px] font-medium text-[#FFFFFF] truncate">Sostituzione Frizione</span>
+</div>
+<span class="check-icon material-symbols-outlined text-[22px] text-[#38A169] opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Card 5 -->
+<div aria-checked="false" class="intervention-row h-[72px] min-h-[72px] w-full px-4 flex items-center justify-between cursor-pointer transition-all border border-[#2D4A7A] bg-[#1A365D]" data-name="Cambio Batteria" onclick="selectRow(this)" role="radio" style="border-radius: 12px;" tabindex="0">
+<div class="flex items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-[22px] text-[#A0AEC0]" data-icon="battery_charging_full">battery_charging_full</span>
+<span class="text-[15px] font-medium text-[#FFFFFF] truncate">Cambio Batteria</span>
+</div>
+<span class="check-icon material-symbols-outlined text-[22px] text-[#38A169] opacity-0 flex-shrink-0" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Textarea 96px with character count -->
+<div class="flex flex-col gap-1.5 mt-2">
+<label class="text-[12px] font-medium text-[#A0AEC0] flex justify-between" for="custom-notes">
+<span class="">Altro intervento o note preventivo</span>
+<span class="text-[#A0AEC0]" id="char-counter">0 / 250</span>
+</label>
+<textarea class="w-full h-24 p-3 text-[14px] bg-[#1A365D] border border-[#2D4A7A] text-[#FFFFFF] placeholder:text-[#A0AEC0] focus:outline-none focus:ring-2 focus:ring-[#38A169] focus:border-transparent transition-all resize-none" id="custom-notes" maxlength="250" oninput="onNotesInput(this)" placeholder="Descrivi il lavoro come sul preventivo" style="border-radius: 10px;"></textarea>
+</div>
+</div>
+</main>
+<!-- Sticky Footer (64px) -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[360px] h-16 z-50 flex items-center justify-between gap-3 px-4 bg-[#0B0F19] border-t border-[#2D4A7A]">
+<!-- Link Indietro in #38A169 -->
+<button class="flex items-center justify-center text-[#38A169] font-semibold text-[14px] hover:opacity-80 active:opacity-60 transition-opacity gap-1 px-2 py-2" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
+<span class="">Indietro</span>
+</button>
+<!-- CTA Primaria "Avanti →" su sfondo #38A169 con testo #0B0F19 bold, raggio 10px -->
+<button class="flex-1 flex items-center justify-center bg-[#38A169] text-[#0B0F19] font-bold text-[15px] h-11 hover:opacity-90 active:opacity-80 transition-all gap-1 shadow-none" id="btn-avanti" style="border-radius: 10px;" type="button">
+<span class="">Avanti</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</nav>
+</div>
+<script>
+  function selectRow(element) {
+    const allRows = document.querySelectorAll('.intervention-row');
+    allRows.forEach(row => {
+      row.setAttribute('aria-checked', 'false');
+      row.classList.remove('border-2', 'border-[#38A169]');
+      row.classList.add('border', 'border-[#2D4A7A]');
+      const icon = row.querySelector('.material-symbols-outlined:first-child');
+      if (icon) {
+        icon.classList.remove('text-[#38A169]');
+        icon.classList.add('text-[#A0AEC0]');
+      }
+      const title = row.querySelector('span.truncate');
+      if (title) {
+        title.classList.remove('font-semibold');
+        title.classList.add('font-medium');
+      }
+      const checkIcon = row.querySelector('.check-icon');
+      if (checkIcon) {
+        checkIcon.classList.add('opacity-0');
+      }
+    });
+
+    element.setAttribute('aria-checked', 'true');
+    element.classList.remove('border', 'border-[#2D4A7A]');
+    element.classList.add('border-2', 'border-[#38A169]');
+    const activeIcon = element.querySelector('.material-symbols-outlined:first-child');
+    if (activeIcon) {
+      activeIcon.classList.remove('text-[#A0AEC0]');
+      activeIcon.classList.add('text-[#38A169]');
+    }
+    const activeTitle = element.querySelector('span.truncate');
+    if (activeTitle) {
+      activeTitle.classList.remove('font-medium');
+      activeTitle.classList.add('font-semibold');
+    }
+    const activeCheck = element.querySelector('.check-icon');
+    if (activeCheck) {
+      activeCheck.classList.remove('opacity-0');
+    }
+  }
+
+  function onNotesInput(textarea) {
+    const counter = document.getElementById('char-counter');
+    if (counter) {
+      counter.textContent = textarea.value.length + ' / 250';
+    }
+  }
+
+  function filterInterventions(val) {
+    const query = val.toLowerCase().trim();
+    const rows = document.querySelectorAll('.intervention-row');
+    rows.forEach(row => {
+      const name = (row.getAttribute('data-name') || '').toLowerCase();
+      if (!query || name.includes(query)) {
+        row.style.display = 'flex';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+
+</body></html>
