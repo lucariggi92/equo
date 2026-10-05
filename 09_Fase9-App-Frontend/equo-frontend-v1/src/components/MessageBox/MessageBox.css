@@ -1,0 +1,9 @@
+.msgbox {
+  background: #0B0F19;
+  border: 1px dashed #2D4A7A;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #A0AEC0;
+}

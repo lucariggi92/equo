@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>EQUO - Analisi</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brandDark: "#0B0F19",
+            brandBlue: "#1A365D",
+            brandBorder: "#2D4A7A",
+            brandGreen: "#38A169",
+            brandError: "#FC8181",
+            brandMuted: "#A0AEC0",
+          },
+          fontFamily: {
+            sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    @keyframes spin-slow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .custom-spinner {
+      animation: spin-slow 1.5s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-[#FFFFFF] antialiased flex justify-center min-h-screen">
+<!-- Mobile Viewport Container: 360px baseline width simulation -->
+<div class="w-full max-w-[360px] min-h-screen bg-[#0B0F19] flex flex-col relative border-x border-[#2D4A7A] select-none">
+<!-- Top App Bar (56px fisso) -->
+<header class="fixed top-0 left-0 w-full max-w-[360px] h-[56px] z-50 flex items-center justify-between px-4 bg-[#0B0F19] border-b border-[#2D4A7A]">
+<div class="flex items-center">
+<img alt="EQUO" src="https://lh3.googleusercontent.com/aida/AEtjO1X44r7KlntOmMlWn71_N-YAp1yRsU6M5YFjf97kCPTrdwjN7p5MjpRmHodG9h6lUzxbB702M4TIdPGw6ACpXc-GUw2hNvkmLI3VIoMwOh0QstSqKRz6ocGKPlqojWIsxbbgLC8vL3S6L6zkyj5TWG6e1PP_e-ViWqsXYwJ-ayHW1W-IzTGPNCssf07t320eekVCtby2EYze86E1PN1leXqougvwMA9J8kWgASwuryyBw9KMZxNbFdm58hw" style="height: 22px; width: auto; display: block;"/>
+</div>
+<!-- Right Status Badge -->
+<div class="flex items-center gap-1.5 px-2 py-0.5 border border-[#2D4A7A] bg-[#0B0F19] rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-[#38A169] animate-pulse"></span>
+<span class="text-xs text-[#A0AEC0] font-medium">Analisi...</span>
+</div>
+</header>
+<!-- Scrollable & Centered Viewport Body -->
+<main class="flex-1 flex flex-col justify-between pt-[56px] pb-[64px] px-4 overflow-y-auto">
+<!-- Top Auxiliary Structural Guide / Step Breadcrumb -->
+<div class="pt-4 flex items-center justify-between border-b border-[#2D4A7A] pb-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[#A0AEC0] text-[16px]" data-icon="sync">sync</span>
+<span class="text-xs text-[#A0AEC0]">Fase 5/5: Verifica Comparativa</span>
+</div>
+<span class="text-xs font-semibold text-[#38A169]">Elaborazione</span>
+</div>
+<!-- Center Loading State -->
+<div class="flex-1 flex flex-col items-center justify-center py-6 text-center">
+<!-- Spinner con accento verde #38A169 e fondo #2D4A7A -->
+<div class="relative w-20 h-20 mb-5 flex items-center justify-center">
+<svg class="w-20 h-20 custom-spinner" fill="none" viewbox="0 0 80 80">
+<circle cx="40" cy="40" r="34" stroke="#2D4A7A" stroke-width="6"></circle>
+<path d="M40 6 A34 34 0 0 1 74 40" stroke="#38A169" stroke-linecap="round" stroke-width="6"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[#38A169] text-[24px]" data-icon="query_stats">query_stats</span>
+</div>
+</div>
+<!-- Primary Loading Text -->
+<h1 class="text-lg font-bold text-[#FFFFFF] mb-1.5 tracking-tight">
+      Analisi dei listini in corso...
+    </h1>
+<!-- Subtext description -->
+<p class="text-xs text-[#A0AEC0] max-w-[280px] leading-relaxed mb-6">
+      Confronto costi orari manodopera regionale e prezzi medi ricambi OEM/Aftermarket in corso
+    </p>
+<!-- Barra Progresso: sfondo #1A365D, bordo #2D4A7A, raggio 12px -->
+<div class="w-full bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-3 flex flex-col gap-2 text-left">
+<div class="flex justify-between items-center text-[11px]">
+<span class="text-[#A0AEC0]">Accesso bancadati ANIA / Tempario</span>
+<span class="text-[#FFFFFF] font-bold">78%</span>
+</div>
+<!-- Barra di avanzamento: riempita con #38A169, traccia #0B0F19 -->
+<div class="w-full bg-[#0B0F19] h-2 rounded-full overflow-hidden">
+<div class="bg-[#38A169] h-full w-[78%] rounded-full"></div>
+</div>
+<span class="text-[10px] text-[#A0AEC0]">Ricerca benchmark su 14 ricambi identificati</span>
+</div>
+</div>
+<!-- Box Stato Errore: sfondo #1A365D, bordo 2px #FC8181, raggio 12px -->
+<div class="w-full bg-[#1A365D] border-2 border-[#FC8181] rounded-[12px] p-3.5 flex flex-col gap-3 mb-4">
+<div class="flex items-start gap-2.5">
+<div class="w-5 h-5 flex-shrink-0 flex items-center justify-center mt-0.5">
+<span class="material-symbols-outlined text-[#FC8181] text-[20px]" data-icon="warning">warning</span>
+</div>
+<div class="flex-1">
+<span class="text-xs font-bold text-[#FC8181] block leading-tight mb-1">Stato Connessione</span>
+<p class="text-xs text-[#A0AEC0] leading-snug">
+          Attenzione: Connessione al database listini lenta o interrotta
+        </p>
+</div>
+</div>
+<div class="pt-2 border-t border-[#2D4A7A] flex justify-end">
+<button class="h-7 px-3 border border-[#FC8181] bg-transparent rounded-[6px] flex items-center justify-center gap-1.5 hover:bg-[#0B0F19] active:opacity-75 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-[#FFFFFF]" data-icon="refresh">refresh</span>
+<span class="text-xs font-medium text-[#FFFFFF]">Riprova</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Sticky Footer Action Bar (64px) -->
+<footer class="fixed bottom-0 left-0 w-full max-w-[360px] z-50 h-[64px] bg-[#0B0F19] border-t border-[#2D4A7A] px-4 flex items-center justify-center">
+<!-- 'Annulla operazione' secondario con bordo #2D4A7A, testo #A0AEC0, raggio 10px -->
+<button class="w-full h-11 border border-[#2D4A7A] bg-transparent text-[#A0AEC0] rounded-[10px] flex items-center justify-center gap-2 hover:bg-[#1A365D] active:opacity-75 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-[#A0AEC0]" data-icon="close">close</span>
+<span class="text-sm font-semibold text-[#A0AEC0]">Annulla operazione</span>
+</button>
+</footer>
+</div>
+</body></html>

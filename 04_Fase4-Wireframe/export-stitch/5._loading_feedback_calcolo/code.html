@@ -1,0 +1,214 @@
+<!DOCTYPE html><html class="light" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>EQUO - Analisi</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#46464e",
+            "on-primary-container": "#858387",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#e2e2e6",
+            "tertiary-fixed-dim": "#c6c6ca",
+            "surface-tint": "#5f5e61",
+            "secondary": "#5d5e66",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f9f9fa",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#e4e1e6",
+            "surface-container-low": "#f3f3f4",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#63646c",
+            "primary-fixed-dim": "#c8c5ca",
+            "secondary-fixed": "#e3e1ec",
+            "on-primary-fixed-variant": "#47464a",
+            "surface-container-high": "#e8e8e9",
+            "surface-variant": "#e2e2e3",
+            "inverse-primary": "#c8c5ca",
+            "secondary-fixed-dim": "#c6c5cf",
+            "surface-container-highest": "#e2e2e3",
+            "primary-container": "#1b1b1e",
+            "primary": "#000000",
+            "on-tertiary-fixed": "#1a1c1f",
+            "on-surface": "#1a1c1d",
+            "secondary-container": "#e3e1ec",
+            "outline-variant": "#c8c5cb",
+            "surface": "#f9f9fa",
+            "on-secondary-fixed": "#1a1b22",
+            "on-tertiary-fixed-variant": "#45474a",
+            "surface-container": "#eeeeef",
+            "tertiary-container": "#1a1c1f",
+            "inverse-surface": "#2f3132",
+            "outline": "#77767b",
+            "inverse-on-surface": "#f0f1f2",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#838487",
+            "on-primary-fixed": "#1b1b1e",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#dadadb",
+            "tertiary": "#000000",
+            "on-surface-variant": "#47464b",
+            "background": "#f9f9fa",
+            "on-background": "#1a1c1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "headline-lg": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @keyframes spin-segmented {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .wireframe-spinner {
+      animation: spin-segmented 1.8s steps(8, end) infinite;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased flex justify-center min-h-screen">
+<!-- Mobile Viewport Container: 360px baseline width simulation -->
+<div class="w-full max-w-[360px] min-h-screen bg-surface-container-lowest flex flex-col relative border-x border-outline-variant select-none">
+<!-- Top App Bar (56px) mapped from Shared Components & Style Specs -->
+<header class="fixed top-0 left-0 w-full max-w-[360px] h-14 z-50 flex items-center justify-between px-margin bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="car_repair">car_repair</span>
+<span class="font-headline-sm text-headline-sm text-primary tracking-tight">EQUO</span>
+</div>
+<!-- Right Status Badge (Wireframe Indicator) -->
+<div class="flex items-center gap-space-xs px-2 py-0.5 border border-outline-variant bg-surface-container rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-outline animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Analisi...</span>
+</div>
+</header>
+<!-- Scrollable & Centered Viewport Body -->
+<main class="flex-1 flex flex-col justify-between pt-14 pb-20 px-margin overflow-y-auto">
+<!-- Top Auxiliary Structural Guide / Step Breadcrumb -->
+<div class="pt-space-md flex items-center justify-between border-b border-outline-variant pb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[16px]" data-icon="sync">sync</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fase 5/5: Verifica Comparativa</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Elaborazione</span>
+</div>
+<!-- Center Loading State -->
+<div class="flex-1 flex flex-col items-center justify-center py-space-xl text-center">
+<!-- Neutral Gray Segmented Ring / Wireframe Spinner Placeholder -->
+<div class="relative w-20 h-20 mb-space-lg flex items-center justify-center">
+<!-- Background Outer Ring Placeholder -->
+<div class="absolute inset-0 rounded-full border-4 border-dashed border-outline-variant wireframe-spinner"></div>
+<!-- Center Structural Target -->
+<div class="w-10 h-10 rounded-full border border-outline bg-surface-container-low flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="query_stats">query_stats</span>
+</div>
+</div>
+<!-- Primary Loading Text -->
+<h1 class="font-headline-md text-headline-md text-primary mb-space-xs tracking-tight">
+          Analisi dei listini in corso...
+        </h1>
+<!-- Subtext description -->
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[280px] leading-relaxed mb-space-lg">
+          Confronto costi orari manodopera regionale e prezzi medi ricambi OEM/Aftermarket in corso
+        </p>
+<!-- Low-Fidelity Process Flow Progress Bar -->
+<div class="w-full bg-surface-container border border-outline-variant rounded p-2 flex flex-col gap-1.5 text-left">
+<div class="flex justify-between items-center text-[11px]">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Accesso bancadati ANIA / Tempario</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">78%</span>
+</div>
+<!-- Stepped progress bar wireframe -->
+<div class="w-full bg-surface-container-highest h-2 rounded-none overflow-hidden flex gap-0.5">
+<div class="bg-primary w-3/4 h-full"></div>
+<div class="bg-outline-variant w-1/4 h-full"></div>
+</div>
+<span class="font-body-sm text-[10px] text-outline">Ricerca benchmark su 14 ricambi identificati</span>
+</div>
+</div>
+<!-- Inline Wireframe Error Notification Banner (Simulated Error State) -->
+<div class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-space-md flex flex-col gap-space-sm mb-space-md">
+<div class="flex items-start gap-space-sm">
+<div class="w-5 h-5 flex-shrink-0 flex items-center justify-center border border-outline rounded bg-surface-container-highest mt-0.5">
+<span class="material-symbols-outlined text-primary text-[14px]" data-icon="warning">warning</span>
+</div>
+<div class="flex-1">
+<span class="font-label-md text-label-md text-primary block leading-tight mb-0.5">Stato Connessione</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+              Attenzione: Connessione al database listini lenta o interrotta
+            </p>
+</div>
+</div>
+<div class="pt-space-xs border-t border-outline-variant flex justify-end">
+<button class="h-8 px-space-md border border-outline bg-surface rounded flex items-center justify-center gap-space-xs hover:bg-surface-container active:opacity-75 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="refresh">refresh</span>
+<span class="font-label-sm text-label-sm text-primary">Riprova</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Sticky Footer Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full max-w-[360px] z-50 min-h-[64px] bg-surface border-t border-outline-variant p-margin flex items-center justify-center">
+<!-- 'Annulla operazione' wireframe secondary button (full-width outline) -->
+<button class="w-full h-11 border border-outline bg-surface-container-lowest text-primary rounded flex items-center justify-center gap-space-xs hover:bg-surface-container active:opacity-75 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface" data-icon="close">close</span>
+<span class="font-label-lg text-label-lg text-on-surface">Annulla operazione</span>
+</button>
+</footer>
+</div>
+
+
+</body></html>

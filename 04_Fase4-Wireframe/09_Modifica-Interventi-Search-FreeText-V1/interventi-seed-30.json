@@ -1,0 +1,35 @@
+// Seed 30 interventi comuni per catalogo search + keyword match n8n.
+// Solo struttura, senza prezzi (prezzi restano nel JSON n8n esistente da estendere).
+// Campi: id, nome, keywords per match testo libero.
+[
+  {"id":"tagliando-completo","nome":"Tagliando completo","keywords":["tagliando","filtri","olio"]},
+  {"id":"pastiglie-freni","nome":"Pastiglie freni","keywords":["pastiglie","freni","pasticche"]},
+  {"id":"dischi-pastiglie","nome":"Dischi + pastiglie freni","keywords":["dischi","pastiglie","freni"]},
+  {"id":"batteria","nome":"Sostituzione batteria","keywords":["batteria","accumulatore"]},
+  {"id":"frizione","nome":"Kit frizione","keywords":["frizione","volano"]},
+  {"id":"cinghia-distribuzione","nome":"Cinghia distribuzione + pompa acqua","keywords":["cinghia","distribuzione","pompa acqua"]},
+  {"id":"ammortizzatori","nome":"Ammortizzatori (coppia)","keywords":["ammortizzatori","sospensioni"]},
+  {"id":"marmitta-scarico","nome":"Marmitta / scarico","keywords":["marmitta","scarico","silenziatore"]},
+  {"id":"alternatore","nome":"Alternatore","keywords":["alternatore"]},
+  {"id":"motorino-avviamento","nome":"Motorino avviamento","keywords":["motorino","avviamento"]},
+  {"id":"radiatore","nome":"Radiatore / raffreddamento","keywords":["radiatore","raffreddamento","liquido"]},
+  {"id":"pompa-acqua","nome":"Pompa acqua","keywords":["pompa acqua"]},
+  {"id":"filtro-aria","nome":"Filtro aria","keywords":["filtro aria"]},
+  {"id":"filtro-gasolio","nome":"Filtro gasolio","keywords":["filtro gasolio","gasolio"]},
+  {"id":"candele","nome":"Candele accensione","keywords":["candele","accensione"]},
+  {"id":"bobina","nome":"Bobina accensione","keywords":["bobina"]},
+  {"id":"turbina","nome":"Turbina / turbocompressore","keywords":["turbina","turbo"]},
+  {"id":"egr-fap","nome":"Valvola EGR / FAP pulizia","keywords":["egr","fap","dpf","antiparticolato"]},
+  {"id":"freni-tamburo","nome":"Ganasce / tamburi","keywords":["ganasce","tamburi"]},
+  {"id":"pinze-freni","nome":"Pinze freni","keywords":["pinze","pinza"]},
+  {"id":"olio-cambio","nome":"Olio cambio","keywords":["olio cambio","cambio olio"]},
+  {"id":"cinghia-servizi","nome":"Cinghia servizi","keywords":["cinghia servizi","servizi"]},
+  {"id":"braccetti-sospensioni","nome":"Braccetti / testine","keywords":["braccetti","testine","sospensioni"]},
+  {"id":"cuscinetto-ruota","nome":"Cuscinetto ruota","keywords":["cuscinetto","ruota"]},
+  {"id":"semiassi","nome":"Semiassi / giunti","keywords":["semiassi","giunti","trasmissione"]},
+  {"id":"clima-ricarica","nome":"Ricarica clima","keywords":["clima","aria condizionata","ricarica"]},
+  {"id":"compressore-clima","nome":"Compressore clima","keywords":["compressore","clima"]},
+  {"id":"vetri-alzacristalli","nome":"Alzacristalli","keywords":["alzacristalli","vetro","finestrino"]},
+  {"id":"diagnosi-elettronica","nome":"Diagnosi elettronica","keywords":["diagnosi","centralina","spia","errore"]},
+  {"id":"altro-testo-libero","nome":"Altro (descrivi tu)","keywords":[]}
+]

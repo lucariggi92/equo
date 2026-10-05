@@ -1,0 +1,13 @@
+.badge {
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-weight: 600;
+  font-size: 12px;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+}
+.badge-ok { color: #38A169; border-color: #38A169; background: rgba(56,161,105,.15); }
+.badge-warn { color: #ECC94B; border-color: #ECC94B; background: rgba(236,201,75,.15); }
+.badge-err { color: #FC8181; border-color: #FC8181; background: rgba(252,129,129,.15); }
+.badge-info { color: #74db9d; border-color: #2D4A7A; background: #1A365D; }

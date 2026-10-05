@@ -1,0 +1,18 @@
+.card {
+  background: #1A365D;
+  border: 1px solid #2D4A7A;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #38A169;
+  border-bottom: 1px solid #2D4A7A;
+  padding-bottom: 8px;
+}

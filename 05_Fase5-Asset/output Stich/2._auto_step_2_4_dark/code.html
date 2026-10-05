@@ -1,0 +1,196 @@
+<!DOCTYPE html><html class="dark" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>EQUO - Step 2/4 Auto</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: "#0B0F19",
+              card: "#1A365D",
+              border: "#2D4A7A",
+              green: "#38A169",
+              muted: "#A0AEC0",
+            }
+          },
+          fontFamily: {
+            sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: max(884px, 100dvh);
+      background-color: #0B0F19;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-[#FFFFFF] flex justify-center min-h-screen">
+<!-- Mobile Viewport Shell (360px baseline frame) -->
+<div class="w-full max-w-[360px] min-h-[800px] bg-[#0B0F19] flex flex-col relative border-x border-[#2D4A7A]">
+<!-- TopAppBar Component (56px fisso) -->
+<header class="fixed top-0 left-0 w-full h-14 z-50 flex items-center justify-between px-4 bg-[#0B0F19] border-b border-[#2D4A7A] max-w-[360px] mx-auto right-0">
+<div class="flex items-center">
+<img alt="EQUO" src="https://lh3.googleusercontent.com/aida/AEtjO1X44r7KlntOmMlWn71_N-YAp1yRsU6M5YFjf97kCPTrdwjN7p5MjpRmHodG9h6lUzxbB702M4TIdPGw6ACpXc-GUw2hNvkmLI3VIoMwOh0QstSqKRz6ocGKPlqojWIsxbbgLC8vL3S6L6zkyj5TWG6e1PP_e-ViWqsXYwJ-ayHW1W-IzTGPNCssf07t320eekVCtby2EYze86E1PN1leXqougvwMA9J8kWgASwuryyBw9KMZxNbFdm58hw" style="height: 22px; width: auto; display: block;">
+</div>
+
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 pt-[72px] pb-[88px] px-4 flex flex-col">
+<!-- Section Intro / Context -->
+<section class="mb-4">
+<h1 class="text-[22px] font-bold text-[#FFFFFF] tracking-tight">Che auto guidi?</h1>
+<p class="text-[13px] text-[#A0AEC0] mt-1">
+    Seleziona il veicolo per verificare il costo dei ricambi compatibili
+  </p>
+</section>
+<!-- Search Input Bar (48px) -->
+<div class="mb-4">
+<div class="relative flex items-center">
+<div class="absolute left-3.5 flex items-center pointer-events-none text-[#A0AEC0]">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+</div>
+<input class="w-full h-12 pl-10 pr-16 bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] text-[14px] text-[#FFFFFF] placeholder:text-[#A0AEC0] focus:outline-none focus:ring-2 focus:ring-[#38A169] focus:border-[#38A169]" placeholder="Cerca..." type="text">
+<div class="absolute right-3 py-1 px-2 border border-[#2D4A7A] rounded bg-[#0B0F19] text-[10px] text-[#A0AEC0] uppercase font-semibold">
+      Filtra
+    </div>
+</div>
+</div>
+<!-- Vehicle List Header Meta -->
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-[#2D4A7A]">
+<span class="text-[11px] font-medium text-[#A0AEC0] uppercase tracking-wider">Modelli frequenti (10)</span>
+<span class="text-[11px] font-medium text-[#A0AEC0]">A - Z</span>
+</div>
+<!-- List of 10 vehicle models (each 56px height, rounded 12px) -->
+<ul aria-label="Seleziona modello auto" class="flex flex-col w-full gap-2" role="radiogroup">
+<!-- Item 1: Fiat Panda (Selected state) -->
+<li aria-checked="true" class="h-14 bg-[#1A365D] rounded-[12px] border-2 border-[#38A169] flex items-center justify-between px-3.5 cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<!-- Selected radio dot wireframe indicator -->
+<div class="w-[18px] h-[18px] rounded-full border-2 border-[#38A169] flex items-center justify-center bg-transparent">
+<div class="w-2 h-2 rounded-full bg-[#38A169]"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-[14px] font-semibold text-[#FFFFFF]">Fiat Panda</span>
+<span class="text-[11px] text-[#A0AEC0] leading-tight">Utilitaria • Benzina / Ibrida</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[#38A169] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 2: Volkswagen Golf -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Volkswagen Golf</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 3: Renault Clio -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Renault Clio</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 4: Toyota Yaris -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Toyota Yaris</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 5: Ford Fiesta -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Ford Fiesta</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 6: Peugeot 208 -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Peugeot 208</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 7: Dacia Sandero -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Dacia Sandero</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 8: Citroën C3 -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Citroën C3</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 9: Jeep Renegade -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Jeep Renegade</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 10: Fiat 500 -->
+<li aria-checked="false" class="h-14 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A] flex items-center justify-between px-3.5 hover:border-[#38A169] transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-3">
+<div class="w-[18px] h-[18px] rounded-full border border-[#2D4A7A] flex items-center justify-center bg-transparent"></div>
+<span class="text-[14px] font-medium text-[#FFFFFF]">Fiat 500</span>
+</div>
+<span class="material-symbols-outlined text-[#A0AEC0] text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+</ul>
+<!-- Informative Micro-Card (Box Info) -->
+<div class="mt-4 p-3.5 border border-[#2D4A7A] rounded-[12px] bg-[#1A365D] flex items-start gap-3">
+<span class="material-symbols-outlined text-[#A0AEC0] text-[20px] mt-[1px]" data-icon="help_outline">help_outline</span>
+<div class="flex flex-col">
+<span class="text-[13px] font-semibold text-[#FFFFFF]">Non trovi il modello esatto?</span>
+<span class="text-[12px] text-[#A0AEC0] leading-snug mt-0.5">Puoi inserire la targa o il numero di telaio nel passaggio successivo per un'identificazione immediata.</span>
+</div>
+</div>
+</main>
+<!-- Sticky Footer (64px) -->
+<nav aria-label="Navigazione passaggi" class="fixed bottom-0 left-0 w-full z-50 flex items-center justify-between gap-3 p-3 h-16 bg-[#0B0F19] border-t border-[#2D4A7A] max-w-[360px] mx-auto right-0">
+<!-- Indietro (Outlined/Link #38A169) -->
+<button class="flex items-center justify-center bg-transparent border border-[#38A169] text-[#38A169] rounded-[10px] px-3 h-11 w-full hover:bg-[#38A169]/10 active:opacity-75 transition-colors font-medium text-[14px]" type="button">
+<span class="material-symbols-outlined text-[18px] mr-1.5" data-icon="arrow_back">arrow_back</span>
+<span class="">Indietro</span>
+</button>
+<!-- Avanti (Primary #38A169 con testo #0B0F19 bold) -->
+<button class="flex items-center justify-center bg-[#38A169] text-[#0B0F19] font-bold rounded-[10px] px-3 h-11 w-full hover:opacity-90 active:opacity-75 transition-opacity text-[14px]" type="button">
+<span class="">Avanti</span>
+<span class="material-symbols-outlined text-[18px] ml-1.5" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</nav>
+</div>
+
+
+</body></html>

@@ -1,0 +1,20 @@
+.row {
+  min-height: 56px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #1A365D;
+  color: #fff;
+  border: 0;
+  border-bottom: 1px solid #2D4A7A;
+  cursor: pointer;
+  text-align: left;
+}
+.row:hover { background: #234574; }
+.row-selected { outline: 2px solid #38A169; outline-offset: -2px; }
+.row-main { display: flex; flex-direction: column; }
+.row-label { font-weight: 600; font-size: 14px; }
+.row-sub { font-size: 12px; color: #A0AEC0; }
+.row-arrow { color: #A0AEC0; font-size: 20px; }

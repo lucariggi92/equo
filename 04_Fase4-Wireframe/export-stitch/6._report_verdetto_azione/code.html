@@ -1,0 +1,240 @@
+<!DOCTYPE html><html class="light" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PreventivoCheck.web - Report Verdetto</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#46464e",
+            "on-primary-container": "#858387",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#e2e2e6",
+            "tertiary-fixed-dim": "#c6c6ca",
+            "surface-tint": "#5f5e61",
+            "secondary": "#5d5e66",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f9f9fa",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#e4e1e6",
+            "surface-container-low": "#f3f3f4",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#63646c",
+            "primary-fixed-dim": "#c8c5ca",
+            "secondary-fixed": "#e3e1ec",
+            "on-primary-fixed-variant": "#47464a",
+            "surface-container-high": "#e8e8e9",
+            "surface-variant": "#e2e2e3",
+            "inverse-primary": "#c8c5ca",
+            "secondary-fixed-dim": "#c6c5cf",
+            "surface-container-highest": "#e2e2e3",
+            "primary-container": "#1b1b1e",
+            "primary": "#000000",
+            "on-tertiary-fixed": "#1a1c1f",
+            "on-surface": "#1a1c1d",
+            "secondary-container": "#e3e1ec",
+            "outline-variant": "#c8c5cb",
+            "surface": "#f9f9fa",
+            "on-secondary-fixed": "#1a1b22",
+            "on-tertiary-fixed-variant": "#45474a",
+            "surface-container": "#eeeeef",
+            "tertiary-container": "#1a1c1f",
+            "inverse-surface": "#2f3132",
+            "outline": "#77767b",
+            "inverse-on-surface": "#f0f1f2",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#838487",
+            "on-primary-fixed": "#1b1b1e",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#dadadb",
+            "tertiary": "#000000",
+            "on-surface-variant": "#47464b",
+            "background": "#f9f9fa",
+            "on-background": "#1a1c1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "headline-lg": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container text-on-surface font-body-md text-body-md flex justify-center items-start min-h-screen p-0 sm:py-6 antialiased selection:bg-surface-dim selection:text-primary">
+<!-- Mobile Viewport Container: strictly 360px x 800px constraint -->
+<div class="w-[360px] h-[800px] max-h-[800px] bg-surface flex flex-col relative border border-outline-variant overflow-hidden shadow-none">
+<!-- Top App Bar (Header: 56px fixed height) -->
+<header class="fixed top-0 left-0 w-[360px] h-14 z-50 flex items-center justify-between px-margin bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="car_repair">car_repair</span>
+<span class="text-headline-sm font-headline-sm text-primary tracking-tight">EQUO</span>
+</div>
+<div class="flex items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-space-sm py-space-xs rounded border border-outline-variant">Verdetto Finale</span>
+</div>
+</header>
+<!-- Scrollable Viewport Body: Between 56px header and 124px footer -->
+<main class="flex-1 overflow-y-auto pt-[64px] pb-[136px] px-margin flex flex-col gap-space-lg">
+<!-- Main Verdict Block -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col items-center text-center">
+<!-- Large Grayscale Wireframe Traffic-Light Circle Placeholder -->
+<div class="relative w-16 h-16 rounded-full bg-surface-container border border-outline flex items-center justify-center mb-space-md">
+<!-- Concentric indicator ring pattern in neutral wireframe -->
+<div class="w-12 h-12 rounded-full border border-dashed border-outline-variant flex items-center justify-center bg-surface-variant">
+<span class="material-symbols-outlined text-on-surface text-[24px]" data-icon="priority_high">priority_high</span>
+</div>
+</div>
+<!-- H1 Title Verdetto -->
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight mb-space-xs">
+          Preventivo Sopra la Media
+        </h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+          Analisi comparativa tariffe e ricambi
+        </p>
+<!-- Pill / Badge Box -->
+<div class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container-high border border-outline text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="trending_up">trending_up</span>
+<span class="">+65,00 € rispetto alla stima equa</span>
+</div>
+</section>
+<!-- Breakdown Summary (2 Concise Wireframe Rows) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between pb-space-xs border-b border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">VOCI DI CONFRONTO</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">STIMA MEDIA</span>
+</div>
+<!-- Row 1: Manodopera -->
+<div class="flex items-start justify-between gap-space-sm pt-space-xs">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px] mt-[1px]" data-icon="build">build</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Manodopera stimata: 120,00 €</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">3h x 40€/h in Lombardia</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-space-xs py-[2px] rounded border border-outline-variant">Ref. OK</span>
+</div>
+<div class="w-full border-t border-dashed border-outline-variant my-space-xs"></div>
+<!-- Row 2: Ricambi -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px] mt-[1px]" data-icon="inventory_2">inventory_2</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Ricambi e materiali: 95,00 €</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">listino medio compatibile</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-space-xs py-[2px] rounded border border-outline-variant">Ref. OK</span>
+</div>
+</section>
+<!-- Wireframe Copy-Message Box -->
+<section class="bg-surface-container-low border border-dashed border-outline rounded-xl p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="chat">chat</span>
+<span class="font-label-md text-label-md text-primary">Bozza messaggio pronta da inviare:</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">SMS / WhatsApp</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md mt-space-xs">
+<p class="font-body-sm text-body-sm text-on-surface italic leading-relaxed select-all" id="messageText">
+            "Salve, ho verificato i parametri medi per il tagliando della mia Fiat Panda in Lombardia: la manodopera e i ricambi standard risultano inferiori di circa 65€. È possibile verificare il dettaglio delle voci applicate?"
+          </p>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant pt-space-xs">
+<span class="font-body-sm text-body-sm flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="info">info</span>
+            Tono cordiale e orientato al riscontro
+          </span>
+<span class="font-label-sm text-label-sm" id="copyStatusBadge">Pronto</span>
+</div>
+</section>
+</main>
+<!-- Sticky Footer Action Bar -->
+<footer class="fixed bottom-0 left-0 w-[360px] z-50 flex flex-col gap-space-sm p-margin bg-surface border-t border-outline-variant">
+<!-- Primary CTA Button -->
+<button class="flex items-center justify-center gap-space-xs bg-primary text-on-primary rounded px-space-lg h-11 w-full font-label-lg text-label-lg hover:opacity-90 active:opacity-75 transition-opacity" id="copyBtn" onclick="copyMessage()" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+<span id="copyBtnLabel" class="">Copia messaggio per il meccanico</span>
+</button>
+<!-- Secondary CTA Button -->
+<button class="flex items-center justify-center gap-space-xs bg-surface border border-outline text-on-surface rounded px-space-lg h-11 w-full font-label-lg text-label-lg hover:bg-surface-container active:opacity-75 transition-colors" onclick="resetCheck()" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+<span class="">Nuova verifica</span>
+</button>
+</footer>
+</div>
+<script>
+    function copyMessage() {
+      const text = document.getElementById('messageText').innerText.replace(/^"|"$/g, '');
+      navigator.clipboard.writeText(text).then(() => {
+        const btnLabel = document.getElementById('copyBtnLabel');
+        const badge = document.getElementById('copyStatusBadge');
+        btnLabel.innerText = "Messaggio Copiato!";
+        badge.innerText = "Copiato";
+        setTimeout(() => {
+          btnLabel.innerText = "Copia messaggio per il meccanico";
+          badge.innerText = "Pronto";
+        }, 2000);
+      }).catch(() => {
+        const btnLabel = document.getElementById('copyBtnLabel');
+        btnLabel.innerText = "Seleziona testo sopra";
+      });
+    }
+
+    function resetCheck() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+
+</body></html>

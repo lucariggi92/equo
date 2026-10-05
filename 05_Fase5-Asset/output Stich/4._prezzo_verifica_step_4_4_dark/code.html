@@ -1,0 +1,127 @@
+<!DOCTYPE html><html class="h-full" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PreventivoCheck.web - Step 4/4</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brandDark: "#0B0F19",
+            brandBlue: "#1A365D",
+            brandBorder: "#2D4A7A",
+            brandGreen: "#38A169",
+            brandMuted: "#A0AEC0",
+          },
+          fontFamily: {
+            sans: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .cursor-blink {
+      animation: blink 1s step-start infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-[#FFFFFF] antialiased min-h-full flex justify-center selection:bg-[#2D4A7A]">
+<!-- Mobile Viewport Canvas Container (360px targeted baseline) -->
+<div class="w-full max-w-[360px] min-h-screen bg-[#0B0F19] flex flex-col relative border-x border-[#2D4A7A]">
+<!-- TopAppBar (56px fisso) -->
+<header class="fixed top-0 max-w-[360px] w-full h-[56px] z-50 flex items-center justify-between px-4 bg-[#0B0F19] border-b border-[#2D4A7A]">
+<div class="flex items-center">
+<img alt="EQUO" src="https://lh3.googleusercontent.com/aida/AEtjO1X44r7KlntOmMlWn71_N-YAp1yRsU6M5YFjf97kCPTrdwjN7p5MjpRmHodG9h6lUzxbB702M4TIdPGw6ACpXc-GUw2hNvkmLI3VIoMwOh0QstSqKRz6ocGKPlqojWIsxbbgLC8vL3S6L6zkyj5TWG6e1PP_e-ViWqsXYwJ-ayHW1W-IzTGPNCssf07t320eekVCtby2EYze86E1PN1leXqougvwMA9J8kWgASwuryyBw9KMZxNbFdm58hw" style="height: 22px; width: auto; display: block;">
+</div>
+<div class="flex items-center">
+
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 pt-[56px] pb-[80px] px-4 flex flex-col gap-4">
+<!-- Screen Header Section -->
+<section class="mt-4 flex flex-col gap-1.5">
+<h1 class="text-[22px] font-bold text-[#FFFFFF] tracking-tight leading-snug">
+          Quanto ti ha chiesto il meccanico?
+        </h1>
+<p class="text-[13px] text-[#A0AEC0] leading-relaxed">
+          Inserisci il totale IVA inclusa indicato nel tuo preventivo cartaceo o digitale
+        </p>
+</section>
+<!-- Previous Steps Recap Box (3 Righe) -->
+<section class="bg-[#1A365D] border border-[#2D4A7A] rounded-[12px] p-3.5 flex flex-col gap-1">
+<div class="flex items-center justify-between py-1.5 border-b border-[#2D4A7A]">
+<span class="text-[12px] text-[#A0AEC0]">Regione:</span>
+<span class="text-[13px] font-semibold text-[#FFFFFF]">Lombardia</span>
+</div>
+<div class="flex items-center justify-between py-1.5 border-b border-[#2D4A7A]">
+<span class="text-[12px] text-[#A0AEC0]">Veicolo:</span>
+<span class="text-[13px] font-semibold text-[#FFFFFF]">Fiat Panda 1.2</span>
+</div>
+<div class="flex items-center justify-between py-1.5">
+<span class="text-[12px] text-[#A0AEC0]">Intervento:</span>
+<span class="text-[13px] font-semibold text-[#FFFFFF]">Tagliando Completo</span>
+</div>
+</section>
+<!-- Currency Input Display Box -->
+<section class="flex flex-col gap-1.5">
+<label class="text-[13px] font-semibold text-[#A0AEC0]">Totale Preventivo (€)</label>
+<div class="h-16 w-full bg-[#1A365D] border-2 border-[#38A169] rounded-[10px] flex items-center justify-between px-4">
+<div class="flex items-baseline gap-1 overflow-hidden">
+<span class="text-[26px] font-bold tracking-tight text-[#FFFFFF]">€ 280,00</span>
+<span class="inline-block w-0.5 h-6 bg-[#38A169] cursor-blink translate-y-0.5"></span>
+</div>
+<span class="text-[12px] font-semibold text-[#A0AEC0] uppercase tracking-wider">EUR</span>
+</div>
+</section>
+<!-- Numeric Keypad (Tastierino Numerico Touch 3x4) -->
+<section class="w-full flex-1 flex flex-col justify-end mt-2">
+<div class="grid grid-cols-3 gap-2 p-2 bg-[#1A365D] rounded-[12px] border border-[#2D4A7A]">
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">1</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">2</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">3</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">4</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">5</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">6</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">7</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">8</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">9</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">,</button>
+<button class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[20px] font-bold text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">0</button>
+<button aria-label="Cancella" class="min-h-[52px] bg-[#1A365D] border border-[#2D4A7A] rounded-[10px] flex items-center justify-center text-[#FFFFFF] active:bg-[#2D4A7A] transition-colors" type="button">
+<span class="material-symbols-outlined text-[22px]" data-icon="backspace">backspace</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Sticky Footer Action Bar (64px) -->
+<footer class="fixed bottom-0 max-w-[360px] w-full h-[64px] z-50 flex items-center justify-between gap-3 px-4 bg-[#0B0F19] border-t border-[#2D4A7A]">
+<!-- Outlined Secondary CTA: Indietro -->
+<button class="flex items-center justify-center gap-1.5 bg-transparent border border-[#38A169] text-[#38A169] rounded-[10px] px-3 h-11 w-1/3 hover:bg-[#38A169]/10 active:opacity-75 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
+<span class="text-[14px] font-semibold">Indietro</span>
+</button>
+<!-- Prominent Primary CTA: Verifica Preventivo -->
+<button class="flex-1 flex items-center justify-center gap-1.5 bg-[#38A169] text-[#0B0F19] font-bold rounded-[10px] px-3 h-11 hover:opacity-95 active:opacity-85 transition-opacity" type="button">
+<span class="text-[14px] whitespace-nowrap">Verifica Preventivo</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</footer>
+</div>
+
+
+</body></html>

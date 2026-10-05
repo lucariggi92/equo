@@ -1,0 +1,38 @@
+.phone {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100svh;
+  margin: 0 auto;
+  background: #0B0F19;
+  display: flex;
+  flex-direction: column;
+}
+.phone-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Tablet (768–1023): 8 colonne, margini 24 */
+@media (min-width: 768px) {
+  .phone {
+    max-width: 600px;
+    min-height: 100svh;
+    border-left: 1px solid rgba(45, 74, 122, 0.3);
+    border-right: 1px solid rgba(45, 74, 122, 0.3);
+  }
+}
+
+/* Desktop (>=1024): 12 colonne, margini 32 */
+@media (min-width: 1024px) {
+  .phone {
+    max-width: 760px;
+    border-left: 1px solid #2D4A7A;
+    border-right: 1px solid #2D4A7A;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html><html class="light" lang="it"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PreventivoCheck.web - Step 2/4 Auto</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#46464e",
+            "on-primary-container": "#858387",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#e2e2e6",
+            "tertiary-fixed-dim": "#c6c6ca",
+            "surface-tint": "#5f5e61",
+            "secondary": "#5d5e66",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f9f9fa",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#e4e1e6",
+            "surface-container-low": "#f3f3f4",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#63646c",
+            "primary-fixed-dim": "#c8c5ca",
+            "secondary-fixed": "#e3e1ec",
+            "on-primary-fixed-variant": "#47464a",
+            "surface-container-high": "#e8e8e9",
+            "surface-variant": "#e2e2e3",
+            "inverse-primary": "#c8c5ca",
+            "secondary-fixed-dim": "#c6c5cf",
+            "surface-container-highest": "#e2e2e3",
+            "primary-container": "#1b1b1e",
+            "primary": "#000000",
+            "on-tertiary-fixed": "#1a1c1f",
+            "on-surface": "#1a1c1d",
+            "secondary-container": "#e3e1ec",
+            "outline-variant": "#c8c5cb",
+            "surface": "#f9f9fa",
+            "on-secondary-fixed": "#1a1b22",
+            "on-tertiary-fixed-variant": "#45474a",
+            "surface-container": "#eeeeef",
+            "tertiary-container": "#1a1c1f",
+            "inverse-surface": "#2f3132",
+            "outline": "#77767b",
+            "inverse-on-surface": "#f0f1f2",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#838487",
+            "on-primary-fixed": "#1b1b1e",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#dadadb",
+            "tertiary": "#000000",
+            "on-surface-variant": "#47464b",
+            "background": "#f9f9fa",
+            "on-background": "#1a1c1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }],
+            "headline-lg": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface flex justify-center min-h-screen">
+<!-- Mobile Viewport Shell (360px x 800px baseline frame) -->
+<div class="w-full max-w-[360px] min-h-[800px] bg-surface-container-lowest flex flex-col relative border-x border-outline-variant">
+<!-- TopAppBar Component (from JSON specification) -->
+<header class="fixed top-0 left-0 w-full h-14 z-50 flex items-center justify-between px-margin bg-surface border-b border-outline-variant max-w-[360px] mx-auto right-0">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="car_repair">car_repair</span>
+<span class="font-headline-sm text-headline-sm text-primary tracking-tight">EQUO</span>
+</div>
+<div class="flex items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-space-sm py-[2px] rounded border border-outline-variant">Step 2/4</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 pt-[72px] pb-[88px] px-margin flex flex-col">
+<!-- Section Intro / Context -->
+<section class="mb-space-lg">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Che auto guidi?</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+          Seleziona il veicolo per verificare il costo dei ricambi compatibili
+        </p>
+</section>
+<!-- Search Input Bar -->
+<div class="mb-space-lg">
+<div class="relative flex items-center">
+<div class="absolute left-space-md flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+</div>
+<input class="w-full h-11 pl-9 pr-space-md bg-surface-container-low border border-outline-variant rounded font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" placeholder="Cerca..." type="text">
+<div class="absolute right-space-sm py-0.5 px-space-xs border border-outline-variant rounded bg-surface text-[10px] text-outline uppercase font-label-sm">
+            Filtra
+          </div>
+</div>
+</div>
+<!-- Vehicle List Header Meta -->
+<div class="flex items-center justify-between pb-space-xs mb-space-xs border-b border-outline-variant">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Modelli frequenti (10)</span>
+<span class="font-label-sm text-label-sm text-outline">A - Z</span>
+</div>
+<!-- List of 10 vehicle models (each 56px height) -->
+<ul aria-label="Seleziona modello auto" class="flex flex-col w-full" role="radiogroup">
+<!-- Item 1: Fiat Panda (Selected wireframe state) -->
+<li aria-checked="true" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm bg-surface-container-low rounded border border-primary my-[2px] cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<!-- Selected radio dot wireframe indicator -->
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-primary flex items-center justify-center bg-surface-container-lowest">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-primary">Fiat Panda</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant leading-none">Utilitaria • Benzina / Ibrida</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 2: Volkswagen Golf -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Volkswagen Golf</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 3: Renault Clio -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Renault Clio</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 4: Toyota Yaris -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Toyota Yaris</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 5: Ford Fiesta -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Ford Fiesta</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 6: Peugeot 208 -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Peugeot 208</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 7: Dacia Sandero -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Dacia Sandero</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 8: Citroën C3 -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Citroën C3</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 9: Jeep Renegade -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Jeep Renegade</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+<!-- Item 10: Fiat 500 -->
+<li aria-checked="false" class="h-14 border-b border-outline-variant flex items-center justify-between px-space-sm hover:bg-surface-container transition-colors cursor-pointer" role="radio">
+<div class="flex items-center gap-space-md">
+<div class="w-[18px] h-[18px] rounded-full border-[1.5px] border-outline flex items-center justify-center bg-surface-container-lowest"></div>
+<span class="font-body-md text-body-md text-on-surface">Fiat 500</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="chevron_right">chevron_right</span>
+</li>
+</ul>
+<!-- Informative Micro-Card Placeholder -->
+<div class="mt-space-lg p-space-md border border-dashed border-outline-variant rounded bg-surface-container-low flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-outline text-[18px] mt-[2px]" data-icon="help_outline">help_outline</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary">Non trovi il modello esatto?</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Puoi inserire la targa o il numero di telaio nel passaggio successivo per un'identificazione immediata.</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Component (Dual-Button Sticky Footer from JSON specification) -->
+<nav aria-label="Navigazione passaggi" class="fixed bottom-0 left-0 w-full z-50 flex items-center justify-between gap-space-md p-margin min-h-[64px] bg-surface border-t border-outline-variant max-w-[360px] mx-auto right-0">
+<!-- Destination 1: Indietro (Inactive / Outlined style from JSON) -->
+<button class="flex items-center justify-center bg-surface border border-outline text-on-surface rounded px-space-lg py-space-sm h-11 w-full hover:opacity-90 active:opacity-75 transition-opacity" type="button">
+<span class="material-symbols-outlined text-[18px] mr-space-xs" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-lg text-label-lg">Indietro</span>
+</button>
+<!-- Destination 2: Avanti (Active Primary style from JSON) -->
+<button class="flex items-center justify-center bg-primary text-on-primary rounded px-space-lg py-space-sm h-11 w-full hover:opacity-90 active:opacity-75 transition-opacity" type="button">
+<span class="font-label-lg text-label-lg">Avanti</span>
+<span class="material-symbols-outlined text-[18px] ml-space-xs" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</nav>
+</div>
+
+
+</body></html>
