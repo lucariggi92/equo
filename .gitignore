@@ -37,3 +37,6 @@ _v2/
 # Backup locali del database (solo la cartella va su git)
 database-mysql/backup/*
 !database-mysql/backup/.gitkeep
+
+# Elenco fonti con rating di affidabilità (per ora solo locale)
+database-mysql/import/elenco-fonti.xlsx

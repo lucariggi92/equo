@@ -72,5 +72,6 @@ Note su alcune tabelle:
 - **Codice ricambio unico per produttore** (`produttore` + `codice`), perché produttori diversi possono usare lo stesso codice.
 - **Cinghia solo se serve**: l'intervento "Cinghia distribuzione" non si propone per le varianti con `distribuzione = catena`.
 - **Interventi nel form**: pacchetti e pezzi singoli sono tutti visibili (`interventions.visibile_nel_form = 1`); il form li mostra in un unico elenco con barra di ricerca. Con `0` un intervento si nasconde senza cancellarlo.
+- **Ogni fonte ha un grado** (`sources.affidabilita`: basso / medio / elevato, dal file `import/elenco-fonti.xlsx`). L'import usa le fonti `elevato` anche con un solo valore, le `medio` solo come mediana di 3 campioni, le `basso` mai.
 - **Richiesta valida**: in `quote_requests` serve un intervento dal menu oppure il testo di `altro_intervento`.
 - **Nessun numero inventato**: prezzi, tariffe, ore e ricarichi sono vuoti finché non arrivano dalla raccolta.

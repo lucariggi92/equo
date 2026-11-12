@@ -80,6 +80,7 @@ erDiagram
   sources { int id PK
     enum tipo
     varchar riferimento
+    enum affidabilita "basso medio elevato"
     varchar url
     date data_rilevazione }
   labor_hours { smallint variante_id PK,FK
