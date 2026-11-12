@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="05_Fase5-Asset/assets/logo-equo-dark.svg">
-    <img src="05_Fase5-Asset/assets/logo-equo-light.svg" alt="EQUO" width="140">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/preparazione/05_Fase5-Asset/assets/logo-equo-dark.svg">
+    <img src="docs/preparazione/05_Fase5-Asset/assets/logo-equo-light.svg" alt="EQUO" width="140">
   </picture>
 </p>
 
@@ -78,33 +78,33 @@ _The screens_ — dark UI, viewport target 360×800
 <table>
   <tr>
     <td align="center">
-      <img src="05_Fase5-Asset/output%20Stich/0._benvenuto_mission_start_dark/screen.png" width="190" alt="Schermata 0 — Benvenuto e Mission"><br>
+      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/0._benvenuto_mission_start_dark/screen.png" width="190" alt="Schermata 0 — Benvenuto e Mission"><br>
       <sub><strong>0 · Benvenuto</strong></sub>
     </td>
     <td align="center">
-      <img src="05_Fase5-Asset/output%20Stich/1._regione_step_1_4_dark/screen.png" width="190" alt="Schermata 1 — Regione"><br>
+      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/1._regione_step_1_4_dark/screen.png" width="190" alt="Schermata 1 — Regione"><br>
       <sub><strong>1 · Regione</strong></sub>
     </td>
     <td align="center">
-      <img src="05_Fase5-Asset/output%20Stich/2._auto_step_2_4_dark/screen.png" width="190" alt="Schermata 2 — Auto"><br>
+      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/2._auto_step_2_4_dark/screen.png" width="190" alt="Schermata 2 — Auto"><br>
       <sub><strong>2 · Auto</strong></sub>
     </td>
     <td align="center">
-      <img src="05_Fase5-Asset/output%20Stich/3._intervento_step_3_4_dark/screen.png" width="190" alt="Schermata 3 — Intervento"><br>
+      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/3._intervento_step_3_4_dark/screen.png" width="190" alt="Schermata 3 — Intervento"><br>
       <sub><strong>3 · Intervento</strong></sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="05_Fase5-Asset/output%20Stich/4._prezzo_verifica_step_4_4_dark/screen.png" width="190" alt="Schermata 4 — Prezzo e Verifica"><br>
+      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/4._prezzo_verifica_step_4_4_dark/screen.png" width="190" alt="Schermata 4 — Prezzo e Verifica"><br>
       <sub><strong>4 · Prezzo</strong></sub>
     </td>
     <td align="center">
-      <img src="05_Fase5-Asset/output%20Stich/5._loading_feedback_calcolo_dark/screen.png" width="190" alt="Schermata 5 — Loading"><br>
+      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/5._loading_feedback_calcolo_dark/screen.png" width="190" alt="Schermata 5 — Loading"><br>
       <sub><strong>5 · Loading</strong></sub>
     </td>
     <td align="center">
-      <img src="05_Fase5-Asset/output%20Stich/6._report_verdetto_azione_dark/screen.png" width="190" alt="Schermata 6 — Report e Azione"><br>
+      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/6._report_verdetto_azione_dark/screen.png" width="190" alt="Schermata 6 — Report e Azione"><br>
       <sub><strong>6 · Report</strong></sub>
     </td>
     <td></td>
@@ -128,22 +128,16 @@ _Repository structure_
 
 ```
 equo/
-├── 00_LEGGIMI-PRIMA/               # Indice, gate di fase, leggimi
-├── 01_Fase1-Scoping/               # Problema, target, valore
-├── 02_Fase2-MVP0-PreventivoCheck/  # Scope MVP congelato (chiusa 2026-09-10)
-├── 03_Fase3-Paper-Prototype/       # Flusso schermate, schede
-├── 04_Fase4-Wireframe/             # Wireframe low-fi + export Stitch
-├── 05_Fase5-Asset/                 # Logo, palette, schermate dark, PRD v3.0
-├── 06_Fase6-Design-System-Layout/  # DESIGN.md (colori, tipografia, componenti)
-├── 07_Fase7-Mockup-Handoff/        # Mockup hi-fi + handoff per il build
-├── 08_Fase8-Agent-Workspace/       # Agent.md + workspace.md (contesto AI vivo)
-├── 09_Fase9-App-Frontend/          # App React + workflow n8n
-│   ├── equo-frontend-v1/           # sorgenti React/Vite/Tailwind
-│   └── equo-n8n-backend-v1.json    # workflow n8n importabile
-└── _Archivio-Template-Originali/   # Template originali (non modificare)
+├── database-mysql/        # Database MySQL 8.4: setup, schema, seed, import, query
+├── backend-laravel/       # API Laravel (fase successiva al database)
+├── frontend-react/        # App React 19 + Vite + Tailwind
+└── docs/
+    ├── architettura/      # Diagramma del database e decisioni tecniche
+    ├── preparazione/      # Fasi 00-08 della pipeline AI-first (scoping → handoff)
+    └── progetto/          # Documenti di progetto del database (presentazione, prompt)
 ```
 
-Ogni cartella `0X_` è una fase della pipeline AI-first: un artefatto prepara il passo successivo, e i gate di fase ne certificano la chiusura.
+Tre cartelle di codice, una per livello: **database**, **backend**, **frontend**. Tutto il materiale preparatorio sta in `docs/`; ogni cartella `0X_` in `docs/preparazione/` è una fase della pipeline, e i gate di fase ne certificano la chiusura.
 
 ## Stato e roadmap
 
@@ -159,7 +153,9 @@ _Status & roadmap_
 | 06 Design System + Layout | DESIGN.md + layout | Completa |
 | 07 Mockup + Handoff | mockup hi-fi + handoff | Completa |
 | 08 Agent + Workspace | Agent.md, workspace.md | Completa |
-| 09 App Frontend | React + n8n | **In corso** — v1 con 7 schermate |
+| 09 App Frontend | React + n8n (`frontend-react/`) | v1 con 7 schermate |
+| 10 Database | MySQL (`database-mysql/`) | **In corso** — schema pronto, raccolta prezzi reali |
+| 11 Backend | Laravel (`backend-laravel/`) | Da iniziare dopo il database |
 
 **Non-goal (mai):** export PDF del report · geolocalizzazione GPS · login/account e database.
 
@@ -173,14 +169,14 @@ _Run it locally_
 
 ```bash
 git clone https://github.com/lucariggi92/equo.git
-cd equo/09_Fase9-App-Frontend/equo-frontend-v1
+cd equo/frontend-react
 npm install
 npm run dev
 ```
 
 **Backend n8n** (opzionale — senza env il frontend usa un mock locale):
 
-1. Importa `09_Fase9-App-Frontend/equo-n8n-backend-v1.json` in n8n;
+1. Importa il workflow `equo-n8n-backend-v1.json` in n8n (non è nel repo);
 2. attiva il webhook `equo-verifica`;
 3. copia `.env.example` in `.env` e imposta `VITE_N8N_VERIFICA_URL`.
 
@@ -190,13 +186,15 @@ Comandi utili: `npm run dev` · `npm run build` · `npm run lint`.
 
 _Key documents_
 
-- [PRD & Product Brief v3.0](05_Fase5-Asset/output%20Stich/equo_prd_product_brief_v3.0.md)
-- [Agent.md — istruzioni vive del progetto](08_Fase8-Agent-Workspace/Agent.md)
-- [workspace.md — log append-only delle decisioni](08_Fase8-Agent-Workspace/workspace.md)
-- [DESIGN.md — design system](06_Fase6-Design-System-Layout/DESIGN.md)
-- [Handoff per il build](07_Fase7-Mockup-Handoff/HANDOFF-PreventivoCheck.md)
-- [Indice del progetto](00_LEGGIMI-PRIMA/INDICE.md)
-- [Pipeline AI-first a 9 fasi](00_LEGGIMI-PRIMA/README.md)
+- [PRD & Product Brief v3.0](docs/preparazione/05_Fase5-Asset/output%20Stich/equo_prd_product_brief_v3.0.md)
+- [Agent.md — istruzioni vive del progetto](docs/preparazione/08_Fase8-Agent-Workspace/Agent.md)
+- [workspace.md — log append-only delle decisioni](docs/preparazione/08_Fase8-Agent-Workspace/workspace.md)
+- [DESIGN.md — design system](docs/preparazione/06_Fase6-Design-System-Layout/DESIGN.md)
+- [Handoff per il build](docs/preparazione/07_Fase7-Mockup-Handoff/HANDOFF-PreventivoCheck.md)
+- [Indice del progetto](docs/preparazione/00_LEGGIMI-PRIMA/INDICE.md)
+- [Pipeline AI-first a 9 fasi](docs/preparazione/00_LEGGIMI-PRIMA/README.md)
+- [Database: installazione e tabelle](database-mysql/README.md)
+- [Database: schema delle tabelle](database-mysql/SCHEMA.md)
 
 ## Credits
 

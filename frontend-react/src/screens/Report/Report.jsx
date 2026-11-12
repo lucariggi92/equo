@@ -5,7 +5,7 @@ import Badge from '../../components/Badge/Badge.jsx';
 import Semaforo from '../../components/Semaforo/Semaforo.jsx';
 import MessageBox from '../../components/MessageBox/MessageBox.jsx';
 import { euro, copyText } from '../../lib/format.js';
-import { messaggioMeccanico } from '../../lib/api.js';
+import { messaggioMeccanico } from '../../api/verifica.js';
 import '../Welcome/Welcome.css';
 
 const META = {

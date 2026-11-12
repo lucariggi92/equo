@@ -21,3 +21,19 @@ npm-debug.log*
 .idea/
 .DS_Store
 *.local
+
+# Raccolta dati e processi operativi (solo locale, non versionati)
+_v2/
+
+# File di lock di Office
+~$*
+
+# Script SQL con credenziali locali
+*.local.sql
+
+# Credenziali client MySQL locali
+*.local.cnf
+
+# Backup locali del database (solo la cartella va su git)
+database-mysql/backup/*
+!database-mysql/backup/.gitkeep

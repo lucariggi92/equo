@@ -7,7 +7,7 @@ import Intervento from './screens/Intervento/Intervento.jsx';
 import Prezzo from './screens/Prezzo/Prezzo.jsx';
 import Loading from './screens/Loading/Loading.jsx';
 import Report from './screens/Report/Report.jsx';
-import { verificaPreventivo } from './lib/api.js';
+import { verificaPreventivo } from './api/verifica.js';
 import './App.css';
 
 export default function App() {
