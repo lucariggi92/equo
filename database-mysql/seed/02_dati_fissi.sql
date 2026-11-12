@@ -50,16 +50,16 @@ INSERT INTO components (descrizione, categoria, unita) VALUES
   ('Kit frizione',               'frizione',      'kit'),
   ('Batteria',                   'batteria',      'pezzo');
 
--- Interventi: 5 approvati nel design (§12.5) + pezzi singoli proposti (§12.6).
--- I pezzi singoli sono NASCOSTI dal form finché il PM non approva la lista (decisione D1).
+-- Interventi: 5 pacchetti (§12.5) + pezzi singoli (§12.6).
+-- Decisione D1 (PM, 2026-11-12): tutti visibili nel form, che avrà una barra di ricerca.
 INSERT INTO interventions (nome, descrizione, tipo, visibile_nel_form) VALUES
   ('Tagliando completo',     'Olio, filtro olio, filtro aria, filtro abitacolo; + filtro gasolio (diesel) o candele (benzina)', 'pacchetto', TRUE),
   ('Freni anteriori',        'Dischi e pastiglie anteriori',                 'pacchetto', TRUE),
   ('Cinghia distribuzione',  'Kit cinghia e pompa acqua; volano escluso',    'pacchetto', TRUE),
   ('Frizione',               'Kit frizione; volano escluso',                 'pacchetto', TRUE),
   ('Batteria',               'Sostituzione batteria, smaltimento incluso',   'singolo',   TRUE),
-  ('Pastiglie freno anteriori', 'Solo pastiglie, senza dischi',              'singolo',   FALSE),
-  ('Filtro abitacolo',       'Sostituzione filtro abitacolo',                'singolo',   FALSE),
-  ('Filtro aria',            'Sostituzione filtro aria',                     'singolo',   FALSE),
-  ('Cambio olio e filtro',   'Olio motore e filtro olio',                    'singolo',   FALSE),
-  ('Pompa acqua',            'Sostituzione pompa acqua',                     'singolo',   FALSE);
+  ('Pastiglie freno anteriori', 'Solo pastiglie, senza dischi',              'singolo',   TRUE),
+  ('Filtro abitacolo',       'Sostituzione filtro abitacolo',                'singolo',   TRUE),
+  ('Filtro aria',            'Sostituzione filtro aria',                     'singolo',   TRUE),
+  ('Cambio olio e filtro',   'Olio motore e filtro olio',                    'singolo',   TRUE),
+  ('Pompa acqua',            'Sostituzione pompa acqua',                     'singolo',   TRUE);

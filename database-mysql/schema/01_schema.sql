@@ -110,7 +110,7 @@ CREATE TABLE interventions (
   nome         VARCHAR(80) NOT NULL,
   descrizione  VARCHAR(255) NULL,
   tipo         ENUM('pacchetto','singolo') NOT NULL,
-  visibile_nel_form  BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'FALSE = non compare nel menu del form (es. pezzi singoli in attesa di approvazione)',
+  visibile_nel_form  BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'FALSE = non compare nel menu del form (es. intervento sospeso)',
   PRIMARY KEY (id),
   UNIQUE KEY uq_interventions_nome (nome)
 ) ENGINE=InnoDB COMMENT='Elenco interventi del form: pacchetti (tagliando) e pezzi singoli, stesso calcolo';

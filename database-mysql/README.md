@@ -71,6 +71,6 @@ Note su alcune tabelle:
 - **Olio in litri, per variante**: la quantità sta in `intervention_components`.
 - **Codice ricambio unico per produttore** (`produttore` + `codice`), perché produttori diversi possono usare lo stesso codice.
 - **Cinghia solo se serve**: l'intervento "Cinghia distribuzione" non si propone per le varianti con `distribuzione = catena`.
-- **Pezzi singoli nascosti** (`interventions.visibile_nel_form = 0`) finché il PM non approva la lista.
+- **Interventi nel form**: pacchetti e pezzi singoli sono tutti visibili (`interventions.visibile_nel_form = 1`); il form li mostra in un unico elenco con barra di ricerca. Con `0` un intervento si nasconde senza cancellarlo.
 - **Richiesta valida**: in `quote_requests` serve un intervento dal menu oppure il testo di `altro_intervento`.
 - **Nessun numero inventato**: prezzi, tariffe, ore e ricarichi sono vuoti finché non arrivano dalla raccolta.
