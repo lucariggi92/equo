@@ -40,3 +40,7 @@ database-mysql/backup/*
 
 # Elenco fonti con rating di affidabilità (per ora solo locale)
 database-mysql/import/elenco-fonti.xlsx
+
+# Output dello script di import (contengono dati raccolti)
+database-mysql/import/ultimo-import.sql
+database-mysql/import/report-import.txt

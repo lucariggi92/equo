@@ -52,7 +52,7 @@ CREATE TABLE sources (
   tipo              ENUM('listino_ufficiale','ecommerce','catalogo_produttore',
                          'fattura','officina','assunzione','altro') NOT NULL,
   riferimento       VARCHAR(200) NOT NULL COMMENT 'Nome del sito, dell''officina o del documento',
-  affidabilita      ENUM('basso','medio','elevato') NOT NULL COMMENT 'Rating della fonte (elenco-fonti.xlsx). basso: mai usata come valore; medio: solo come mediana di 3 campioni; elevato: basta un valore',
+  affidabilita      ENUM('basso','medio','elevato') NOT NULL COMMENT 'Rating della fonte (elenco-fonti.xlsx). basso: mai usata come valore; medio: solo come mediana di almeno 2 negozi indipendenti; elevato: basta un valore',
   url               VARCHAR(500) NULL,
   file              VARCHAR(255) NULL COMMENT 'Screenshot/PDF archiviato in LISTINI PREZZI',
   data_rilevazione  DATE NOT NULL,

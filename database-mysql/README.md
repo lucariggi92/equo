@@ -16,7 +16,7 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `setup/crea_database_root.ps1` | esegue lo script 00 come root (chiede la password) | sì |
 | `schema/01_schema.sql` | crea le 18 tabelle (rieseguibile: cancella i dati) | sì |
 | `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
-| `import/` | script di caricamento della raccolta prezzi (M4) | sì (i dati no) |
+| `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
 | `queries/` | calcolo stima, controlli di copertura, taratura (M6-M8) | sì |
 | `backup/` | dump locali del database | **no** (solo la cartella) |
 | `SCHEMA.md` | tabelle, collegamenti, corrispondenza con i nomi vecchi | sì |
@@ -58,7 +58,7 @@ Nomi delle tabelle in inglese, nomi delle colonne in italiano.
 Note su alcune tabelle:
 
 - **`intervention_components`**: ogni riga dice *per questa variante, in questo intervento, serve questo componente in questa quantità*. Servono sia intervento sia componente perché un intervento ha più pezzi e lo stesso pezzo compare in più interventi (il filtro aria sta nel tagliando e nel "Filtro aria" singolo).
-- **`price_samples`**: ogni prezzo di mercato è la mediana di 3 rilevazioni, e ognuna ha la sua fonte (URL, data, screenshot).
+- **`price_samples`**: ogni prezzo di mercato è la mediana di almeno 2 rilevazioni da negozi indipendenti, e ognuna ha la sua fonte (URL, data, screenshot).
 - **`quote_requests`**: ogni verifica fatta da un utente, senza dati personali. Se l'intervento non è in elenco si salva il testo in `altro_intervento`: ci dice quali interventi aggiungere.
 - **`car_models.info_completed`**: TRUE quando i dati del modello sono completi; solo allora il modello compare nel form.
 - **`variants.anno_produzione_inizio / fine`**: anni in cui quella motorizzazione è stata prodotta. Il form propone solo le varianti compatibili con l'anno di immatricolazione.
@@ -72,6 +72,6 @@ Note su alcune tabelle:
 - **Codice ricambio unico per produttore** (`produttore` + `codice`), perché produttori diversi possono usare lo stesso codice.
 - **Cinghia solo se serve**: l'intervento "Cinghia distribuzione" non si propone per le varianti con `distribuzione = catena`.
 - **Interventi nel form**: pacchetti e pezzi singoli sono tutti visibili (`interventions.visibile_nel_form = 1`); il form li mostra in un unico elenco con barra di ricerca. Con `0` un intervento si nasconde senza cancellarlo.
-- **Ogni fonte ha un grado** (`sources.affidabilita`: basso / medio / elevato, dal file `import/elenco-fonti.xlsx`). L'import usa le fonti `elevato` anche con un solo valore, le `medio` solo come mediana di 3 campioni, le `basso` mai.
+- **Ogni fonte ha un grado** (`sources.affidabilita`: basso / medio / elevato, dal file `import/elenco-fonti.xlsx`). L'import usa le fonti `elevato` anche con un solo valore, le `medio` solo come mediana di almeno 2 negozi indipendenti, le `basso` mai.
 - **Richiesta valida**: in `quote_requests` serve un intervento dal menu oppure il testo di `altro_intervento`.
 - **Nessun numero inventato**: prezzi, tariffe, ore e ricarichi sono vuoti finché non arrivano dalla raccolta.
