@@ -5,7 +5,7 @@ Uso, dalla cartella database-mysql:
     python import/importa_dati.py "<percorso>/dati-disponibili.xlsx" --prova  # controlla e annulla
 
 Cosa fa:
-1. legge i fogli Fonti, Varianti, Composizione, Codici, Prezzi, Ore, Tariffe, Fatture;
+1. legge i fogli Fonti, Varianti, Composizione, Codici, Prezzi, Riferimenti, Ore, Tariffe, Ricarichi, Fatture;
 2. controlla ogni riga (fonte in elenco, URL/documento, data, valori ammessi);
 3. applica le regole di affidabilità:
    - fonte "Basso": la riga non entra mai;
@@ -564,17 +564,36 @@ def main(path, prova):
         valore = round(statistics.median(v for v, _ in vals), 2)
         ultima = max(vals, key=lambda x: x[1][4])[1]
         nome, aff, tipo, url, d = ultima
+        origine_t = 'reale' if tipo in ('fattura', 'officina') else 'assunzione'
         sql.append(sql_fonte('fid', nome, aff, tipo, url, d).rstrip('\n'))
         sql.append(f"SET @reg = (SELECT id FROM regions WHERE nome = {q(reg)});")
         sql.append(f"SET @cur = (SELECT id FROM labor_rates WHERE regione_id = @reg AND tipo_officina = {q(off)} AND valido_al IS NULL);")
         sql.append(f"SET @same = (SELECT COUNT(*) FROM labor_rates WHERE id = @cur AND tariffa_oraria_netta = {valore} "
-                   f"AND n_campioni = {len(vals)});")
+                   f"AND n_campioni = {len(vals)} AND origine = {q(origine_t)});")
         sql.append(f"UPDATE labor_rates SET valido_al = GREATEST(valido_dal, {q(oggi)}) WHERE id = @cur AND @same = 0;")
         sql.append(
             "INSERT INTO labor_rates (regione_id, tipo_officina, tariffa_oraria_netta, origine, n_campioni, data_rilevazione, "
-            f"valido_dal, fonte_id) SELECT @reg, {q(off)}, {valore}, 'reale', {len(vals)}, {q(d)}, {q(oggi)}, @fid "
+            f"valido_dal, fonte_id) SELECT @reg, {q(off)}, {valore}, {q(origine_t)}, {len(vals)}, {q(d)}, {q(oggi)}, @fid "
             "FROM DUAL WHERE @same = 0;")
         caricati['Tariffe (regione e officina)'] += 1
+
+    # ------------------------------------------------------------ Ricarichi (finché non ci sono tarature da fatture)
+    for n, r in righe(wb, 'Ricarichi'):
+        off, tp, fatt = testo(r.get('Tipo officina')).lower(), testo(r.get('Tipo prezzo')).lower(), numero(r.get('Ricarico'))
+        if off not in OFFICINE or tp not in ('media', 'ufficiale') or fatt is None or not (-0.5 <= fatt <= 2.0):
+            scarta('Ricarichi', n, 'tipo officina, tipo prezzo o ricarico non validi (ricarico tra -50% e +200%)')
+            continue
+        f = controlla_fonte(fonti, 'Ricarichi', n, r)
+        if not f:
+            continue
+        origine_r = 'taratura' if f[2] == 'fattura' else 'assunzione'
+        nota_r = testo(r.get('Note'))[:255] or None
+        sql.append(f"SET @cur = (SELECT id FROM markups WHERE tipo_officina = {q(off)} AND tipo_fonte = {q(tp)} AND valido_al IS NULL);")
+        sql.append(f"SET @same = (SELECT COUNT(*) FROM markups WHERE id = @cur AND fattore = {fatt} AND origine = {q(origine_r)});")
+        sql.append(f"UPDATE markups SET valido_al = GREATEST(valido_dal, {q(oggi)}) WHERE id = @cur AND @same = 0;")
+        sql.append("INSERT INTO markups (tipo_officina, tipo_fonte, fattore, origine, n_campioni, valido_dal, note) "
+                   f"SELECT {q(off)}, {q(tp)}, {fatt}, {q(origine_r)}, 0, {q(oggi)}, {q(nota_r)} FROM DUAL WHERE @same = 0;")
+        caricati['Ricarichi'] += 1
 
     # ------------------------------------------------------------ Fatture
     prezzi_ok = {k for k in gruppi if any(e.startswith(f'{k[0]} {k[1]}: caricato') for e in esiti_prezzi)}
@@ -613,6 +632,7 @@ def main(path, prova):
                "SELECT 'sources', COUNT(*) FROM sources UNION ALL "
                "SELECT 'labor_hours', COUNT(*) FROM labor_hours UNION ALL "
                "SELECT 'labor_rates (correnti)', COUNT(*) FROM labor_rates WHERE valido_al IS NULL UNION ALL "
+               "SELECT 'markups (correnti)', COUNT(*) FROM markups WHERE valido_al IS NULL UNION ALL "
                "SELECT 'calibrations', COUNT(*) FROM calibrations;")
     sql.append("ROLLBACK;" if prova else "COMMIT;")
     with open(SQL_OUT, 'w', encoding='utf-8') as fh:
