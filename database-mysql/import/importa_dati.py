@@ -12,8 +12,11 @@ Cosa fa:
    - prezzi: basta 1 campione da fonte "Elevato", altrimenti mediana di almeno 2 campioni "Medio"
      da negozi di gruppi societari diversi (colonna Gruppo societario del foglio Fonti),
      dopo aver scartato quelli oltre ±50% dalla mediana;
-4. genera un unico script SQL e lo esegue in una transazione (tutto o niente);
-5. scrive il report in import/report-import.txt (righe caricate e scartate, con il motivo).
+4. D5: dove manca il prezzo rilevato lo stima con una scala dichiarata (indicativo, rapporto tra qualità,
+   mediana di marca, mediana di categoria), marcata da_avvalorare; per i pezzi senza codice crea un ricambio
+   generico di categoria; misura l'affidabilità delle stime con un backtest sui prezzi reali;
+5. genera un unico script SQL e lo esegue in una transazione (tutto o niente);
+6. scrive il report in import/report-import.txt (righe caricate e scartate, con il motivo).
 
 È rieseguibile: le anagrafiche si aggiornano, un prezzo uguale a quello corrente non crea righe nuove,
 un prezzo diverso chiude il vecchio (valido_al) e apre il nuovo.
@@ -36,6 +39,7 @@ SQL_OUT = os.path.join(HERE, 'ultimo-import.sql')
 REPORT = os.path.join(HERE, 'report-import.txt')
 
 SCARTO = 0.50          # settings.scarto_campione
+MIN_STAT = 3          # campioni minimi per una mediana statistica (D5)
 CAMPIONI_MEDIO = 2    # decisione PM 2026-11-12 (D4): 2 negozi indipendenti
 
 INTERVENTI = {'Tagliando completo', 'Freni anteriori', 'Cinghia distribuzione', 'Frizione', 'Batteria',
@@ -231,6 +235,7 @@ def main(path, prova):
         return varianti[vid]
 
     # ------------------------------------------------------------ Composizione
+    comp_var = defaultdict(set)          # variante -> componenti che usa
     for n, r in righe(wb, 'Composizione'):
         chiave = variante_ok('Composizione', n, r)
         if not chiave:
@@ -249,10 +254,14 @@ def main(path, prova):
             f"SELECT {variante_sql(chiave)}, i.id, c.id, {qta} FROM interventions i, components c "
             f"WHERE i.nome = {q(interv)} AND c.descrizione = {q(comp)} "
             "ON DUPLICATE KEY UPDATE quantita = VALUES(quantita);")
+        comp_var[chiave].add(comp)
         caricati['Composizione'] += 1
 
     # ------------------------------------------------------------ Codici
     codici = set()
+    code_meta = {}                       # (produttore, codice) -> (componente, qualità)
+    sott = {}                            # (produttore, codice) -> sottotipo (D5)
+    slots = defaultdict(dict)            # (variante, componente) -> {qualità: (produttore, codice)}
     for n, r in righe(wb, 'Codici'):
         chiave = variante_ok('Codici', n, r)
         if not chiave:
@@ -268,9 +277,13 @@ def main(path, prova):
         if not controlla_fonte(fonti, 'Codici', n, r):
             continue
         codici.add((prod, cod))
+        code_meta.setdefault((prod, cod), (comp, qual))
+        sott[(prod, cod)] = testo(r.get('Sottotipo'))
+        slots[(chiave, comp)][qual] = (prod, cod)
         desc = testo(r.get('Codici OE collegati'))
-        sql.append(f"INSERT INTO spare_parts (codice, produttore, descrizione) VALUES ({q(cod)}, {q(prod)}, "
-                   f"{q(('OE: ' + desc) if desc else None)}) ON DUPLICATE KEY UPDATE descrizione = VALUES(descrizione);")
+        sql.append(f"INSERT INTO spare_parts (codice, produttore, descrizione, sottotipo) VALUES ({q(cod)}, {q(prod)}, "
+                   f"{q(('OE: ' + desc) if desc else None)}, {q(testo(r.get('Sottotipo')))}) "
+                   "ON DUPLICATE KEY UPDATE descrizione = VALUES(descrizione), sottotipo = VALUES(sottotipo);")
         sql.append(
             "INSERT INTO part_qualities (variante_id, componente_id, qualita, ricambio_id) "
             f"SELECT {variante_sql(chiave)}, c.id, {q(qual)}, s.id FROM components c, spare_parts s "
@@ -302,6 +315,35 @@ def main(path, prova):
         gruppi[(prod, cod)].append(dict(riga=n, fonte=f, lordo=p, iva=iva_incl != 'no', iva_pct=iva_pct, netto=netto))
 
     esiti_prezzi = []
+    prezzi_reali = {}                    # (produttore, codice) -> (prezzo netto, metodo)
+
+    def scrivi_prezzo(prod, cod, prezzo, tipo_prezzo, metodo, n_c, pmin, pmax, d_ril, nota, usati=(), scartati=()):
+        prezzo = round(prezzo, 4)
+        pmin = round(min(pmin, prezzo), 4)
+        pmax = round(max(pmax, prezzo), 4)
+        stimato = metodo != 'rilevato'
+        n_c = max(1, min(int(n_c), 255))
+        sql.append(f"-- Prezzo {prod} {cod} ({metodo})")
+        sql.append(f"SET @rid = (SELECT id FROM spare_parts WHERE produttore = {q(prod)} AND codice = {q(cod)});")
+        sql.append("SET @cur = (SELECT id FROM part_prices WHERE ricambio_id = @rid AND valido_al IS NULL);")
+        sql.append(f"SET @same = (SELECT COUNT(*) FROM part_prices WHERE id = @cur AND prezzo_netto = {prezzo} "
+                   f"AND n_campioni = {n_c} AND tipo_fonte = {q(tipo_prezzo)} AND metodo = {q(metodo)});")
+        sql.append(f"UPDATE part_prices SET valido_al = GREATEST(valido_dal, {q(oggi)}) WHERE id = @cur AND @same = 0;")
+        sql.append(
+            "INSERT INTO part_prices (ricambio_id, prezzo_netto, tipo_fonte, metodo, da_avvalorare, nota_stima, n_campioni, "
+            "prezzo_min, prezzo_max, data_rilevazione, valido_dal) "
+            f"SELECT @rid, {prezzo}, {q(tipo_prezzo)}, {q(metodo)}, {q(stimato)}, {q(nota[:255] if nota else None)}, {n_c}, "
+            f"{pmin}, {pmax}, {q(d_ril)}, {q(oggi)} FROM DUAL WHERE @same = 0;")
+        sql.append("SET @pid = (SELECT id FROM part_prices WHERE ricambio_id = @rid AND valido_al IS NULL);")
+        for c in list(usati) + list(scartati):
+            nome, aff, tipo, url, d = c['fonte']
+            sql.append(sql_fonte('fid', nome, aff, tipo, url, d).rstrip('\n'))
+            sql.append(
+                "INSERT INTO price_samples (prezzo_id, fonte_id, prezzo_fonte, iva_inclusa, iva_fonte_pct, prezzo_netto, scartato, note) "
+                f"SELECT @pid, @fid, {c['lordo']}, {q(c['iva'])}, {round(c['iva_pct'] * 100, 2)}, {c['netto']}, "
+                f"{q(c in scartati)}, {q('oltre ±50% dalla mediana' if c in scartati else None)} FROM DUAL WHERE @same = 0;")
+        caricati['Prezzi (codici)'] += 1
+
     for (prod, cod), camp in gruppi.items():
         elevati = [c for c in camp if c['fonte'][1] == 'elevato']
         medi = [c for c in camp if c['fonte'][1] == 'medio']
@@ -318,50 +360,173 @@ def main(path, prova):
             scarta('Prezzi', c['riga'], f'stesso gruppo societario ({GRUPPI.get(c["fonte"][0])}) di un altro campione: conta una volta sola')
         scartati = []
         if elevati:
-            usati = elevati
+            usati, metodo = elevati, 'rilevato'
             tipo_prezzo = 'ufficiale' if any(c['fonte'][2] == 'listino_ufficiale' for c in elevati) else 'media'
-        else:
-            if len(medi) < CAMPIONI_MEDIO:
-                esiti_prezzi.append(f'{prod} {cod}: NON caricato, {len(medi)} negozi indipendenti su {CAMPIONI_MEDIO}')
-                for c in camp:
-                    if c not in doppi:
-                        scarta('Prezzi', c['riga'], f'{prod} {cod}: mancano {CAMPIONI_MEDIO - len(medi)} campioni da negozi indipendenti')
-                continue
+        elif len(medi) >= CAMPIONI_MEDIO:
             m = statistics.median(c['netto'] for c in medi)
             usati = [c for c in medi if abs(c['netto'] - m) / m <= SCARTO]
             scartati = [c for c in medi if c not in usati]
-            if len(usati) < CAMPIONI_MEDIO:
-                esiti_prezzi.append(f'{prod} {cod}: NON caricato, dopo lo scarto oltre ±50% restano {len(usati)} campioni')
-                for c in camp:
-                    scarta('Prezzi', c['riga'], f'gruppo {prod} {cod}: dopo lo scarto restano meno di {CAMPIONI_MEDIO} campioni')
-                continue
+            metodo = 'rilevato' if len(usati) >= CAMPIONI_MEDIO else 'indicativo'
             tipo_prezzo = 'media'
+        elif len(medi) == 1:
+            usati, metodo, tipo_prezzo = medi, 'indicativo', 'media'
+        else:
+            continue
         valori = [c['netto'] for c in usati]
-        prezzo = round(statistics.median(valori), 4)
-        d_ril = max(c['fonte'][4] for c in usati)
-        n_c = len(usati)
-        sql.append(f"-- Prezzo {prod} {cod}")
-        sql.append(f"SET @rid = (SELECT id FROM spare_parts WHERE produttore = {q(prod)} AND codice = {q(cod)});")
-        sql.append("SET @cur = (SELECT id FROM part_prices WHERE ricambio_id = @rid AND valido_al IS NULL);")
-        sql.append(f"SET @same = (SELECT COUNT(*) FROM part_prices WHERE id = @cur AND prezzo_netto = {prezzo} "
-                   f"AND n_campioni = {n_c} AND tipo_fonte = {q(tipo_prezzo)});")
-        sql.append(f"UPDATE part_prices SET valido_al = GREATEST(valido_dal, {q(oggi)}) WHERE id = @cur AND @same = 0;")
-        sql.append(
-            "INSERT INTO part_prices (ricambio_id, prezzo_netto, tipo_fonte, n_campioni, prezzo_min, prezzo_max, "
-            "data_rilevazione, valido_dal) "
-            f"SELECT @rid, {prezzo}, {q(tipo_prezzo)}, {n_c}, {min(valori)}, {max(valori)}, {q(d_ril)}, {q(oggi)} "
-            "FROM DUAL WHERE @same = 0;")
-        sql.append("SET @pid = (SELECT id FROM part_prices WHERE ricambio_id = @rid AND valido_al IS NULL);")
-        for c in usati + scartati:
-            nome, aff, tipo, url, d = c['fonte']
-            sql.append(sql_fonte('fid', nome, aff, tipo, url, d).rstrip('\n'))
-            sql.append(
-                "INSERT INTO price_samples (prezzo_id, fonte_id, prezzo_fonte, iva_inclusa, iva_fonte_pct, prezzo_netto, scartato, note) "
-                f"SELECT @pid, @fid, {c['lordo']}, {q(c['iva'])}, {round(c['iva_pct'] * 100, 2)}, {c['netto']}, "
-                f"{q(c in scartati)}, {q('oltre ±50% dalla mediana' if c in scartati else None)} FROM DUAL WHERE @same = 0;")
-        esiti_prezzi.append(f'{prod} {cod}: caricato {prezzo:.2f} € netti ({tipo_prezzo}, {n_c} campioni'
+        prezzo = statistics.median(valori)
+        nota = None if metodo == 'rilevato' else 'D5 livello 2: un solo negozio indipendente, da confermare con un secondo negozio'
+        scrivi_prezzo(prod, cod, prezzo, tipo_prezzo, metodo, len(usati), min(valori), max(valori),
+                      max(c['fonte'][4] for c in usati), nota, usati, scartati)
+        prezzi_reali[(prod, cod)] = (round(prezzo, 4), metodo)
+        esiti_prezzi.append(f'{prod} {cod}: {metodo} {prezzo:.2f} € netti ({len(usati)} negozi indipendenti'
                             + (f', {len(scartati)} scartati' if scartati else '') + ')')
-        caricati['Prezzi (codici)'] += 1
+
+    # ------------------------------------------------------------ Riferimenti (base statistica D5)
+    riferimenti = {}                     # (produttore, codice) -> (componente, qualità, netto)
+    for n, r in righe(wb, 'Riferimenti'):
+        comp, qual = testo(r.get('Componente')), testo(r.get('Qualità')).lower()
+        prod, cod = testo(r.get('Produttore')), testo(r.get('Codice'))
+        p = numero(r.get('Prezzo esposto €'))
+        iva_incl = testo(r.get('IVA inclusa')).lower()
+        iva_pct = numero(r.get('IVA della fonte'))
+        iva_pct = 0.22 if iva_pct is None else (iva_pct / 100 if iva_pct > 1 else iva_pct)
+        if comp not in COMPONENTI or qual not in QUALITA or not prod or not cod or not p or p <= 0:
+            scarta('Riferimenti', n, 'componente, qualità, produttore, codice o prezzo non validi')
+            continue
+        f = controlla_fonte(fonti, 'Riferimenti', n, r)
+        if not f:
+            continue
+        netto = round(p / (1 + iva_pct), 4) if iva_incl != 'no' else round(p, 4)
+        if (prod, cod) in riferimenti:
+            continue
+        riferimenti[(prod, cod)] = (comp, qual, netto)
+        sott.setdefault((prod, cod), testo(r.get('Sottotipo')))
+        nome, aff, tipo, url, d = f
+        sql.append(sql_fonte('fid', nome, aff, tipo, url, d).rstrip('\n'))
+        sql.append("INSERT INTO reference_prices (componente_id, qualita, produttore, codice, sottotipo, prezzo_netto, fonte_id, data_rilevazione) "
+                   f"SELECT c.id, {q(qual)}, {q(prod)}, {q(cod)}, {q(testo(r.get('Sottotipo')))}, {netto}, @fid, {q(d)} FROM components c WHERE c.descrizione = {q(comp)} "
+                   "ON DUPLICATE KEY UPDATE prezzo_netto = VALUES(prezzo_netto), data_rilevazione = VALUES(data_rilevazione);")
+        caricati['Riferimenti'] += 1
+
+    # base dati statistica: riferimenti + prezzi reali dei nostri codici (un valore per codice)
+    base = dict(riferimenti)
+    for code, (prezzo, _) in prezzi_reali.items():
+        if code not in base and code in code_meta:
+            base[code] = (code_meta[code][0], code_meta[code][1], prezzo)
+
+    def quartili(vals):
+        vals = sorted(vals)
+        if len(vals) < 2:
+            return vals[0], vals[0], vals[0]
+        q1, med, q3 = statistics.quantiles(vals, n=4, method='inclusive')
+        return q1, statistics.median(vals), q3
+
+    def valori(escludi=None, comp=None, qual=None, prod=None, sottotipo=None):
+        return [v for k, (c, ql, v) in base.items() if k != escludi and c == comp
+                and (qual is None or ql == qual) and (prod is None or k[0] == prod)
+                and (not sottotipo or sott.get(k, '') == sottotipo)]
+
+    def rapporto(comp, q_da, q_a, escludi=None):
+        """Rapporto mediano tra due qualità: prima nella stessa categoria, altrimenti su tutte le categorie."""
+        a, b = valori(escludi, comp, q_a), valori(escludi, comp, q_da)
+        if len(a) >= MIN_STAT and len(b) >= MIN_STAT:
+            return statistics.median(a) / statistics.median(b), f'categoria {comp}'
+        rap = []
+        for c in COMPONENTI:
+            a, b = valori(escludi, c, q_a), valori(escludi, c, q_da)
+            if len(a) >= MIN_STAT and len(b) >= MIN_STAT:
+                rap.append(statistics.median(a) / statistics.median(b))
+        if rap:
+            return statistics.median(rap), f'mediana di {len(rap)} categorie'
+        return None, None
+
+    def stima(code, comp, qual, chiavi_slot, escludi=None):
+        """Scala D5 dal livello 3 al 5. Restituisce (metodo, prezzo, min, max, n, nota) oppure None."""
+        # livelli 4 e 5, prima nello stesso sottotipo (es. disco ventilato), poi nella categoria intera
+        prod, st_ = code[0], sott.get(code, '')
+        for sotto in ([st_, None] if st_ else [None]):
+            etichetta = f'{comp} {sotto}' if sotto else comp
+            v = valori(escludi or code, comp, None, prod, sotto)
+            if prod != 'GENERICO' and len(v) >= MIN_STAT:
+                q1, med, q3 = quartili(v)
+                return ('mediana_marca', med, q1, q3, len(v), f'D5 livello 4: mediana di {len(v)} prezzi {prod} per {etichetta}')
+        # livello 3: stesso pezzo sulla stessa auto, prezzo noto in un'altra qualità
+        # (non per i generici: sono condivisi tra più auto e non hanno un 'pezzo gemello' unico)
+        for chiave in ([] if code[0] == 'GENERICO' else chiavi_slot):
+            for q_altra, altro in slots.get((chiave, comp), {}).items():
+                if q_altra == qual or altro == code or altro not in prezzi_reali or altro == escludi:
+                    continue
+                r_, origine = rapporto(comp, q_altra, qual, escludi)
+                if r_:
+                    p0 = prezzi_reali[altro][0]
+                    return ('rapporto_qualita', p0 * r_, p0 * r_ * 0.8, p0 * r_ * 1.2, MIN_STAT,
+                            f'D5 livello 3: {altro[0]} {altro[1]} ({q_altra}) × rapporto {r_:.2f} ({origine})')
+        # livello 5: stessa categoria e qualità, prima nello stesso sottotipo
+        prod, st_ = code[0], sott.get(code, '')
+        for sotto in ([st_, None] if st_ else [None]):
+            etichetta = f'{comp} {sotto}' if sotto else comp
+            v = valori(escludi or code, comp, qual, None, sotto)
+            if len(v) >= MIN_STAT:
+                q1, med, q3 = quartili(v)
+                return ('mediana_categoria', med, q1, q3, len(v), f'D5 livello 5: mediana di {len(v)} prezzi {etichetta} {qual}')
+        # livello 5b: mediana della stessa categoria nell'altra qualità × rapporto tra qualità
+        for q_altra in ('equivalente', 'economico', 'originale'):
+            if q_altra == qual:
+                continue
+            v = valori(escludi or code, comp, q_altra)
+            r_, origine = rapporto(comp, q_altra, qual, escludi)
+            if len(v) >= MIN_STAT and r_:
+                q1, med, q3 = quartili(v)
+                return ('mediana_categoria', med * r_, q1 * r_, q3 * r_, len(v),
+                        f'D5 livello 5b: mediana di {len(v)} prezzi {comp} {q_altra} × rapporto {r_:.2f} ({origine})')
+        return None
+
+    # ricambi generici per i componenti senza codice (qualità equivalente ed economico)
+    generici = 0
+    for chiave, comps in comp_var.items():
+        for comp in sorted(comps):
+            for qual in ('equivalente', 'economico'):
+                if qual in slots[(chiave, comp)]:
+                    continue
+                code = ('GENERICO', f'{comp} - {qual}'[:40])
+                if code not in code_meta:
+                    code_meta[code] = (comp, qual)
+                    sql.append(f"INSERT INTO spare_parts (codice, produttore, descrizione, generico) VALUES ({q(code[1])}, 'GENERICO', "
+                               f"{q('Segnaposto D5: codice reale non ancora noto')}, TRUE) ON DUPLICATE KEY UPDATE generico = TRUE;")
+                slots[(chiave, comp)][qual] = code
+                sql.append(
+                    "INSERT INTO part_qualities (variante_id, componente_id, qualita, ricambio_id) "
+                    f"SELECT {variante_sql(chiave)}, c.id, {q(qual)}, s.id FROM components c, spare_parts s "
+                    f"WHERE c.descrizione = {q(comp)} AND s.produttore = 'GENERICO' AND s.codice = {q(code[1])} "
+                    "ON DUPLICATE KEY UPDATE ricambio_id = VALUES(ricambio_id);")
+                generici += 1
+
+    # stime per tutti i codici ancora senza prezzo
+    stime_fatte, senza_prezzo = defaultdict(int), []
+    for code, (comp, qual) in sorted(code_meta.items()):
+        if code in prezzi_reali:
+            continue
+        chiavi = [k for (k, c), d in slots.items() if c == comp and d.get(qual) == code]
+        st = stima(code, comp, qual, chiavi)
+        if not st:
+            senza_prezzo.append(f'{code[0]} {code[1]} ({comp}, {qual})')
+            continue
+        metodo, prezzo, pmin, pmax, n_c, nota = st
+        scrivi_prezzo(code[0], code[1], prezzo, 'media', metodo, n_c, pmin, pmax, oggi, nota)
+        stime_fatte[metodo] += 1
+
+    # backtest: nascondo ogni prezzo reale e lo ristimo con il metodo
+    errori, dettaglio_bt = defaultdict(list), []
+    for code, (prezzo, _) in sorted(prezzi_reali.items()):
+        if code not in code_meta:
+            continue
+        comp, qual = code_meta[code]
+        chiavi = [k for (k, c), d in slots.items() if c == comp and d.get(qual) == code]
+        st = stima(code, comp, qual, chiavi, escludi=code)
+        if st:
+            errori[st[0]].append(abs(st[1] - prezzo) / prezzo)
+            dettaglio_bt.append(f'{code[0]} {code[1]} ({comp}{", " + sott.get(code) if sott.get(code) else ""}): reale {prezzo:.2f}, '
+                                f'stima {st[1]:.2f} [{st[0]}], errore {abs(st[1] - prezzo) / prezzo * 100:.0f}%')
 
     # ------------------------------------------------------------ Ore
     for n, r in righe(wb, 'Ore'):
@@ -442,6 +607,8 @@ def main(path, prova):
                "SELECT 'spare_parts', COUNT(*) FROM spare_parts UNION ALL "
                "SELECT 'part_qualities', COUNT(*) FROM part_qualities UNION ALL "
                "SELECT 'part_prices (correnti)', COUNT(*) FROM part_prices WHERE valido_al IS NULL UNION ALL "
+               "SELECT CONCAT('  di cui ', metodo), COUNT(*) FROM part_prices WHERE valido_al IS NULL GROUP BY metodo UNION ALL "
+               "SELECT 'reference_prices', COUNT(*) FROM reference_prices UNION ALL "
                "SELECT 'price_samples', COUNT(*) FROM price_samples UNION ALL "
                "SELECT 'sources', COUNT(*) FROM sources UNION ALL "
                "SELECT 'labor_hours', COUNT(*) FROM labor_hours UNION ALL "
@@ -462,6 +629,16 @@ def main(path, prova):
              "Righe accettate per foglio:"]
     lines += [f"  {k}: {v}" for k, v in caricati.items()] or ["  nessuna"]
     lines += ["", "Prezzi:"] + ([f"  {e}" for e in esiti_prezzi] or ["  nessun prezzo nel file"])
+    lines += ["", "Stime D5 (da avvalorare):"]
+    lines += [f"  {m}: {n} codici" for m, n in sorted(stime_fatte.items())] or ["  nessuna"]
+    lines += [f"  ricambi generici creati (componenti senza codice): {generici}"]
+    lines += ["", "Ancora senza prezzo:"] + ([f"  {x}" for x in senza_prezzo] or ["  nessuno"])
+    lines += ["", "Backtest (prezzo reale nascosto e ristimato): errore medio assoluto per metodo"]
+    lines += [f"  {m}: {statistics.median(e) * 100:.0f}% (mediana su {len(e)} prezzi reali)" for m, e in sorted(errori.items())] or ["  non calcolabile"]
+    tutti = [x for e in errori.values() for x in e]
+    if tutti:
+        lines += [f"  tutti i metodi: {statistics.median(tutti) * 100:.0f}% (mediana su {len(tutti)} prezzi reali)"]
+    lines += [f"    {x}" for x in dettaglio_bt]
     lines += ["", f"Righe scartate: {len(scarti)}"]
     lines += [f"  {f} riga {n}: {m}" for f, n, m in sorted(scarti)]
     lines += ["", "Database dopo l'import:" if not prova else "Database come sarebbe dopo l'import:", res.stdout.strip()]

@@ -1,6 +1,6 @@
 # Schema del database `equo`
 
-Le 18 tabelle create da `schema/01_schema.sql` e i loro collegamenti. GitHub disegna il diagramma da solo; la versione in immagine è in [`../docs/architettura/schema-database-equo.png`](../docs/architettura/schema-database-equo.png).
+Le 19 tabelle create da `schema/01_schema.sql` e i loro collegamenti. GitHub disegna il diagramma da solo; la versione in immagine è in [`../docs/architettura/schema-database-equo.png`](../docs/architettura/schema-database-equo.png).
 Nomi delle tabelle in inglese, nomi delle colonne in italiano (revisione PM del 2026-11-12).
 
 ```mermaid
@@ -16,6 +16,8 @@ erDiagram
   spare_parts ||--o{ part_prices : "prezzo nel tempo"
   part_prices ||--o{ price_samples : "mediana di"
   sources ||--o{ price_samples : "prova"
+  sources ||--o{ reference_prices : "prova"
+  components ||--o{ reference_prices : "categoria"
   variants ||--o{ labor_hours : "tempo"
   interventions ||--o{ labor_hours : "tempo"
   sources |o--o{ labor_hours : "prova"
@@ -58,7 +60,8 @@ erDiagram
   spare_parts { int id PK
     varchar produttore UK
     varchar codice UK
-    varchar descrizione }
+    varchar descrizione
+    bool generico }
   part_qualities { smallint variante_id PK,FK
     smallint componente_id PK,FK
     enum qualita PK
@@ -67,6 +70,8 @@ erDiagram
     int ricambio_id FK
     decimal prezzo_netto
     enum tipo_fonte "ufficiale o media"
+    enum metodo "scala D5"
+    bool da_avvalorare
     tinyint n_campioni
     date valido_dal
     date valido_al }
@@ -77,6 +82,13 @@ erDiagram
     bool iva_inclusa
     decimal prezzo_netto
     bool scartato }
+  reference_prices { int id PK
+    smallint componente_id FK
+    enum qualita
+    varchar produttore
+    varchar codice
+    decimal prezzo_netto
+    int fonte_id FK }
   sources { int id PK
     enum tipo
     varchar riferimento
@@ -143,7 +155,7 @@ erDiagram
 | interventi | `interventions` | | ricarichi | `markups` |
 | componenti | `components` | | tarature | `calibrations` |
 | distinta_base | `intervention_components` | | interventi_esclusi | *(eliminata)* |
-| — | `quote_requests` *(nuova)* | | | |
+| — | `quote_requests` *(nuova)* | | — | `reference_prices` *(nuova, D5)* |
 
 `car_models` e non `models`: in Laravel una classe `Model` andrebbe in conflitto con la classe base di Eloquent.
 

@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS tarature, ricarichi, tariffe_manodopera, ore_stimate,
   fonti, impostazioni;
 -- Nomi attuali
 DROP TABLE IF EXISTS quote_requests, calibrations, markups, labor_rates, labor_hours,
-  price_samples, part_prices, part_qualities, spare_parts, intervention_components,
+  reference_prices, price_samples, part_prices, part_qualities, spare_parts, intervention_components,
   components, interventions, variants, car_models, brands, regions, sources, settings;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -150,6 +150,8 @@ CREATE TABLE spare_parts (
   codice       VARCHAR(40) NOT NULL,
   produttore   VARCHAR(60) NOT NULL,
   descrizione  VARCHAR(200) NULL,
+  generico     BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Ricambio segnaposto di categoria quando il codice reale non è ancora noto (D5)',
+  sottotipo    VARCHAR(40) NULL COMMENT 'Es. disco pieno/ventilato, filtro a cartuccia/avvitamento, abitacolo standard/carboni attivi: affina le stime D5',
   PRIMARY KEY (id),
   UNIQUE KEY uq_spare_parts (produttore, codice)
 ) ENGINE=InnoDB COMMENT='Anagrafica dei codici: un codice si prezza una volta e vale per tutte le auto compatibili';
@@ -171,6 +173,10 @@ CREATE TABLE part_prices (
   ricambio_id       INT UNSIGNED NOT NULL,
   prezzo_netto      DECIMAL(10,4) NOT NULL COMMENT 'Valore usato nel calcolo: listino o mediana dei campioni, IVA esclusa',
   tipo_fonte        ENUM('ufficiale','media') NOT NULL COMMENT 'Decide quale ricarico si applica',
+  metodo            ENUM('rilevato','indicativo','rapporto_qualita','mediana_marca','mediana_categoria') NOT NULL DEFAULT 'rilevato'
+                    COMMENT 'Scala D5: rilevato = 2+ negozi indipendenti; indicativo = 1 negozio; gli altri sono stime statistiche',
+  da_avvalorare     BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'TRUE per tutto ciò che non è rilevato: va confermato con un prezzo reale',
+  nota_stima        VARCHAR(255) NULL COMMENT 'Come è stata calcolata la stima (base, rapporto, campioni)',
   n_campioni        TINYINT UNSIGNED NOT NULL,
   prezzo_min        DECIMAL(10,4) NULL,
   prezzo_max        DECIMAL(10,4) NULL,
@@ -186,8 +192,9 @@ CREATE TABLE part_prices (
   CONSTRAINT ck_part_prices_campioni CHECK (n_campioni >= 1),
   CONSTRAINT ck_part_prices_range CHECK (prezzo_min IS NULL OR prezzo_max IS NULL
                                     OR (prezzo_min <= prezzo_netto AND prezzo_netto <= prezzo_max)),
-  CONSTRAINT ck_part_prices_validita CHECK (valido_al IS NULL OR valido_al >= valido_dal)
-) ENGINE=InnoDB COMMENT='Prezzo per codice, con storico; i singoli campioni stanno in price_samples';
+  CONSTRAINT ck_part_prices_validita CHECK (valido_al IS NULL OR valido_al >= valido_dal),
+  CONSTRAINT ck_part_prices_metodo CHECK ((metodo = 'rilevato') = (da_avvalorare = FALSE))
+) ENGINE=InnoDB COMMENT='Prezzo per codice, con storico; i singoli campioni stanno in price_samples; le stime D5 sono marcate da_avvalorare';
 
 CREATE TABLE price_samples (
   id                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -206,6 +213,26 @@ CREATE TABLE price_samples (
   CONSTRAINT fk_price_samples_fonte  FOREIGN KEY (fonte_id)  REFERENCES sources (id),
   CONSTRAINT ck_price_samples_prezzo CHECK (prezzo_fonte > 0 AND prezzo_netto > 0)
 ) ENGINE=InnoDB COMMENT='Ogni rilevazione con la sua fonte: listino ufficiale (1) o campioni di mercato (3)';
+
+CREATE TABLE reference_prices (
+  id                INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  componente_id     SMALLINT UNSIGNED NOT NULL,
+  qualita           ENUM('originale','equivalente','economico') NOT NULL,
+  produttore        VARCHAR(60) NOT NULL,
+  codice            VARCHAR(40) NOT NULL COMMENT 'Anche codici di altre auto: servono a costruire la statistica',
+  sottotipo         VARCHAR(40) NULL COMMENT 'Stessa classificazione di spare_parts.sottotipo',
+  prezzo_netto      DECIMAL(10,4) NOT NULL,
+  fonte_id          INT UNSIGNED NOT NULL,
+  data_rilevazione  DATE NOT NULL,
+  note              VARCHAR(255) NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_reference_prices (produttore, codice, fonte_id),
+  KEY idx_reference_categoria (componente_id, qualita),
+  KEY idx_reference_marca (produttore, componente_id),
+  CONSTRAINT fk_reference_prices_componente FOREIGN KEY (componente_id) REFERENCES components (id),
+  CONSTRAINT fk_reference_prices_fonte      FOREIGN KEY (fonte_id)      REFERENCES sources (id),
+  CONSTRAINT ck_reference_prices_netto CHECK (prezzo_netto > 0)
+) ENGINE=InnoDB COMMENT='Prezzi di mercato di riferimento per categoria e marca: base statistica delle stime D5';
 
 -- ---------------------------------------------------------------------
 -- Manodopera e ricarico

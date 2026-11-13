@@ -14,7 +14,7 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `setup/00_crea_database.sql` | modello: database `equo` + utente `equo_app` | sì (password segnaposto) |
 | `setup/00_crea_database.local.sql` | come sopra, con la password vera | **no** |
 | `setup/crea_database_root.ps1` | esegue lo script 00 come root (chiede la password) | sì |
-| `schema/01_schema.sql` | crea le 18 tabelle (rieseguibile: cancella i dati) | sì |
+| `schema/01_schema.sql` | crea le 19 tabelle (rieseguibile: cancella i dati) | sì |
 | `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
 | `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
 | `queries/` | calcolo stima, controlli di copertura, taratura (M6-M8) | sì |
@@ -51,7 +51,7 @@ Nomi delle tabelle in inglese, nomi delle colonne in italiano.
 | Parametri e fonti | `settings`, `regions`, `sources` |
 | Veicoli | `brands`, `car_models`, `variants` |
 | Interventi | `interventions`, `components`, `intervention_components` |
-| Ricambi e prezzi | `spare_parts`, `part_qualities`, `part_prices`, `price_samples` |
+| Ricambi e prezzi | `spare_parts`, `part_qualities`, `part_prices`, `price_samples`, `reference_prices` |
 | Manodopera e ricarico | `labor_hours`, `labor_rates`, `markups`, `calibrations` |
 | Utenti (anonimi) | `quote_requests` |
 
@@ -74,4 +74,4 @@ Note su alcune tabelle:
 - **Interventi nel form**: pacchetti e pezzi singoli sono tutti visibili (`interventions.visibile_nel_form = 1`); il form li mostra in un unico elenco con barra di ricerca. Con `0` un intervento si nasconde senza cancellarlo.
 - **Ogni fonte ha un grado** (`sources.affidabilita`: basso / medio / elevato, dal file `import/elenco-fonti.xlsx`). L'import usa le fonti `elevato` anche con un solo valore, le `medio` solo come mediana di almeno 2 negozi indipendenti, le `basso` mai.
 - **Richiesta valida**: in `quote_requests` serve un intervento dal menu oppure il testo di `altro_intervento`.
-- **Nessun numero inventato**: prezzi, tariffe, ore e ricarichi sono vuoti finché non arrivano dalla raccolta.
+- **Nessun numero senza metodo e senza etichetta (D5)**: ogni prezzo ha un `metodo` (rilevato, indicativo, rapporto_qualita, mediana_marca, mediana_categoria). Tutto ciò che non è `rilevato` è `da_avvalorare` e porta mediana, intervallo e numero di campioni. La base statistica sta in `reference_prices`; i componenti senza codice usano un ricambio `generico` di categoria.
