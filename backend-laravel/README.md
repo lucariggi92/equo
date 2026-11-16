@@ -33,6 +33,13 @@ Sessioni e cache restano per ora su file (`SESSION_DRIVER=file`, `CACHE_STORE=fi
 - **Solo aggiunta** (`Concerns\SoloAggiunta`) per `QuoteRequest` (richieste degli utenti) e `AdminAuditLog` (registro): si crea una riga, poi non si tocca più.
 - **`User` e `AdminAuditLog`** usano il collegamento `import` (`equo_import`): l'API (`equo_api`) non vede account né registro.
 
+## Calcolo della stima (L4, 16/11/2026)
+
+- **`App\Services\Stima\CalcoloStima`**: stessa logica della procedura MySQL `calcola_stima` (fase 1): ricambi con prezzo e ricarico riga per riga, manodopera con le ore minime, IVA una volta alla fine, fascia da–a, quota di prezzi verificati / da un solo negozio / stimati, completezza (manca un prezzo, la tariffa, le ore o l'olio nel tagliando) e verdetto (equo fino a +10%, sopra la media fino a +25%, oltre anomalo; sotto −25% equo con avviso).
+- **Aritmetica decimale esatta** (`Decimale`, con l'estensione PHP `bcmath`, dichiarata in `composer.json`): gli importi viaggiano come stringhe e si arrotondano come in MySQL. Nessun errore da numeri con la virgola mobile.
+- **Verifica:** `C:\php85\php.exe artisan equo:confronta-stime` confronta PHP e MySQL campo per campo e riga per riga su ogni versione × intervento × qualità × tipo di officina × regione (una per area; `--tutte-le-regioni` per tutte e 20), più 4 preventivi per stima (−30%, +10%, +25%, +40%: sotto, sulle due soglie e oltre). Il 16/11/2026: **14.202 casi, tutti identici**, in circa 7 minuti.
+- I test automatici (`tests/Feature/CalcoloStimaTest.php`) fissano 10 casi con i valori restituiti dalla procedura MySQL.
+
 ## Test
 
 ```powershell
@@ -42,7 +49,7 @@ C:\php85\php.exe artisan test
 - I test usano solo il database di prova `equo_test` (impostato in `phpunit.xml`); `tests/TestCase.php` li ferma se un collegamento puntasse a `equo`.
 - A ogni esecuzione il comando `equo:copia-dati-test` copia i dati veri in `equo_test` (con l'utente `equo_schema`; rifiuta di copiare verso qualunque database diverso da `equo_test`).
 - Le scritture di prova (una richiesta, una riga di registro) stanno in una transazione annullata alla fine.
-- 16/11/2026: **15 test, tutti verdi**. Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
+- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
 
 ## Prova del 16/11/2026 (L1)
 
