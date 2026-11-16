@@ -45,6 +45,7 @@ erDiagram
     varchar etichetta
     enum alimentazione
     enum distribuzione
+    enum cambio "manuale, robotizzato, automatico"
     varchar olio_specifica
     smallint anno_produzione_inizio
     smallint anno_produzione_fine }

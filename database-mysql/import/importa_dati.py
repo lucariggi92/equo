@@ -195,6 +195,7 @@ def main(path, prova):
         vid, marca, modello, etich = (testo(r.get(k)) for k in ('ID variante', 'Marca', 'Modello', "Etichetta per l'utente"))
         alim = testo(r.get('Alimentazione')).lower()
         distr = testo(r.get('Distribuzione')).lower() or None
+        cambio = testo(r.get('Cambio')).lower() or None
         a_ini = numero(r.get('Anno inizio produzione'))
         a_fin = numero(r.get('Anno fine produzione'))
         if not all((vid, marca, modello, etich)):
@@ -205,6 +206,9 @@ def main(path, prova):
             continue
         if distr not in (None, 'cinghia', 'catena'):
             scarta('Varianti', n, f'distribuzione non valida: "{distr}"')
+            continue
+        if cambio not in (None, 'manuale', 'robotizzato', 'automatico'):
+            scarta('Varianti', n, f'cambio non valido: "{cambio}" (manuale, robotizzato o automatico)')
             continue
         if not a_ini or (a_fin and a_fin < a_ini):
             scarta('Varianti', n, 'anni di produzione mancanti o incoerenti')
@@ -218,13 +222,14 @@ def main(path, prova):
                    f"ON DUPLICATE KEY UPDATE car_models.nome = car_models.nome;")
         sql.append(
             "INSERT INTO variants (modello_id, etichetta, codice_motore, cilindrata, potenza_kw, alimentazione, distribuzione, "
-            "olio_specifica, anno_produzione_inizio, anno_produzione_fine) "
+            "cambio, olio_specifica, anno_produzione_inizio, anno_produzione_fine) "
             f"SELECT m.id, {q(etich)}, {q(testo(r.get('Codice motore')))}, {q(int(numero(r.get('Cilindrata cm3')) or 0) or None)}, "
-            f"{q(int(numero(r.get('Potenza kW')) or 0) or None)}, {q(alim)}, {q(distr)}, {q(testo(r.get('Olio specifica')))}, "
+            f"{q(int(numero(r.get('Potenza kW')) or 0) or None)}, {q(alim)}, {q(distr)}, {q(cambio)}, {q(testo(r.get('Olio specifica')))}, "
             f"{int(a_ini)}, {q(int(a_fin) if a_fin else None)} "
             f"FROM car_models m JOIN brands b ON b.id = m.marca_id WHERE b.nome = {q(marca)} AND m.nome = {q(modello)} "
             "ON DUPLICATE KEY UPDATE codice_motore = VALUES(codice_motore), cilindrata = VALUES(cilindrata), "
             "potenza_kw = VALUES(potenza_kw), alimentazione = VALUES(alimentazione), distribuzione = VALUES(distribuzione), "
+            "cambio = VALUES(cambio), "
             "olio_specifica = VALUES(olio_specifica), anno_produzione_inizio = VALUES(anno_produzione_inizio), "
             "anno_produzione_fine = VALUES(anno_produzione_fine);")
         caricati['Varianti'] += 1

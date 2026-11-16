@@ -31,6 +31,7 @@ source queries/controlli_copertura.sql;
 CALL controlli_copertura(180);   -- 180 = giorni oltre i quali un prezzo è "vecchio"
 ```
 
+Conta solo gli interventi possibili su quella versione: niente frizione con il cambio automatico, niente cinghia con la catena.
 Restituisce sei tabelle: riepilogo per variante e qualità (interventi calcolabili e quota di valore verificata,
 indicativa, stimata); interventi non calcolabili con il motivo; ricambi senza prezzo corrente; prezzi vecchi o scaduti;
 tariffe e ricarichi mancanti; dati tecnici mancanti nelle varianti. Usa la stessa regola di completezza di `calcola_stima`.

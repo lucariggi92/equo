@@ -96,6 +96,7 @@ Note su alcune tabelle:
 - **Olio in litri, per variante**: la quantità sta in `intervention_components`.
 - **Codice ricambio unico per produttore** (`produttore` + `codice`), perché produttori diversi possono usare lo stesso codice.
 - **Cinghia solo se serve**: l'intervento "Cinghia distribuzione" non si propone per le varianti con `distribuzione = catena`.
+- **Frizione solo se serve**: l'intervento "Frizione" non si propone per le varianti con `cambio = automatico` (convertitore di coppia, e-CVT delle ibride; per ora anche il doppia frizione). Manuale e robotizzato hanno la frizione. Il controllo di copertura non conta questi interventi né come calcolabili né come mancanti; se il dato tecnico manca, l'intervento resta e conta come mancante.
 - **Interventi nel form**: pacchetti e pezzi singoli sono tutti visibili (`interventions.visibile_nel_form = 1`); il form li mostra in un unico elenco con barra di ricerca. Con `0` un intervento si nasconde senza cancellarlo.
 - **Ogni fonte ha un grado** (`sources.affidabilita`: basso / medio / elevato, dal file `import/elenco-fonti.xlsx`). L'import usa le fonti `elevato` anche con un solo valore, le `medio` solo come mediana di almeno 2 negozi indipendenti, le `basso` mai.
 - **Richiesta valida**: in `quote_requests` serve un intervento dal menu oppure il testo di `altro_intervento`.

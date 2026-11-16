@@ -6,12 +6,13 @@
 --   CALL controlli_copertura(180);   -- 180 = giorni oltre i quali un prezzo è "vecchio"
 --
 -- Restituisce sei tabelle:
---   1. per variante e qualità: interventi calcolabili su 10, ricambi con prezzo, quota verificata/indicativa/stimata;
+--   1. per variante e qualità: interventi calcolabili sugli interventi possibili (la frizione non c'è con il cambio
+--      automatico, la cinghia non c'è con la catena), quota di valore verificata/indicativa/stimata;
 --   2. interventi non calcolabili, con il motivo (manca la composizione, mancano ore, manca un prezzo);
 --   3. ricambi senza prezzo corrente;
 --   4. prezzi vecchi (rilevazione più vecchia della soglia) e storico chiuso senza prezzo corrente;
 --   5. tariffe orarie e ricarichi mancanti (60 tariffe e 6 ricarichi attesi);
---   6. dati tecnici mancanti nelle varianti (olio, distribuzione, anno di fine produzione).
+--   6. dati tecnici mancanti nelle varianti (olio, distribuzione, cambio, anno di fine produzione).
 -- Un intervento è calcolabile in una qualità quando ha composizione, ore, un prezzo per ogni componente
 -- e, per tagliando e cambio olio, la quantità di olio
 -- (con la stessa regola della procedura calcola_stima).
@@ -50,6 +51,10 @@ BEGIN
   LEFT JOIN part_prices pp    ON pp.ricambio_id = pq.ricambio_id AND pp.valido_al IS NULL
   LEFT JOIN labor_hours lh    ON lh.variante_id = v.id AND lh.intervento_id = i.id
   WHERE i.visibile_nel_form
+    -- interventi che non esistono su quella versione: non contano né come calcolabili né come mancanti
+    -- (COALESCE: se il dato tecnico manca, l'intervento resta e conta come mancante)
+    AND NOT (i.nome = 'Frizione' AND COALESCE(v.cambio, '') = 'automatico')
+    AND NOT (i.nome = 'Cinghia distribuzione' AND COALESCE(v.distribuzione, '') = 'catena')
   GROUP BY v.id, i.id, q.qualita;
 
   -- 1. riepilogo per variante e qualità
@@ -124,6 +129,7 @@ BEGIN
                           WHERE x.variante_id = v.id AND c.descrizione = 'Olio motore'), 'quantità olio', NULL),
            IF(v.olio_specifica IS NULL, 'specifica olio', NULL),
            IF(v.distribuzione IS NULL, 'cinghia o catena', NULL),
+           IF(v.cambio IS NULL, 'tipo di cambio', NULL),
            IF(v.anno_produzione_fine IS NULL, 'anno fine produzione', NULL)) AS mancano
   FROM variants v JOIN car_models m ON m.id = v.modello_id
   HAVING mancano <> ''

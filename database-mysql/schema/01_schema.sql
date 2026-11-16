@@ -93,6 +93,7 @@ CREATE TABLE variants (
   potenza_kw        SMALLINT UNSIGNED NULL,
   alimentazione     ENUM('benzina','diesel','gpl','metano','ibrida','elettrica') NOT NULL,
   distribuzione     ENUM('cinghia','catena') NULL,
+  cambio            ENUM('manuale','robotizzato','automatico') NULL COMMENT 'manuale e robotizzato hanno la frizione; automatico (convertitore, e-CVT, per ora anche doppia frizione) no',
   olio_specifica    VARCHAR(40) NULL COMMENT 'es. 5W-30 C3; i litri stanno in intervention_components',
   anno_produzione_inizio  SMALLINT UNSIGNED NOT NULL COMMENT 'Primo anno in cui questa motorizzazione è stata prodotta',
   anno_produzione_fine    SMALLINT UNSIGNED NULL COMMENT 'Ultimo anno di produzione; NULL = ancora in produzione',
