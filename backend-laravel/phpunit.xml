@@ -27,6 +27,8 @@
         <env name="DB_CONNECTION" value="mysql"/>
         <env name="DB_DATABASE" value="equo_test"/>
         <env name="DB_SCHEMA_DATABASE" value="equo_test"/>
+        <!-- i test provano l'area riservata con la verifica in due passaggi accesa, come dovrà essere online -->
+        <env name="EQUO_GESTIONE_DUE_FATTORI" value="true"/>
         <env name="DB_URL" value=""/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>

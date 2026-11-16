@@ -55,6 +55,19 @@ Registrati in `bootstrap/app.php`, valgono per ogni richiesta (codice in `app/Ht
 
 Tolte la pagina di benvenuto di Laravel e la rotta `/up`: nessuna pagina pubblica rivela il software usato. Con `APP_DEBUG=false` gli errori rispondono solo `Server Error`.
 
+## Area riservata `/gestione` (L7, 16/11/2026)
+
+Pannello Filament 5 (`app/Providers/Filament/GestionePanelProvider.php`), con l'utente MySQL `equo_import`.
+
+- **Account:** si crea solo sul server con `C:\php85\php.exe artisan equo:crea-amministratore` (password di almeno 14 caratteri con maiuscole, minuscole, numeri e simboli). Non esistono pagina di registrazione né recupero via email: se si perde l'accesso, `artisan equo:recupera-accesso <email>` cambia la password, chiude le sessioni aperte e, con `--azzera-due-fattori`, toglie il codice del telefono.
+- **Chi entra:** solo gli account con ruolo `amministratore`. Massimo 5 tentativi al minuto. Facoltativo: solo da indirizzi ammessi (`EQUO_GESTIONE_IP`).
+- **Verifica in due passaggi** (codice dall'app del telefono, con codici di recupero): interruttore `EQUO_GESTIONE_DUE_FATTORI`. **Spenta per decisione del PM del 16/11/2026** sul computer di sviluppo; accesa nel modello `.env.example` e nei test. **Va riaccesa prima di mettere l'area riservata online.**
+- **Registro:** ogni accesso, tentativo fallito, blocco per troppi tentativi, uscita, creazione dell'account e recupero dell'accesso finisce in `admin_audit_log`, con indirizzo e browser.
+- **Sessione:** su database, 30 minuti, chiusa con il browser, cifrata; cookie `equo_sessione` non leggibile dagli script, mai mandato da altri siti, solo HTTPS in produzione (`SESSION_SECURE_COOKIE=true`).
+- **Browser:** regole di sicurezza (CSP) solo per le risorse del nostro server, nessun font o script esterno, pagine non salvate dal browser.
+- **Pagine, tutte in sola lettura:** stato dei dati (prezzi verificati, ore da tempario, tariffe confermate, modelli pronti per il form, richieste ricevute) e copertura per versione; richieste ricevute; impostazioni; registro delle azioni. Modifica delle impostazioni, backup e import dal pannello arrivano con L8.
+- I file di stile e script del pannello (`public/css|js|fonts/filament`) si rigenerano a ogni `composer install` e non stanno su git.
+
 ## Test
 
 ```powershell
@@ -64,7 +77,7 @@ C:\php85\php.exe artisan test
 - I test usano solo il database di prova `equo_test` (impostato in `phpunit.xml`); `tests/TestCase.php` li ferma se un collegamento puntasse a `equo`.
 - A ogni esecuzione il comando `equo:copia-dati-test` copia i dati veri in `equo_test` (con l'utente `equo_schema`; rifiuta di copiare verso qualunque database diverso da `equo_test`).
 - Le scritture di prova (una richiesta, una riga di registro) stanno in una transazione annullata alla fine.
-- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Dopo L5: **42 test, tutti verdi** (API: risposte, 422 sui dati sbagliati, 405 sui metodi non previsti, 429 oltre i limiti di traffico). Dopo L6: **52 test, tutti verdi** (tolti i 2 esempi di Laravel, aggiunti 12 test di sicurezza). Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
+- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Dopo L5: **42 test, tutti verdi** (API: risposte, 422 sui dati sbagliati, 405 sui metodi non previsti, 429 oltre i limiti di traffico). Dopo L6: **52 test, tutti verdi** (tolti i 2 esempi di Laravel, aggiunti 12 test di sicurezza). Dopo L7: **64 test, tutti verdi** (12 sull'area riservata). Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
 
 ## Prova del 16/11/2026 (L1)
 

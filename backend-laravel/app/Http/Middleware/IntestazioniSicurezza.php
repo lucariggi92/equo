@@ -30,6 +30,13 @@ class IntestazioniSicurezza
         $h->set('Cross-Origin-Opener-Policy', 'same-origin');
         if ($request->is('api/*')) {
             $h->set('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");
+        } elseif (! $h->has('Content-Security-Policy')) {
+            // area riservata (L7): solo risorse del nostro server; il pannello usa script e stili in linea
+            // e la valutazione di espressioni (Alpine.js), quindi servono 'unsafe-inline' e 'unsafe-eval'
+            $h->set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+                ."style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; "
+                ."frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'");
+            $h->set('Cache-Control', 'no-store, private');
         }
         $h->remove('X-Powered-By');
         header_remove('X-Powered-By');

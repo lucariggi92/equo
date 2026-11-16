@@ -117,11 +117,20 @@ comuni = {'APP_NAME': 'EQUO', 'APP_LOCALE': 'it', 'APP_FALLBACK_LOCALE': 'it', '
           'DB_CONNECTION': 'mysql', 'DB_HOST': '127.0.0.1', 'DB_PORT': '3306', 'DB_DATABASE': 'equo',
           'DB_USERNAME': 'equo_api', 'DB_COLLATION': 'utf8mb4_0900_ai_ci',
           'DB_IMPORT_USERNAME': 'equo_import', 'DB_SCHEMA_USERNAME': 'equo_schema', 'DB_SCHEMA_DATABASE': 'equo',
-          'SESSION_DRIVER': 'file', 'CACHE_STORE': 'file', 'QUEUE_CONNECTION': 'sync',
+          'QUEUE_CONNECTION': 'sync',
           # niente lavori in background: i lavori falliti non vanno in una tabella (failed_jobs non esiste più)
-          'QUEUE_FAILED_DRIVER': 'null'}
+          'QUEUE_FAILED_DRIVER': 'null',
+          # area riservata (task L7): sessioni e cache su database con l'utente equo_import (equo_api non le vede);
+          # sessione di 30 minuti, chiusa con il browser, cifrata, cookie non leggibile dagli script e mai mandato da altri siti
+          'SESSION_DRIVER': 'database', 'SESSION_CONNECTION': 'import', 'SESSION_LIFETIME': '30',
+          'SESSION_EXPIRE_ON_CLOSE': 'true', 'SESSION_ENCRYPT': 'true', 'SESSION_HTTP_ONLY': 'true',
+          'SESSION_SAME_SITE': 'strict', 'SESSION_COOKIE': 'equo_sessione',
+          'CACHE_STORE': 'database', 'DB_CACHE_CONNECTION': 'import', 'DB_CACHE_LOCK_CONNECTION': 'import',
+          'DB_CACHE_LOCK_TABLE': 'cache_locks'}
 if os.path.exists(os.path.join(BE, '.env')):
+    # sul computer di sviluppo si usa http://localhost: il cookie non può essere "solo HTTPS"
     imposta(os.path.join(BE, '.env'), {**comuni, 'DB_PASSWORD': pws['equo_api'], 'DB_IMPORT_PASSWORD': pws['equo_import'],
-                                       'DB_SCHEMA_PASSWORD': pws['equo_schema']})
-imposta(os.path.join(BE, '.env.example'), {**comuni, 'DB_PASSWORD': '', 'DB_IMPORT_PASSWORD': '', 'DB_SCHEMA_PASSWORD': ''})
+                                       'DB_SCHEMA_PASSWORD': pws['equo_schema'], 'SESSION_SECURE_COOKIE': 'false'})
+imposta(os.path.join(BE, '.env.example'), {**comuni, 'DB_PASSWORD': '', 'DB_IMPORT_PASSWORD': '', 'DB_SCHEMA_PASSWORD': '',
+                                           'SESSION_SECURE_COOKIE': 'true'})
 print('ok:', ', '.join(f'{u} ({len(p)} caratteri)' for u, p in pws.items()))

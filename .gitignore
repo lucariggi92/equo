@@ -44,3 +44,6 @@ database-mysql/import/elenco-fonti.xlsx
 # Output dello script di import (contengono dati raccolti)
 database-mysql/import/ultimo-import.sql
 database-mysql/import/report-import.txt
+
+# impostazioni locali dell'assistente (avvio del server di prova)
+.claude/

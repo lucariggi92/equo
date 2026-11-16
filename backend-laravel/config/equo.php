@@ -36,4 +36,20 @@ return [
     /* Dimensione massima di una richiesta all'API: una verifica pesa poche centinaia di byte. */
     'dimensione_massima_richiesta' => 16 * 1024,
 
+    /*
+     * Area riservata (task L7).
+     * gestione_indirizzi_ammessi: se non vuoto, l'area si apre solo da questi indirizzi o reti (EQUO_GESTIONE_IP, separati da virgola).
+     * password_lunghezza_minima: per l'account amministratore.
+     */
+    'gestione_indirizzi_ammessi' => array_values(array_filter(array_map('trim', explode(',', (string) env('EQUO_GESTIONE_IP', ''))))),
+
+    'password_lunghezza_minima' => 14,
+
+    /*
+     * Verifica in due passaggi (codice dall'app del telefono) per l'area riservata.
+     * Decisione del PM del 16/11/2026: spenta per ora (EQUO_GESTIONE_DUE_FATTORI=false). Si riaccende con true,
+     * senza cambiare il codice; da riaccendere prima di mettere l'area riservata su Internet.
+     */
+    'gestione_due_fattori' => (bool) env('EQUO_GESTIONE_DUE_FATTORI', true),
+
 ];
