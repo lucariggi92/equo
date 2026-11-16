@@ -40,6 +40,7 @@ REPORT = os.path.join(HERE, 'report-import.txt')
 
 SCARTO = 0.50          # settings.scarto_campione
 MIN_STAT = 3          # campioni minimi per una mediana statistica (D5)
+CORTI = {'Disco freno anteriore': 'Disco ant.', 'Filtro abitacolo': 'Filtro abit.', 'Pastiglie freno anteriori': 'Pastiglie ant.'}
 CAMPIONI_MEDIO = 2    # decisione PM 2026-11-12 (D4): 2 negozi indipendenti
 
 INTERVENTI = {'Tagliando completo', 'Freni anteriori', 'Cinghia distribuzione', 'Frizione', 'Batteria',
@@ -461,7 +462,9 @@ def main(path, prova):
                     p0 = prezzi_reali[altro][0]
                     return ('rapporto_qualita', p0 * r_, p0 * r_ * 0.8, p0 * r_ * 1.2, MIN_STAT,
                             f'D5 livello 3: {altro[0]} {altro[1]} ({q_altra}) × rapporto {r_:.2f} ({origine})')
-        # livello 5: stessa categoria e qualità, prima nello stesso sottotipo
+        # livelli 5 e 5b, prima nello stesso sottotipo e poi nella categoria intera:
+        #   5  = mediana della categoria nella stessa qualità
+        #   5b = mediana della categoria in un'altra qualità × rapporto tra qualità
         prod, st_ = code[0], sott.get(code, '')
         for sotto in ([st_, None] if st_ else [None]):
             etichetta = f'{comp} {sotto}' if sotto else comp
@@ -469,16 +472,15 @@ def main(path, prova):
             if len(v) >= MIN_STAT:
                 q1, med, q3 = quartili(v)
                 return ('mediana_categoria', med, q1, q3, len(v), f'D5 livello 5: mediana di {len(v)} prezzi {etichetta} {qual}')
-        # livello 5b: mediana della stessa categoria nell'altra qualità × rapporto tra qualità
-        for q_altra in ('equivalente', 'economico', 'originale'):
-            if q_altra == qual:
-                continue
-            v = valori(escludi or code, comp, q_altra)
-            r_, origine = rapporto(comp, q_altra, qual, escludi)
-            if len(v) >= MIN_STAT and r_:
-                q1, med, q3 = quartili(v)
-                return ('mediana_categoria', med * r_, q1 * r_, q3 * r_, len(v),
-                        f'D5 livello 5b: mediana di {len(v)} prezzi {comp} {q_altra} × rapporto {r_:.2f} ({origine})')
+            for q_altra in ('equivalente', 'economico', 'originale'):
+                if q_altra == qual:
+                    continue
+                v = valori(escludi or code, comp, q_altra, None, sotto)
+                r_, origine = rapporto(comp, q_altra, qual, escludi)
+                if len(v) >= MIN_STAT and r_:
+                    q1, med, q3 = quartili(v)
+                    return ('mediana_categoria', med * r_, q1 * r_, q3 * r_, len(v),
+                            f'D5 livello 5b: mediana di {len(v)} prezzi {etichetta} {q_altra} × rapporto {r_:.2f} ({origine})')
         return None
 
     # ricambi generici per i componenti senza codice (qualità equivalente ed economico)
@@ -488,11 +490,17 @@ def main(path, prova):
             for qual in ('equivalente', 'economico'):
                 if qual in slots[(chiave, comp)]:
                     continue
-                code = ('GENERICO', f'{comp} - {qual}'[:40])
+                # sottotipo ereditato dal codice reale della stessa auto in un'altra qualità (es. disco ventilato)
+                st_g = next((sott.get(c_, '') for q_, c_ in slots[(chiave, comp)].items()
+                             if c_[0] != 'GENERICO' and sott.get(c_, '')), '')
+                nome = f'{CORTI.get(comp, comp)} {st_g} - {qual}' if st_g else f'{comp} - {qual}'
+                code = ('GENERICO', nome[:40])
                 if code not in code_meta:
                     code_meta[code] = (comp, qual)
-                    sql.append(f"INSERT INTO spare_parts (codice, produttore, descrizione, generico) VALUES ({q(code[1])}, 'GENERICO', "
-                               f"{q('Segnaposto D5: codice reale non ancora noto')}, TRUE) ON DUPLICATE KEY UPDATE generico = TRUE;")
+                    sott[code] = st_g
+                    sql.append(f"INSERT INTO spare_parts (codice, produttore, descrizione, generico, sottotipo) VALUES ({q(code[1])}, 'GENERICO', "
+                               f"{q('Segnaposto D5: codice reale non ancora noto')}, TRUE, {q(st_g or None)}) "
+                               "ON DUPLICATE KEY UPDATE generico = TRUE, sottotipo = VALUES(sottotipo);")
                 slots[(chiave, comp)][qual] = code
                 sql.append(
                     "INSERT INTO part_qualities (variante_id, componente_id, qualita, ricambio_id) "
