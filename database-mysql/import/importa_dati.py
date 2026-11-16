@@ -5,7 +5,7 @@ Uso, dalla cartella database-mysql:
     python import/importa_dati.py "<percorso>/dati-disponibili.xlsx" --prova  # controlla e annulla
 
 Cosa fa:
-1. legge i fogli Fonti, Varianti, Composizione, Codici, Prezzi, Riferimenti, Ore, Tariffe, Ricarichi, Fatture, Mercato;
+1. legge i fogli Fonti, Varianti, Composizione, Codici, Prezzi, Riferimenti, Ore, Tariffe, Ricarichi, Mercato;
 2. controlla ogni riga (fonte in elenco, URL/documento, data, valori ammessi);
 3. applica le regole di affidabilità:
    - fonte "Basso": la riga non entra mai;
@@ -591,7 +591,7 @@ def main(path, prova):
             "FROM DUAL WHERE @same = 0;")
         caricati['Tariffe (regione e officina)'] += 1
 
-    # ------------------------------------------------------------ Ricarichi (finché non ci sono tarature da fatture)
+    # ------------------------------------------------------------ Ricarichi
     for n, r in righe(wb, 'Ricarichi'):
         off, tp, fatt = testo(r.get('Tipo officina')).lower(), testo(r.get('Tipo prezzo')).lower(), numero(r.get('Ricarico'))
         if off not in OFFICINE or tp not in ('media', 'ufficiale') or fatt is None or not (-0.5 <= fatt <= 2.0):
@@ -608,31 +608,6 @@ def main(path, prova):
         sql.append("INSERT INTO markups (tipo_officina, tipo_fonte, fattore, origine, n_campioni, valido_dal, note) "
                    f"SELECT {q(off)}, {q(tp)}, {fatt}, {q(origine_r)}, 0, {q(oggi)}, {q(nota_r)} FROM DUAL WHERE @same = 0;")
         caricati['Ricarichi'] += 1
-
-    # ------------------------------------------------------------ Fatture
-    prezzi_ok = {k for k in gruppi if any(e.startswith(f'{k[0]} {k[1]}: caricato') for e in esiti_prezzi)}
-    for n, r in righe(wb, 'Fatture'):
-        num, reg, off = testo(r.get('N. fattura (oscurata)')), testo(r.get('Regione')), testo(r.get('Tipo officina')).lower()
-        prod, cod, p = testo(r.get('Produttore')), testo(r.get('Codice')), numero(r.get('Prezzo in fattura netto €'))
-        if not num or reg not in REGIONI or off not in OFFICINE or not p or p <= 0:
-            scarta('Fatture', n, 'numero fattura, regione, tipo officina o prezzo non validi')
-            continue
-        if (prod, cod) not in prezzi_ok:
-            scarta('Fatture', n, f'manca il prezzo di riferimento corrente di {prod} {cod} (foglio Prezzi)')
-            continue
-        f = controlla_fonte(fonti, 'Fatture', n, r, campo_doc=None, campo_data='Data fattura', min_aff='elevato')
-        if not f:
-            continue
-        nome, aff, tipo, _, d = f
-        sql.append(sql_fonte('fid', f'{nome} — fattura {num}', aff, tipo, None, d).rstrip('\n'))
-        sql.append(
-            "INSERT INTO calibrations (fonte_id, ricambio_id, tipo_officina, regione_id, prezzo_fattura_netto, "
-            "prezzo_riferimento_netto, tipo_fonte_riferimento, data_fattura) "
-            f"SELECT @fid, s.id, {q(off)}, g.id, {p}, pp.prezzo_netto, pp.tipo_fonte, {q(d)} "
-            "FROM spare_parts s JOIN part_prices pp ON pp.ricambio_id = s.id AND pp.valido_al IS NULL "
-            f"JOIN regions g ON g.nome = {q(reg)} WHERE s.produttore = {q(prod)} AND s.codice = {q(cod)} "
-            "AND NOT EXISTS (SELECT 1 FROM calibrations c WHERE c.fonte_id = @fid AND c.ricambio_id = s.id);")
-        caricati['Fatture'] += 1
 
     # ------------------------------------------------------------ Mercato (M8: valori pubblicati al posto delle fatture)
     # tabella derivata solo dal foglio: si svuota e si ricarica a ogni import
@@ -684,7 +659,6 @@ def main(path, prova):
                "SELECT CONCAT('  di cui ', origine), COUNT(*) FROM labor_hours GROUP BY origine UNION ALL "
                "SELECT 'labor_rates (correnti)', COUNT(*) FROM labor_rates WHERE valido_al IS NULL UNION ALL "
                "SELECT 'markups (correnti)', COUNT(*) FROM markups WHERE valido_al IS NULL UNION ALL "
-               "SELECT 'calibrations', COUNT(*) FROM calibrations UNION ALL "
                "SELECT 'market_benchmarks', COUNT(*) FROM market_benchmarks;")
     sql.append("ROLLBACK;" if prova else "COMMIT;")
     with open(SQL_OUT, 'w', encoding='utf-8') as fh:

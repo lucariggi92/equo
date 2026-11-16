@@ -1,6 +1,6 @@
 # Schema del database `equo`
 
-Le 20 tabelle create da `schema/01_schema.sql` e i loro collegamenti. GitHub disegna il diagramma da solo; la versione in immagine è in [`../docs/architettura/schema-database-equo.png`](../docs/architettura/schema-database-equo.png).
+Le 19 tabelle dei dati di EQUO e i loro collegamenti (dal 16/11/2026 lo schema sta nelle migration di Laravel; la tabella delle fatture `calibrations` è stata tolta). GitHub disegna il diagramma da solo; la versione in immagine è in [`../docs/architettura/schema-database-equo.png`](../docs/architettura/schema-database-equo.png).
 Nomi delle tabelle in inglese, nomi delle colonne in italiano (revisione PM del 2026-11-12).
 
 ```mermaid
@@ -23,9 +23,6 @@ erDiagram
   sources |o--o{ labor_hours : "prova"
   regions ||--o{ labor_rates : "tariffa"
   sources |o--o{ labor_rates : "prova"
-  sources ||--o{ calibrations : "fattura"
-  spare_parts ||--o{ calibrations : "pezzo"
-  regions ||--o{ calibrations : "dove"
   sources ||--o{ market_benchmarks : "prova"
   variants |o--o{ market_benchmarks : "auto"
   interventions |o--o{ market_benchmarks : "intervento"
@@ -134,14 +131,6 @@ erDiagram
     boolean iva_inclusa
     smallint anno_riferimento
   }
-  calibrations { int id PK
-    int fonte_id FK
-    int ricambio_id FK
-    tinyint regione_id FK
-    enum tipo_officina
-    decimal prezzo_fattura_netto
-    decimal prezzo_riferimento_netto
-    decimal rapporto "calcolato" }
   quote_requests { int id PK
     datetime creata_il
     smallint variante_id FK
@@ -169,7 +158,7 @@ erDiagram
 | modelli | `car_models` | | ore_stimate | `labor_hours` |
 | varianti | `variants` | | tariffe_manodopera | `labor_rates` |
 | interventi | `interventions` | | ricarichi | `markups` |
-| componenti | `components` | | tarature | `calibrations` |
+| componenti | `components` | | tarature | `calibrations` *(tolta il 16/11/2026)* |
 | distinta_base | `intervention_components` | | interventi_esclusi | *(eliminata)* |
 | — | `quote_requests` *(nuova)* | | — | `reference_prices` *(nuova, D5)* |
 | — | `market_benchmarks` *(nuova, M8)* | | | |
@@ -178,7 +167,7 @@ erDiagram
 
 ## Tabelle senza collegamenti diretti
 
-- **`markups`**: si legge con la coppia (`tipo_officina`, `tipo_fonte`). `tipo_fonte` arriva dal prezzo del ricambio, `tipo_officina` dalla scelta dell'utente. Il valore si ricava dalla mediana di `calibrations`.
+- **`markups`**: si legge con la coppia (`tipo_officina`, `tipo_fonte`). `tipo_fonte` arriva dal prezzo del ricambio, `tipo_officina` dalla scelta dell'utente. Il valore è un'assunzione dichiarata (D6), confrontata con i valori pubblicati di `market_benchmarks` (D7).
 - **`settings`**: parametri globali (IVA, soglie del verdetto, ore minime, regole della taratura M8).
 - **`market_benchmarks`**: valori di mercato pubblicati (tariffe orarie per tipo di officina e area, prezzi al cliente per variante e intervento), con fonte e anno di riferimento. La procedura `taratura` li confronta con i valori EQUO.
 - **`labor_hours.origine`**: `assunzione` (D6), `tempario` (tempo pubblicato per la versione), `reale` (fatture, officine).

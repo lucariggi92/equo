@@ -12,7 +12,19 @@ Il backend di EQUO: legge il database `equo` (vedi [`../database-mysql`](../data
 - I tre utenti MySQL si creano una volta con `../database-mysql/setup/crea_utenti_root.ps1` (chiede la password di root).
 - Prova: `C:\php85\php.exe artisan test`.
 
-Fino al passo L2, sessioni e cache stanno su file (`SESSION_DRIVER=file`, `CACHE_STORE=file`): le loro tabelle arrivano con le migration.
+## Migration (L2, 16/11/2026)
+
+- **Le 20 tabelle di EQUO** hanno una migration ciascuna (`database/migrations/2026_11_16_1000NN_create_*`), con lo stesso `CREATE TABLE` provato in MySQL: vincoli CHECK, colonne calcolate, commenti e nomi delle chiavi identici.
+- **Tabelle in più:** `users` (account amministratore), `sessions`, `cache`, `cache_locks` e `admin_audit_log`, il registro delle azioni dell'area riservata.
+- **Si lanciano solo con l'utente `equo_schema`:** `C:\php85\php.exe artisan migrate --database=schema`. Gli altri due utenti non possono cambiare la struttura.
+- **Prova:** `equo_test` costruito solo dalle migration ha le 20 tabelle identiche a `equo`. In `equo` le 20 tabelle esistenti sono registrate come già create (gruppo 1) e le 10 nuove sono state aggiunte (gruppo 2) senza toccare i dati.
+- **Permessi sulle tabelle nuove:** `equo_api` non vede né `users` né il registro; `equo_import` usa le tabelle di Laravel e sul registro può solo leggere e aggiungere (modifica e cancellazione rifiutate da MySQL).
+
+- **Fatture tolte:** la migration `2026_11_16_100200_drop_calibrations_table` cancella la tabella delle fatture reali (vuota, le fatture non arriveranno) e la sua impostazione `min_campioni_taratura`; `down()` le rimette. Dopo la modifica `equo` e `equo_test` hanno 29 tabelle, identiche una per una.
+
+- **Tabelle Laravel tolte:** la migration `2026_11_16_100300_drop_unused_laravel_tables` toglie `password_reset_tokens` (niente recupero password via email: l'accesso si recupera da comando sul server) e `jobs`, `job_batches`, `failed_jobs` (niente lavori in background; `QUEUE_FAILED_DRIVER=null`). `down()` le rimette. Il database ha 25 tabelle: 19 di dati e 6 per l'area riservata.
+
+Sessioni e cache restano per ora su file (`SESSION_DRIVER=file`, `CACHE_STORE=file`); con l'area riservata (L7) passano su database, per vedere e chiudere gli accessi attivi e tenere i limiti di traffico anche dopo un riavvio.
 
 ## Prova del 16/11/2026 (L1)
 

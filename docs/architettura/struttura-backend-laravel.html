@@ -223,10 +223,10 @@ alla fonte (file o feed) e si reimporta: così ogni numero ha sempre fonte, data
 <table>
 <tr><th>Tabella</th><th>Perché</th></tr>
 <tr><td><code>users</code></td><td>l'account amministratore (password cifrata, segreto della verifica in due passaggi)</td></tr>
-<tr><td><code>sessions</code>, <code>cache</code>, <code>jobs</code>, <code>password_reset_tokens</code></td><td>tabelle standard di Laravel per sessioni, limiti di traffico e lavori in background</td></tr>
+<tr><td><code>sessions</code>, <code>cache</code>, <code>cache_locks</code></td><td>tabelle standard di Laravel per sessioni e limiti di traffico (dal 16/11/2026 tolte <code>password_reset_tokens</code>, <code>jobs</code>, <code>job_batches</code>, <code>failed_jobs</code>: niente recupero via email, niente lavori in background)</td></tr>
 <tr><td><code>admin_audit_log</code></td><td>il registro delle azioni dell'area riservata (solo aggiunta)</td></tr>
 </table>
-<p class="nota">Le 20 tabelle dei dati di EQUO non cambiano.</p>
+<p class="nota">Le tabelle dei dati di EQUO non cambiano (dal 16/11/2026 sono 19: tolta quella delle fatture reali, che restava vuota).</p>
 
 <h2>9. Come verifichiamo che non ci siano buchi</h2>
 <ul>

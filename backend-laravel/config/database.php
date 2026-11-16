@@ -64,6 +64,40 @@ return [
             ]) : [],
         ],
 
+        // EQUO (decisione D8): stessi parametri di 'mysql', utenti MySQL diversi.
+        // 'import': import e area riservata (scrittura sui dati). 'schema': solo migration, lanciate a mano.
+        'import' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'equo'),
+            'username' => env('DB_IMPORT_USERNAME', 'equo_import'),
+            'password' => env('DB_IMPORT_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_0900_ai_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'schema' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_SCHEMA_DATABASE', env('DB_DATABASE', 'equo')),
+            'username' => env('DB_SCHEMA_USERNAME', 'equo_schema'),
+            'password' => env('DB_SCHEMA_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_0900_ai_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

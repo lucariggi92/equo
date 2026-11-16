@@ -32,6 +32,5 @@ Il report elenca le righe accettate e quelle scartate, con il motivo.
 - **Backtest**: il report nasconde ogni prezzo reale, lo ristima e riporta l'errore medio per metodo.
 - **Ore, Tariffe, Ricarichi**: le righe con fonte di tipo `fattura` o `officina` sono `reale`/`taratura`; le ore da fonte di tipo `tempario` sono `tempario`; tutte le altre `assunzione` (i valori della decisione D6). Il foglio Ricarichi alimenta `markups` finché non ci sono abbastanza fatture per la taratura.
 - **Mercato** (taratura M8 senza fatture): tariffe orarie (`tariffa_oraria`, per tipo di officina e area) e prezzi al cliente (`prezzo_intervento`, per variante e intervento), con IVA sì/no e anno di riferimento. La tabella `market_benchmarks` si svuota e si ricarica a ogni import.
-- **Fatture** (taratura del ricarico): solo da fonte **elevato** e solo se il codice ha già un prezzo corrente.
 - Tutto in una transazione: se qualcosa va storto nel database, non si salva niente.
 - Rieseguibile: un prezzo uguale non crea righe nuove; un prezzo diverso chiude il vecchio (`valido_al`) e apre il nuovo.

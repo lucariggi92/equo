@@ -17,7 +17,9 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `setup/01_utenti_separati.sql` | modello: utenti `equo_api` (sola lettura + richieste anonime), `equo_import` (scrittura dati), `equo_schema` (struttura) | sì (password segnaposto) |
 | `setup/01_utenti_separati.local.sql` | come sopra, con le password vere (generate casuali) | **no** |
 | `setup/crea_utenti_root.ps1` | esegue lo script 01 come root (chiede la password); rieseguibile | sì |
-| `schema/01_schema.sql` | crea le 20 tabelle (rieseguibile: cancella i dati) | sì |
+| `setup/genera_utenti.py` | rigenera lo script 01, i file `.local.cnf` e le credenziali in `backend-laravel/.env`; da rilanciare quando si aggiunge una tabella | sì |
+| `setup/02_database_test.sql`, `setup/crea_database_test_root.ps1` | database di prova `equo_test` per le migration e i test automatici (come root) | sì |
+| `schema/01_schema.sql` | riferimento storico dello schema della fase 1 (20 tabelle); non va più rieseguito: lo schema ora sta nelle migration | sì |
 | `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
 | `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
 | `queries/` | procedure: stima e verdetto (M6), controlli di copertura (M7), taratura (M8) | sì |
@@ -32,7 +34,7 @@ Il diagramma delle tabelle è in [`../docs/architettura/schema-database-equo.png
 
 Le password stanno solo nei file `.local.*` e `.env`, esclusi da git. Su una macchina nuova: copia `.env.example` in `.env`, copia `setup/00_crea_database.sql` in `setup/00_crea_database.local.sql` e scrivi in entrambi la stessa password; poi crea `equo_app.local.cnf` con le stesse credenziali (sezione `[client]`).
 
-Quando parte la fase Laravel, lo schema passa alle migration di `backend-laravel/` e da lì si modifica solo lì: `schema/01_schema.sql` resta come riferimento.
+**Dal 16/11/2026 (task L2) lo schema si modifica solo con le migration di `backend-laravel/`.** La tabella delle fatture reali (`calibrations`) è stata tolta lo stesso giorno con una migration: le fatture non arriveranno (decisione D7) e la tabella era vuota. Oggi le tabelle dei dati sono 19. Sono state tolte anche quattro tabelle standard di Laravel che EQUO non usa (`password_reset_tokens`, `jobs`, `job_batches`, `failed_jobs`): in tutto il database ha 25 tabelle. Le 20 tabelle hanno ognuna la sua migration, con lo stesso `CREATE TABLE` di `schema/01_schema.sql`; la prova ha costruito `equo_test` solo dalle migration e le 20 tabelle sono risultate identiche a quelle di `equo`. `schema/01_schema.sql` resta come riferimento storico: non va più rieseguito sul database vero.
 
 ## Installazione da zero
 
@@ -79,7 +81,8 @@ Nomi delle tabelle in inglese, nomi delle colonne in italiano.
 | Veicoli | `brands`, `car_models`, `variants` |
 | Interventi | `interventions`, `components`, `intervention_components` |
 | Ricambi e prezzi | `spare_parts`, `part_qualities`, `part_prices`, `price_samples`, `reference_prices` |
-| Manodopera e ricarico | `labor_hours`, `labor_rates`, `markups`, `calibrations`, `market_benchmarks` |
+| Manodopera e ricarico | `labor_hours`, `labor_rates`, `markups`, `market_benchmarks` |
+| Area riservata (Laravel) | `users`, `sessions`, `cache`, `cache_locks`, `admin_audit_log`, `migrations` |
 | Utenti (anonimi) | `quote_requests` |
 
 Note su alcune tabelle:
