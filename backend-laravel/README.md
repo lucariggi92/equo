@@ -40,6 +40,21 @@ Sessioni e cache restano per ora su file (`SESSION_DRIVER=file`, `CACHE_STORE=fi
 - **Verifica:** `C:\php85\php.exe artisan equo:confronta-stime` confronta PHP e MySQL campo per campo e riga per riga su ogni versione × intervento × qualità × tipo di officina × regione (una per area; `--tutte-le-regioni` per tutte e 20), più 4 preventivi per stima (−30%, +10%, +25%, +40%: sotto, sulle due soglie e oltre). Il 16/11/2026: **14.202 casi, tutti identici**, in circa 7 minuti.
 - I test automatici (`tests/Feature/CalcoloStimaTest.php`) fissano 10 casi con i valori restituiti dalla procedura MySQL.
 
+## Controlli di sicurezza (L6, 16/11/2026)
+
+Registrati in `bootstrap/app.php`, valgono per ogni richiesta (codice in `app/Http/Middleware`):
+
+| Controllo | Cosa fa |
+|---|---|
+| `IdRichiesta` | un codice unico per richiesta, generato dal server, nella risposta (`X-Request-Id`) e in ogni riga di log |
+| `IntestazioniSicurezza` | `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `Permissions-Policy`, `Cross-Origin-Opener-Policy`; sull'API una CSP che non permette di caricare né eseguire nulla; toglie `X-Powered-By` |
+| `ForzaHttps` | con `EQUO_FORZA_HTTPS=true` (produzione): le letture in chiaro passano su HTTPS, il resto viene rifiutato; HSTS di un anno sulle risposte cifrate |
+| CORS (`config/cors.php`) | solo il sito React (`FRONTEND_URL`), solo GET e POST, nessun cookie |
+| `TrustProxies` | ci si fida solo del proxy in `TRUSTED_PROXIES` (di default di nessuno): nessuno può fingere un altro indirizzo per aggirare i limiti |
+| `ControlloRichiesteApi` | sull'API: solo GET/HEAD, POST solo su `/api/verifica`; modifiche e cancellazioni rifiutate anche se travestite (`X-HTTP-Method-Override`, `_method`); oltre 16 KB rifiutata; le POST devono essere JSON |
+
+Tolte la pagina di benvenuto di Laravel e la rotta `/up`: nessuna pagina pubblica rivela il software usato. Con `APP_DEBUG=false` gli errori rispondono solo `Server Error`.
+
 ## Test
 
 ```powershell
@@ -49,7 +64,7 @@ C:\php85\php.exe artisan test
 - I test usano solo il database di prova `equo_test` (impostato in `phpunit.xml`); `tests/TestCase.php` li ferma se un collegamento puntasse a `equo`.
 - A ogni esecuzione il comando `equo:copia-dati-test` copia i dati veri in `equo_test` (con l'utente `equo_schema`; rifiuta di copiare verso qualunque database diverso da `equo_test`).
 - Le scritture di prova (una richiesta, una riga di registro) stanno in una transazione annullata alla fine.
-- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Dopo L5: **42 test, tutti verdi** (API: risposte, 422 sui dati sbagliati, 405 sui metodi non previsti, 429 oltre i limiti di traffico). Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
+- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Dopo L5: **42 test, tutti verdi** (API: risposte, 422 sui dati sbagliati, 405 sui metodi non previsti, 429 oltre i limiti di traffico). Dopo L6: **52 test, tutti verdi** (tolti i 2 esempi di Laravel, aggiunti 12 test di sicurezza). Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
 
 ## Prova del 16/11/2026 (L1)
 

@@ -26,4 +26,14 @@ return [
      */
     'preventivo_massimo' => 20000,
 
+    /*
+     * Sicurezza delle richieste (task L6).
+     * forza_https: ogni richiesta non cifrata viene rimandata su HTTPS (GET) o rifiutata (il resto).
+     * Di default è attivo in produzione e spento sul computer di sviluppo, che usa http://localhost.
+     */
+    'forza_https' => (bool) env('EQUO_FORZA_HTTPS', env('APP_ENV') === 'production'),
+
+    /* Dimensione massima di una richiesta all'API: una verifica pesa poche centinaia di byte. */
+    'dimensione_massima_richiesta' => 16 * 1024,
+
 ];
