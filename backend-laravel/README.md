@@ -1,14 +1,41 @@
 # Backend Laravel
 
-API di EQUO: legge il database `equo` (vedi [`../database-mysql`](../database-mysql/README.md)), calcola la stima e il verdetto e salva le richieste anonime in `quote_requests`.
+Il backend di EQUO: legge il database `equo` (vedi [`../database-mysql`](../database-mysql/README.md)), calcola la stima e il verdetto per il sito React, salva le richieste anonime in `quote_requests` e offre un'area riservata all'amministratore.
 
-**Stato:** da iniziare. La fase Laravel parte solo dopo la chiusura della fase MySQL, cioè quando i prezzi reali dell'Onda A sono raccolti e caricati.
+**Stato:** da iniziare. Struttura e sicurezza approvate il 16/11/2026: [`../docs/architettura/struttura-backend-laravel.html`](../docs/architettura/struttura-backend-laravel.html).
 
-Rotte previste:
+## Perché serve, se c'è già React
 
-| Metodo | Rotta | Cosa fa |
+React gira nel browser dell'utente: tutto quello che contiene è leggibile da chiunque. Se si collegasse direttamente al database, le credenziali di MySQL sarebbero nella pagina. Per questo React chiede dati e calcolo a Laravel, che gira sul server e tiene nascoste le credenziali.
+
+```
+Utente → React (browser) → Laravel (server) → MySQL
+```
+
+## Due ingressi
+
+| Ingresso | Chi | Cosa può fare |
 |---|---|---|
-| GET | `/api/opzioni` | regioni, marche, modelli, interventi, qualità, tipi officina |
-| GET | `/api/varianti?modello_id=` | varianti di un modello |
-| POST | `/api/verifica` | stima + verdetto, salva la richiesta |
-| GET | `/api/salute` | stato del servizio e del database |
+| API per il sito React (`/api/…`) | il sito React, senza login | solo leggere il catalogo e aggiungere la richiesta anonima |
+| Area riservata (`/gestione`) | solo l'amministratore, con password e verifica in due passaggi | vedere lo stato dei dati, lanciare l'import (prova → conferma), impostazioni, backup, registro azioni |
+
+Non esiste nessuna rotta per modificare a mano prezzi, codici, ore o tariffe: i dati entrano solo dall'import, con fonte, data e link.
+
+## Rotte dell'API
+
+| Metodo | Rotta | Cosa fa | Limite |
+|---|---|---|---|
+| GET | `/api/opzioni` | regioni, marche, modelli, interventi, qualità, tipi officina | 120/min |
+| GET | `/api/varianti?modello_id=` | varianti di un modello | 120/min |
+| POST | `/api/verifica` | stima + verdetto, salva la richiesta anonima | 20/min, 200/giorno |
+| GET | `/api/salute` | solo "ok" o "errore", senza dettagli interni | 120/min |
+
+## Sicurezza, in breve
+
+- Middleware su tre livelli: tutte le richieste (HTTPS, intestazioni di sicurezza, CORS solo dal sito React, limite dimensione), API (solo JSON, solo GET e una POST, limiti di traffico, validazione), area riservata (cookie cifrati, CSRF, limite tentativi, due fattori, ruolo, scadenza sessione, registro azioni).
+- Utenti MySQL separati: `equo_api` (solo lettura + inserimento in `quote_requests`), `equo_import` (import e area riservata), `equo_schema` (solo migration). L'API non può modificare i dati nemmeno se il codice venisse compromesso.
+- Credenziali solo in `.env` (escluso da git); `APP_DEBUG=false` in produzione; nessun dato personale salvato.
+
+## Piano
+
+I passi L1-L9 sono nel documento di struttura (sezione 10).
