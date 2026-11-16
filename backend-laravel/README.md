@@ -26,6 +26,24 @@ Il backend di EQUO: legge il database `equo` (vedi [`../database-mysql`](../data
 
 Sessioni e cache restano per ora su file (`SESSION_DRIVER=file`, `CACHE_STORE=file`); con l'area riservata (L7) passano su database, per vedere e chiudere gli accessi attivi e tenere i limiti di traffico anche dopo un riavvio.
 
+## Modelli (L3, 16/11/2026)
+
+- **20 modelli in `app/Models`**, uno per tabella (più `User`), con le relazioni principali: marca → modelli → versioni → composizione degli interventi, ricambi per qualità, prezzo corrente e campioni dei negozi, ore, tariffe e ricarichi correnti (`->correnti()`).
+- **Catalogo in sola lettura** (`Concerns\SolaLettura`): salvataggio, creazione, modifica e cancellazione rifiutati, anche nelle varianti "quiet" e nelle scritture di massa (`update`, `delete`, `insert`, `upsert`, `increment`, `truncate`). I dati entrano solo dall'import.
+- **Solo aggiunta** (`Concerns\SoloAggiunta`) per `QuoteRequest` (richieste degli utenti) e `AdminAuditLog` (registro): si crea una riga, poi non si tocca più.
+- **`User` e `AdminAuditLog`** usano il collegamento `import` (`equo_import`): l'API (`equo_api`) non vede account né registro.
+
+## Test
+
+```powershell
+C:\php85\php.exe artisan test
+```
+
+- I test usano solo il database di prova `equo_test` (impostato in `phpunit.xml`); `tests/TestCase.php` li ferma se un collegamento puntasse a `equo`.
+- A ogni esecuzione il comando `equo:copia-dati-test` copia i dati veri in `equo_test` (con l'utente `equo_schema`; rifiuta di copiare verso qualunque database diverso da `equo_test`).
+- Le scritture di prova (una richiesta, una riga di registro) stanno in una transazione annullata alla fine.
+- 16/11/2026: **15 test, tutti verdi**. Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
+
 ## Prova del 16/11/2026 (L1)
 
 Collegato come `equo_api`, il database **rifiuta**: modifica e cancellazione di un prezzo, inserimento nelle impostazioni, cambio di una soglia del verdetto, svuotamento e cancellazione di tabelle, modifica della struttura, esecuzione delle procedure, lettura di altri database e lettura delle richieste degli utenti. **Permette** solo la lettura del catalogo e l'inserimento di una richiesta anonima. Lo stesso rifiuto arriva quando la modifica parte dal codice Laravel.

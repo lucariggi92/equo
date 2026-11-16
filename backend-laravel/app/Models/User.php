@@ -18,6 +18,12 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * Account dell'area riservata (decisione D8): si legge con l'utente MySQL equo_import.
+     * L'utente dell'API per il sito React (equo_api) non vede questa tabella.
+     */
+    protected $connection = 'import';
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
