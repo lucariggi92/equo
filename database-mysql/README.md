@@ -17,7 +17,7 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `schema/01_schema.sql` | crea le 19 tabelle (rieseguibile: cancella i dati) | sì |
 | `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
 | `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
-| `queries/` | calcolo stima, controlli di copertura, taratura (M6-M8) | sì |
+| `queries/` | `calcolo_stima.sql` (procedura di stima e verdetto, M6), poi controlli di copertura e taratura (M7-M8) | sì |
 | `backup/` | dump locali del database | **no** (solo la cartella) |
 | `SCHEMA.md` | tabelle, collegamenti, corrispondenza con i nomi vecchi | sì |
 | `.env.example` | modello delle variabili di connessione, password vuota | sì |
