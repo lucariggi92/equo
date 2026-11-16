@@ -14,7 +14,7 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `setup/00_crea_database.sql` | modello: database `equo` + utente `equo_app` | sì (password segnaposto) |
 | `setup/00_crea_database.local.sql` | come sopra, con la password vera | **no** |
 | `setup/crea_database_root.ps1` | esegue lo script 00 come root (chiede la password) | sì |
-| `schema/01_schema.sql` | crea le 19 tabelle (rieseguibile: cancella i dati) | sì |
+| `schema/01_schema.sql` | crea le 20 tabelle (rieseguibile: cancella i dati) | sì |
 | `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
 | `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
 | `queries/` | `calcolo_stima.sql` (procedura di stima e verdetto, M6), poi controlli di copertura e taratura (M7-M8) | sì |
@@ -52,7 +52,7 @@ Nomi delle tabelle in inglese, nomi delle colonne in italiano.
 | Veicoli | `brands`, `car_models`, `variants` |
 | Interventi | `interventions`, `components`, `intervention_components` |
 | Ricambi e prezzi | `spare_parts`, `part_qualities`, `part_prices`, `price_samples`, `reference_prices` |
-| Manodopera e ricarico | `labor_hours`, `labor_rates`, `markups`, `calibrations` |
+| Manodopera e ricarico | `labor_hours`, `labor_rates`, `markups`, `calibrations`, `market_benchmarks` |
 | Utenti (anonimi) | `quote_requests` |
 
 Note su alcune tabelle:
@@ -61,6 +61,8 @@ Note su alcune tabelle:
 - **`price_samples`**: ogni prezzo di mercato è la mediana di almeno 2 rilevazioni da negozi indipendenti, e ognuna ha la sua fonte (URL, data, screenshot).
 - **`quote_requests`**: ogni verifica fatta da un utente, senza dati personali. Se l'intervento non è in elenco si salva il testo in `altro_intervento`: ci dice quali interventi aggiungere.
 - **`car_models.info_completed`**: TRUE quando i dati del modello sono completi; solo allora il modello compare nel form.
+- **`market_benchmarks`**: tariffe orarie e prezzi al cliente pubblicati da indagini e riviste. Servono alla taratura (M8) al posto delle fatture: confermano o mettono in dubbio i valori EQUO, non li cambiano da soli.
+- **`labor_hours.origine`**: `tempario` se le ore vengono da un tempario pubblicato per quella versione, `assunzione` se sono ancora i valori iniziali D6, `reale` se vengono da fatture od officine.
 - **`variants.anno_produzione_inizio / fine`**: anni in cui quella motorizzazione è stata prodotta. Il form propone solo le varianti compatibili con l'anno di immatricolazione.
 
 ## Regole incorporate nello schema

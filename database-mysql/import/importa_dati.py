@@ -5,7 +5,7 @@ Uso, dalla cartella database-mysql:
     python import/importa_dati.py "<percorso>/dati-disponibili.xlsx" --prova  # controlla e annulla
 
 Cosa fa:
-1. legge i fogli Fonti, Varianti, Composizione, Codici, Prezzi, Riferimenti, Ore, Tariffe, Ricarichi, Fatture;
+1. legge i fogli Fonti, Varianti, Composizione, Codici, Prezzi, Riferimenti, Ore, Tariffe, Ricarichi, Fatture, Mercato;
 2. controlla ogni riga (fonte in elenco, URL/documento, data, valori ammessi);
 3. applica le regole di affidabilità:
    - fonte "Basso": la riga non entra mai;
@@ -54,7 +54,8 @@ REGIONI = {"Valle d'Aosta", 'Piemonte', 'Liguria', 'Lombardia', 'Trentino-Alto A
 ALIMENTAZIONI = {'benzina', 'diesel', 'gpl', 'metano', 'ibrida', 'elettrica'}
 QUALITA = {'originale', 'equivalente', 'economico'}
 OFFICINE = {'concessionaria', 'generica', 'catena'}
-TIPI_FONTE = {'listino_ufficiale', 'ecommerce', 'catalogo_produttore', 'fattura', 'officina', 'assunzione', 'altro'}
+TIPI_FONTE = {'listino_ufficiale', 'ecommerce', 'catalogo_produttore', 'fattura', 'officina', 'tempario', 'assunzione', 'altro'}
+AREE = {'nazionale', 'nord', 'centro', 'sud'}
 
 scarti = []      # (foglio, riga, motivo)
 GRUPPI = {}      # fonte -> gruppo societario (negozi dello stesso gruppo valgono come uno)
@@ -549,7 +550,7 @@ def main(path, prova):
         if not f:
             continue
         nome, aff, tipo, url, d = f
-        origine = 'reale' if tipo in ('fattura', 'officina') else 'assunzione'
+        origine = 'reale' if tipo in ('fattura', 'officina') else 'tempario' if tipo == 'tempario' else 'assunzione'
         sql.append(sql_fonte('fid', nome, aff, tipo, url, d).rstrip('\n'))
         sql.append(
             "INSERT INTO labor_hours (variante_id, intervento_id, ore, origine, fonte_id, note) "
@@ -628,6 +629,42 @@ def main(path, prova):
             "AND NOT EXISTS (SELECT 1 FROM calibrations c WHERE c.fonte_id = @fid AND c.ricambio_id = s.id);")
         caricati['Fatture'] += 1
 
+    # ------------------------------------------------------------ Mercato (M8: valori pubblicati al posto delle fatture)
+    # tabella derivata solo dal foglio: si svuota e si ricarica a ogni import
+    sql.append("DELETE FROM market_benchmarks;")
+    for n, r in righe(wb, 'Mercato'):
+        tdato, off = testo(r.get('Tipo dato')).lower(), testo(r.get('Tipo officina')).lower() or None
+        area = testo(r.get('Area')).lower() or 'nazionale'
+        vmin, vmax = numero(r.get('Valore min €')), numero(r.get('Valore max €'))
+        iva, anno = testo(r.get('IVA inclusa')).lower(), numero(r.get('Anno riferimento'))
+        if tdato not in ('tariffa_oraria', 'prezzo_intervento') or (off and off not in OFFICINE) or area not in AREE:
+            scarta('Mercato', n, 'tipo dato, tipo officina o area non validi')
+            continue
+        if not vmin or not vmax or vmin <= 0 or vmax < vmin or iva not in ('sì', 'si', 'no') or not anno:
+            scarta('Mercato', n, 'valori, IVA (sì/no) o anno di riferimento non validi')
+            continue
+        var_sql, int_sql = 'NULL', 'NULL'
+        if tdato == 'prezzo_intervento':
+            chiave = variante_ok('Mercato', n, r)
+            interv = testo(r.get('Intervento'))
+            if not chiave:
+                continue
+            if interv not in INTERVENTI:
+                scarta('Mercato', n, f'intervento non valido: "{interv}"')
+                continue
+            var_sql, int_sql = variante_sql(chiave), f"(SELECT id FROM interventions WHERE nome = {q(interv)})"
+        f = controlla_fonte(fonti, 'Mercato', n, r)
+        if not f:
+            continue
+        nome, aff, tipo, url, d = f
+        sql.append(sql_fonte('fid', nome, aff, tipo, url, d).rstrip('\n'))
+        sql.append(
+            "INSERT INTO market_benchmarks (fonte_id, tipo_dato, tipo_officina, area, variante_id, intervento_id, "
+            "valore_min, valore_max, iva_inclusa, anno_riferimento, data_rilevazione, note) "
+            f"VALUES (@fid, {q(tdato)}, {q(off)}, {q(area)}, {var_sql}, {int_sql}, {vmin}, {vmax}, "
+            f"{q(iva != 'no')}, {int(anno)}, {q(d)}, {q(testo(r.get('Note'))[:255] or None)});")
+        caricati['Mercato'] += 1
+
     # ------------------------------------------------------------ esecuzione
     sql.append("SELECT 'variants' AS tabella, COUNT(*) AS righe FROM variants UNION ALL "
                "SELECT 'intervention_components', COUNT(*) FROM intervention_components UNION ALL "
@@ -639,9 +676,11 @@ def main(path, prova):
                "SELECT 'price_samples', COUNT(*) FROM price_samples UNION ALL "
                "SELECT 'sources', COUNT(*) FROM sources UNION ALL "
                "SELECT 'labor_hours', COUNT(*) FROM labor_hours UNION ALL "
+               "SELECT CONCAT('  di cui ', origine), COUNT(*) FROM labor_hours GROUP BY origine UNION ALL "
                "SELECT 'labor_rates (correnti)', COUNT(*) FROM labor_rates WHERE valido_al IS NULL UNION ALL "
                "SELECT 'markups (correnti)', COUNT(*) FROM markups WHERE valido_al IS NULL UNION ALL "
-               "SELECT 'calibrations', COUNT(*) FROM calibrations;")
+               "SELECT 'calibrations', COUNT(*) FROM calibrations UNION ALL "
+               "SELECT 'market_benchmarks', COUNT(*) FROM market_benchmarks;")
     sql.append("ROLLBACK;" if prova else "COMMIT;")
     with open(SQL_OUT, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(sql) + '\n')

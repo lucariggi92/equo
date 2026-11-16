@@ -1,7 +1,11 @@
 -- =====================================================================
 -- EQUO — M6 · Calcolo della stima e del verdetto (design §9)
 --
--- Crea la procedura calcola_stima. Uso, dopo `source queries/calcolo_stima.sql`:
+-- Crea due procedure:
+--   prepara_stima  fa il calcolo e lascia il risultato nelle tabelle temporanee tmp_righe e tmp_riepilogo
+--                  (la usano calcola_stima e la taratura M8, così il calcolo esiste in un solo posto);
+--   calcola_stima  la chiama e restituisce dettaglio, riepilogo e verdetto.
+-- Uso, dopo `source queries/calcolo_stima.sql`:
 --
 --   CALL calcola_stima(variante_id, intervento_id, 'equivalente', regione_id, 'generica', 250.00);
 --
@@ -28,25 +32,22 @@
 
 USE equo;
 
+DROP PROCEDURE IF EXISTS prepara_stima;
 DROP PROCEDURE IF EXISTS calcola_stima;
 
 DELIMITER $$
-CREATE PROCEDURE calcola_stima(
+CREATE PROCEDURE prepara_stima(
   IN p_variante   SMALLINT UNSIGNED,
   IN p_intervento TINYINT UNSIGNED,
   IN p_qualita    VARCHAR(20),
   IN p_regione    TINYINT UNSIGNED,
-  IN p_officina   VARCHAR(20),
-  IN p_preventivo DECIMAL(10,2)
+  IN p_officina   VARCHAR(20)
 )
 BEGIN
-  DECLARE v_iva, v_ore_min, v_s_sopra, v_s_anomalo, v_s_sotto DECIMAL(10,4);
+  DECLARE v_iva, v_ore_min DECIMAL(10,4);
 
   SELECT CAST(valore AS DECIMAL(10,4)) / 100 INTO v_iva       FROM settings WHERE chiave = 'iva_pct';
   SELECT CAST(valore AS DECIMAL(10,4))       INTO v_ore_min   FROM settings WHERE chiave = 'ore_minime';
-  SELECT CAST(valore AS DECIMAL(10,4))       INTO v_s_sopra   FROM settings WHERE chiave = 'soglia_sopra_media';
-  SELECT CAST(valore AS DECIMAL(10,4))       INTO v_s_anomalo FROM settings WHERE chiave = 'soglia_anomalo';
-  SELECT CAST(valore AS DECIMAL(10,4))       INTO v_s_sotto   FROM settings WHERE chiave = 'soglia_molto_sotto';
 
   -- righe dei ricambi: un componente della composizione, il codice nella qualità scelta, il prezzo corrente
   DROP TEMPORARY TABLE IF EXISTS tmp_righe;
@@ -92,14 +93,6 @@ BEGIN
   JOIN labor_rates lr ON lr.regione_id = p_regione AND lr.tipo_officina = p_officina AND lr.valido_al IS NULL
   WHERE lh.variante_id = p_variante AND lh.intervento_id = p_intervento;
 
-  -- 1. dettaglio
-  SELECT tipo, voce, quantita, produttore, codice,
-         ROUND(prezzo_netto, 2) AS prezzo_unitario_netto, metodo,
-         CASE WHEN tipo = 'ricambio' THEN ROUND(ricarico * 100) END AS ricarico_pct,
-         ROUND(totale_netto, 2) AS totale_netto,
-         ROUND(totale_min, 2) AS da, ROUND(totale_max, 2) AS a
-  FROM tmp_righe ORDER BY tipo DESC, voce;
-
   -- componenti senza prezzo (letti prima: una tabella temporanea non si apre due volte nella stessa query)
   SELECT GROUP_CONCAT(voce SEPARATOR ', ') INTO @mancanti FROM tmp_righe WHERE tipo = 'ricambio' AND totale_netto IS NULL;
   -- tagliando e cambio olio senza la quantità di olio non sono completi
@@ -109,21 +102,9 @@ BEGIN
     SET @mancanti = CONCAT_WS(', ', @mancanti, 'Olio motore (quantità non nota)');
   END IF;
 
-  -- 2. riepilogo e verdetto
-  SELECT r.*, @mancanti AS mancanti,
-         CASE WHEN p_preventivo IS NULL THEN NULL
-              ELSE ROUND((p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa * 100, 1) END AS scostamento_pct,
-         CASE
-           WHEN p_preventivo IS NULL THEN NULL
-           WHEN r.completo = 0 THEN 'dati_insufficienti'
-           WHEN (p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa <= v_s_sopra THEN 'equo'
-           WHEN (p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa <= v_s_anomalo THEN 'sopra_media'
-           ELSE 'anomalo'
-         END AS esito,
-         CASE WHEN p_preventivo IS NOT NULL AND r.completo = 1
-                   AND (p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa < v_s_sotto
-              THEN 'molto sotto la stima: verifica cosa è incluso' END AS avviso
-  FROM (
+  -- riepilogo in una riga
+  DROP TEMPORARY TABLE IF EXISTS tmp_riepilogo;
+  CREATE TEMPORARY TABLE tmp_riepilogo AS
     SELECT
       ROUND(SUM(CASE WHEN tipo = 'ricambio' THEN ricambio_netto ELSE 0 END), 2)  AS ricambi_netto,
       ROUND(SUM(CASE WHEN tipo = 'ricambio' THEN ricarico_netto ELSE 0 END), 2)  AS ricarico_netto,
@@ -145,9 +126,53 @@ BEGIN
       CASE WHEN SUM(tipo = 'ricambio') > 0
                 AND SUM(tipo = 'ricambio' AND totale_netto IS NULL) = 0
                 AND MAX(tipo = 'manodopera') = 1 AND NOT @olio_mancante THEN 1 ELSE 0 END AS completo
-    FROM tmp_righe
-  ) r;
+    FROM tmp_righe;
+  ALTER TABLE tmp_riepilogo ADD COLUMN mancanti VARCHAR(500) NULL;
+  UPDATE tmp_riepilogo SET mancanti = @mancanti;
+END$$
+
+CREATE PROCEDURE calcola_stima(
+  IN p_variante   SMALLINT UNSIGNED,
+  IN p_intervento TINYINT UNSIGNED,
+  IN p_qualita    VARCHAR(20),
+  IN p_regione    TINYINT UNSIGNED,
+  IN p_officina   VARCHAR(20),
+  IN p_preventivo DECIMAL(10,2)
+)
+BEGIN
+  DECLARE v_s_sopra, v_s_anomalo, v_s_sotto DECIMAL(10,4);
+
+  SELECT CAST(valore AS DECIMAL(10,4)) INTO v_s_sopra   FROM settings WHERE chiave = 'soglia_sopra_media';
+  SELECT CAST(valore AS DECIMAL(10,4)) INTO v_s_anomalo FROM settings WHERE chiave = 'soglia_anomalo';
+  SELECT CAST(valore AS DECIMAL(10,4)) INTO v_s_sotto   FROM settings WHERE chiave = 'soglia_molto_sotto';
+
+  CALL prepara_stima(p_variante, p_intervento, p_qualita, p_regione, p_officina);
+
+  -- 1. dettaglio
+  SELECT tipo, voce, quantita, produttore, codice,
+         ROUND(prezzo_netto, 2) AS prezzo_unitario_netto, metodo,
+         CASE WHEN tipo = 'ricambio' THEN ROUND(ricarico * 100) END AS ricarico_pct,
+         ROUND(totale_netto, 2) AS totale_netto,
+         ROUND(totale_min, 2) AS da, ROUND(totale_max, 2) AS a
+  FROM tmp_righe ORDER BY tipo DESC, voce;
+
+  -- 2. riepilogo e verdetto
+  SELECT r.*,
+         CASE WHEN p_preventivo IS NULL THEN NULL
+              ELSE ROUND((p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa * 100, 1) END AS scostamento_pct,
+         CASE
+           WHEN p_preventivo IS NULL THEN NULL
+           WHEN r.completo = 0 THEN 'dati_insufficienti'
+           WHEN (p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa <= v_s_sopra THEN 'equo'
+           WHEN (p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa <= v_s_anomalo THEN 'sopra_media'
+           ELSE 'anomalo'
+         END AS esito,
+         CASE WHEN p_preventivo IS NOT NULL AND r.completo = 1
+                   AND (p_preventivo - r.stima_iva_inclusa) / r.stima_iva_inclusa < v_s_sotto
+              THEN 'molto sotto la stima: verifica cosa è incluso' END AS avviso
+  FROM tmp_riepilogo r;
 
   DROP TEMPORARY TABLE IF EXISTS tmp_righe;
+  DROP TEMPORARY TABLE IF EXISTS tmp_riepilogo;
 END$$
 DELIMITER ;

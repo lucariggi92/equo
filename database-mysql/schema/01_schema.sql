@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS tarature, ricarichi, tariffe_manodopera, ore_stimate,
   distinta_base, componenti, interventi, varianti, modelli, marche, regioni,
   fonti, impostazioni;
 -- Nomi attuali
-DROP TABLE IF EXISTS quote_requests, calibrations, markups, labor_rates, labor_hours,
+DROP TABLE IF EXISTS quote_requests, market_benchmarks, calibrations, markups, labor_rates, labor_hours,
   reference_prices, price_samples, part_prices, part_qualities, spare_parts, intervention_components,
   components, interventions, variants, car_models, brands, regions, sources, settings;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -50,7 +50,7 @@ CREATE TABLE regions (
 CREATE TABLE sources (
   id                INT UNSIGNED NOT NULL AUTO_INCREMENT,
   tipo              ENUM('listino_ufficiale','ecommerce','catalogo_produttore',
-                         'fattura','officina','assunzione','altro') NOT NULL,
+                         'fattura','officina','tempario','assunzione','altro') NOT NULL COMMENT 'tempario: tempi di lavoro pubblicati per modello e motore',
   riferimento       VARCHAR(200) NOT NULL COMMENT 'Nome del sito, dell''officina o del documento',
   affidabilita      ENUM('basso','medio','elevato') NOT NULL COMMENT 'Rating della fonte (elenco-fonti.xlsx). basso: mai usata come valore; medio: solo come mediana di almeno 2 negozi indipendenti; elevato: basta un valore',
   url               VARCHAR(500) NULL,
@@ -242,7 +242,7 @@ CREATE TABLE labor_hours (
   variante_id    SMALLINT UNSIGNED NOT NULL,
   intervento_id  TINYINT UNSIGNED NOT NULL,
   ore            DECIMAL(6,2) NOT NULL,
-  origine        ENUM('assunzione','reale') NOT NULL,
+  origine        ENUM('assunzione','tempario','reale') NOT NULL COMMENT 'tempario: tempo pubblicato per la versione o il modello; reale: fattura od officina',
   fonte_id       INT UNSIGNED NULL,
   note           VARCHAR(255) NULL,
   PRIMARY KEY (variante_id, intervento_id),
@@ -311,6 +311,31 @@ CREATE TABLE calibrations (
   CONSTRAINT fk_calibrations_regione  FOREIGN KEY (regione_id)  REFERENCES regions (id),
   CONSTRAINT ck_calibrations_prezzi CHECK (prezzo_fattura_netto > 0 AND prezzo_riferimento_netto > 0)
 ) ENGINE=InnoDB COMMENT='Pezzi letti su fatture reali: la mediana di rapporto - 1 dà il fattore in markups';
+
+CREATE TABLE market_benchmarks (
+  id                INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  fonte_id          INT UNSIGNED NOT NULL,
+  tipo_dato         ENUM('tariffa_oraria','prezzo_intervento') NOT NULL,
+  tipo_officina     ENUM('concessionaria','generica','catena') NULL COMMENT 'NULL = la fonte non lo dice',
+  area              ENUM('nazionale','nord','centro','sud') NOT NULL DEFAULT 'nazionale',
+  variante_id       SMALLINT UNSIGNED NULL COMMENT 'Solo per prezzo_intervento',
+  intervento_id     TINYINT UNSIGNED NULL COMMENT 'Solo per prezzo_intervento',
+  valore_min        DECIMAL(10,2) NOT NULL,
+  valore_max        DECIMAL(10,2) NOT NULL,
+  iva_inclusa       BOOLEAN NOT NULL COMMENT 'Come lo pubblica la fonte; i confronti usano il netto',
+  anno_riferimento  SMALLINT UNSIGNED NOT NULL COMMENT 'Anno a cui si riferisce il valore, non la data di lettura',
+  data_rilevazione  DATE NOT NULL,
+  note              VARCHAR(255) NULL,
+  PRIMARY KEY (id),
+  KEY idx_market_benchmarks (tipo_dato, tipo_officina),
+  CONSTRAINT fk_market_benchmarks_fonte      FOREIGN KEY (fonte_id)      REFERENCES sources (id),
+  CONSTRAINT fk_market_benchmarks_variante   FOREIGN KEY (variante_id)   REFERENCES variants (id),
+  CONSTRAINT fk_market_benchmarks_intervento FOREIGN KEY (intervento_id) REFERENCES interventions (id),
+  CONSTRAINT ck_market_benchmarks_valori CHECK (valore_min > 0 AND valore_max >= valore_min),
+  CONSTRAINT ck_market_benchmarks_tipo CHECK (
+    (tipo_dato = 'tariffa_oraria' AND variante_id IS NULL AND intervento_id IS NULL) OR
+    (tipo_dato = 'prezzo_intervento' AND variante_id IS NOT NULL AND intervento_id IS NOT NULL))
+) ENGINE=InnoDB COMMENT='Valori di mercato pubblicati (indagini, riviste): tarano tariffe e totali al posto delle fatture (M8)';
 
 -- ---------------------------------------------------------------------
 -- Richieste degli utenti (anonime)

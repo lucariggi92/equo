@@ -24,7 +24,11 @@ INSERT INTO settings (chiave, valore, descrizione) VALUES
   ('soglia_anomalo',         '0.25',  'Oltre +25% sulla stima: anomalo'),
   ('soglia_molto_sotto',     '-0.25', 'Sotto -25%: equo con avviso "verifica cosa è incluso"'),
   ('scarto_campione',        '0.50',  'Campione oltre ±50% dalla mediana: annotato e sostituito'),
-  ('min_campioni_taratura',  '5',     'Campioni minimi per pubblicare un ricarico tarato');
+  ('min_campioni_taratura',  '5',     'Campioni minimi per pubblicare un ricarico tarato'),
+  ('taratura_min_fonti',     '3',     'M8: fonti indipendenti minime per confermare o correggere una tariffa'),
+  ('taratura_scarto',        '0.10',  'M8: scarto massimo tra mediana delle fonti e valore EQUO per dirlo confermato'),
+  ('taratura_dispersione',   '0.25',  'M8: oltre questo scarto tra fonte più alta e più bassa le fonti sono discordanti'),
+  ('taratura_anni_max',      '3',     'M8: valori riferiti a più di 3 anni fa non contano');
 
 -- Le 20 regioni, con la fascia per le assunzioni iniziali
 INSERT INTO regions (nome, area) VALUES
