@@ -20,7 +20,8 @@
 --   * tutti gli importi del database sono netti; l'IVA (settings.iva_pct) si applica una volta alla fine;
 --   * ricarico solo sui ricambi, riga per riga, da markups(tipo_officina, tipo_fonte del prezzo);
 --   * ore fatturate = MAX(ore stimate, settings.ore_minime);
---   * se manca il prezzo di un componente, la tariffa o le ore: completo = 0 e verdetto "dati_insufficienti" (§9.3);
+--   * se manca il prezzo di un componente, la tariffa, le ore, o l'olio in tagliando/cambio olio:
+--     completo = 0 e verdetto "dati_insufficienti" (§9.3);
 --   * soglie del verdetto da settings: equo fino a +10%, sopra_media fino a +25%, oltre anomalo;
 --     sotto -25% resta "equo" con avviso.
 -- =====================================================================
@@ -101,6 +102,12 @@ BEGIN
 
   -- componenti senza prezzo (letti prima: una tabella temporanea non si apre due volte nella stessa query)
   SELECT GROUP_CONCAT(voce SEPARATOR ', ') INTO @mancanti FROM tmp_righe WHERE tipo = 'ricambio' AND totale_netto IS NULL;
+  -- tagliando e cambio olio senza la quantità di olio non sono completi
+  SET @olio_mancante = (SELECT nome IN ('Tagliando completo', 'Cambio olio e filtro') FROM interventions WHERE id = p_intervento)
+                       AND NOT EXISTS (SELECT 1 FROM tmp_righe WHERE tipo = 'ricambio' AND voce = 'Olio motore');
+  IF @olio_mancante THEN
+    SET @mancanti = CONCAT_WS(', ', @mancanti, 'Olio motore (quantità non nota)');
+  END IF;
 
   -- 2. riepilogo e verdetto
   SELECT r.*, @mancanti AS mancanti,
@@ -137,7 +144,7 @@ BEGIN
       MAX(tipo = 'manodopera')                                                  AS manodopera_presente,
       CASE WHEN SUM(tipo = 'ricambio') > 0
                 AND SUM(tipo = 'ricambio' AND totale_netto IS NULL) = 0
-                AND MAX(tipo = 'manodopera') = 1 THEN 1 ELSE 0 END             AS completo
+                AND MAX(tipo = 'manodopera') = 1 AND NOT @olio_mancante THEN 1 ELSE 0 END AS completo
     FROM tmp_righe
   ) r;
 
