@@ -49,7 +49,7 @@ C:\php85\php.exe artisan test
 - I test usano solo il database di prova `equo_test` (impostato in `phpunit.xml`); `tests/TestCase.php` li ferma se un collegamento puntasse a `equo`.
 - A ogni esecuzione il comando `equo:copia-dati-test` copia i dati veri in `equo_test` (con l'utente `equo_schema`; rifiuta di copiare verso qualunque database diverso da `equo_test`).
 - Le scritture di prova (una richiesta, una riga di registro) stanno in una transazione annullata alla fine.
-- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
+- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Dopo L5: **42 test, tutti verdi** (API: risposte, 422 sui dati sbagliati, 405 sui metodi non previsti, 429 oltre i limiti di traffico). Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
 
 ## Prova del 16/11/2026 (L1)
 
@@ -80,6 +80,13 @@ Non esiste nessuna rotta per modificare a mano prezzi, codici, ore o tariffe: i 
 | GET | `/api/varianti?modello_id=` | varianti di un modello | 120/min |
 | POST | `/api/verifica` | stima + verdetto, salva la richiesta anonima | 20/min, 200/giorno |
 | GET | `/api/salute` | solo "ok" o "errore", senza dettagli interni | 120/min |
+
+Fatte nel task L5 (16/11/2026):
+
+- **`/api/opzioni`**: `marche` (ognuna con i suoi `modelli`), `interventi` visibili, `qualita` e `tipi_officina` con etichetta, `regioni`. Con `EQUO_SOLO_MODELLI_COMPLETI=true` (produzione) compaiono solo i modelli con `info_completed = 1`: **oggi nessuno dei 10 lo è**, quindi il form resta vuoto finché non si segnano i modelli pronti. In sviluppo il `.env` locale ha `false`.
+- **`/api/varianti?modello_id=…&anno=…`**: versioni del modello (con l'anno, solo quelle prodotte in quell'anno) e, per ognuna, `interventi_non_previsti` (frizione con il cambio automatico, cinghia con la catena).
+- **`/api/verifica`** (POST, JSON): `variante_id`, `intervento_id` oppure `altro_intervento` (testo), `qualita`, `regione_id`, `tipo_officina`, `importo_preventivo` (fino a 20.000 €, 2 decimali), `iva_inclusa`, `anno_immatricolazione` facoltativo. Risponde con `dettaglio`, `riepilogo`, `verdetto` e `preventivo_iva_inclusa` (se il preventivo è senza IVA si porta al lordo). Salva la richiesta anonima. Con `altro_intervento` salva solo la richiesta, esito `non_calcolabile`. Rifiuta (422, con messaggio in italiano per ogni campo): valori fuori elenco, importi assurdi, interventi non previsti per quella versione, anno fuori produzione. I campi non previsti si ignorano.
+- **Errori sempre in JSON**; la rotta `/up` di Laravel è stata tolta.
 
 ## Sicurezza, in breve
 
