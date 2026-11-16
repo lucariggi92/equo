@@ -14,6 +14,9 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `setup/00_crea_database.sql` | modello: database `equo` + utente `equo_app` | sì (password segnaposto) |
 | `setup/00_crea_database.local.sql` | come sopra, con la password vera | **no** |
 | `setup/crea_database_root.ps1` | esegue lo script 00 come root (chiede la password) | sì |
+| `setup/01_utenti_separati.sql` | modello: utenti `equo_api` (sola lettura + richieste anonime), `equo_import` (scrittura dati), `equo_schema` (struttura) | sì (password segnaposto) |
+| `setup/01_utenti_separati.local.sql` | come sopra, con le password vere (generate casuali) | **no** |
+| `setup/crea_utenti_root.ps1` | esegue lo script 01 come root (chiede la password); rieseguibile | sì |
 | `schema/01_schema.sql` | crea le 20 tabelle (rieseguibile: cancella i dati) | sì |
 | `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
 | `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
@@ -23,6 +26,7 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `SCHEMA.md` | tabelle, collegamenti, corrispondenza con i nomi vecchi | sì |
 | `.env.example` | modello delle variabili di connessione, password vuota | sì |
 | `.env`, `equo_app.local.cnf` | credenziali di `equo_app` | **no** |
+| `equo_api.local.cnf`, `equo_import.local.cnf`, `equo_schema.local.cnf` | credenziali dei tre utenti separati, per i comandi `mysql` | **no** |
 
 Il diagramma delle tabelle è in [`../docs/architettura/schema-database-equo.png`](../docs/architettura/schema-database-equo.png).
 
