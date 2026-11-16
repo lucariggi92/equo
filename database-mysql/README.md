@@ -17,8 +17,9 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 | `schema/01_schema.sql` | crea le 20 tabelle (rieseguibile: cancella i dati) | sì |
 | `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
 | `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
-| `queries/` | `calcolo_stima.sql` (procedura di stima e verdetto, M6), poi controlli di copertura e taratura (M7-M8) | sì |
-| `backup/` | dump locali del database | **no** (solo la cartella) |
+| `queries/` | procedure: stima e verdetto (M6), controlli di copertura (M7), taratura (M8) | sì |
+| `maintenance/` | `backup.ps1` e `ripristina.ps1` (M9) | sì |
+| `backup/` | dump locali del database con il loro inventario | **no** (solo la cartella) |
 | `SCHEMA.md` | tabelle, collegamenti, corrispondenza con i nomi vecchi | sì |
 | `.env.example` | modello delle variabili di connessione, password vuota | sì |
 | `.env`, `equo_app.local.cnf` | credenziali di `equo_app` | **no** |
@@ -41,6 +42,28 @@ Dalla cartella `database-mysql`:
    ```powershell
    & 'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe' --defaults-extra-file=equo_app.local.cnf -e "source schema/01_schema.sql; source seed/02_dati_fissi.sql"
    ```
+
+## Backup e ripristino
+
+Dalla cartella del progetto (usano `equo_app.local.cnf`, nessuna password da digitare):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File database-mysql\maintenance\backup.ps1
+powershell -ExecutionPolicy Bypass -File database-mysql\maintenance\ripristina.ps1
+```
+
+- **`backup.ps1`** salva in `backup/` il dump completo (tabelle, dati, procedure) `equo-AAAAMMGG-HHMM.sql` e accanto
+  `equo-AAAAMMGG-HHMM.inventario.txt`, con le righe di ogni tabella e i nomi delle procedure.
+- **`ripristina.ps1`** prende l'ultimo backup (oppure `-File <dump.sql>`), **svuota** il database di destinazione
+  (`-Database`, di default `equo`), carica il dump e confronta il risultato con l'inventario: esce con 0 se è identico,
+  con 1 e l'elenco delle differenze se non lo è. Chiede di scrivere il nome del database per conferma (`-Forza` la salta).
+- Il dump non contiene `CREATE DATABASE` né `USE`: si può caricare in un altro database, purché esista e `equo_app` ci possa scrivere
+  (lo crea root, come in `setup/`).
+- Quando farlo: prima di rieseguire `schema/01_schema.sql` (cancella i dati), prima di un import importante, e prima di ogni modifica
+  allo schema. I dump restano solo su questo computer: per una copia esterna vanno copiati a mano su un disco o un cloud personale.
+- Prova del 2026-11-16 (M9): backup di 20 tabelle e 4 procedure, database svuotato e ripristinato, inventario identico;
+  stima di controllo invariata (tagliando Panda, generica, Lombardia: 242,84 €). Il confronto segnala correttamente
+  una differenza inserita apposta.
 
 ## Le tabelle
 
