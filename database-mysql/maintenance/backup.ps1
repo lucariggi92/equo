@@ -21,7 +21,7 @@ $inv   = Join-Path $BackupDir "$Database-$stamp.inventario.txt"
 
 # --single-transaction: copia coerente senza bloccare le tabelle (InnoDB)
 # --routines: include le procedure (calcola_stima, controlli_copertura, taratura...)
-# --no-tablespaces: non serve il privilegio PROCESS, che equo_app non ha
+# --no-tablespaces: non serve il privilegio PROCESS, che gli utenti di EQUO non hanno
 & $Dump "--defaults-extra-file=$Cnf" --default-character-set=utf8mb4 --single-transaction --routines --triggers `
     --no-tablespaces --set-gtid-purged=OFF --hex-blob "--result-file=$file" $Database
 if ($LASTEXITCODE -ne 0) {

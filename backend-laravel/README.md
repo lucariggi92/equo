@@ -68,6 +68,17 @@ Pannello Filament 5 (`app/Providers/Filament/GestionePanelProvider.php`), con l'
 - **Pagine, tutte in sola lettura:** stato dei dati (prezzi verificati, ore da tempario, tariffe confermate, modelli pronti per il form, richieste ricevute) e copertura per versione; richieste ricevute; impostazioni; registro delle azioni. Modifica delle impostazioni, backup e import dal pannello arrivano con L8.
 - I file di stile e script del pannello (`public/css|js|fonts/filament`) si rigenerano a ogni `composer install` e non stanno su git.
 
+## Azioni dell'area riservata (L8, 19/11/2026)
+
+Tutte con conferma, tutte nel registro delle azioni con il valore precedente, tutte con l'utente MySQL `equo_import`.
+
+- **Import dati** (`/gestione/import`): carichi il file Excel (solo `.xlsx`, massimo 10 MB). Parte una **prova**: lo script `database-mysql/import/importa_dati.py` controlla e carica tutto e poi annulla; vedi il report. Se va bene, **confermi**: prima un backup automatico, poi l'import vero, tutto o niente. Un solo import alla volta. Lo script riceve le credenziali in un file temporaneo, cancellato subito dopo, e non accetta file fuori dalla cartella degli import. Sul server servono Python con `openpyxl` e il client `mysql` (`EQUO_PYTHON`, `EQUO_MYSQL`).
+- **Impostazioni**: si modificano i valori numerici (IVA, ore minime, soglie del verdetto, scarto, regole della taratura), entro limiti fissati; la soglia "sopra la media" deve restare più bassa di "anomalo".
+- **Modelli nel sito** e **Interventi nel sito**: si accendono e spengono. Nascondere non cancella niente.
+- **Backup** (`/gestione/backup`): elenco e backup immediato; uno automatico ogni notte alle 02:30 (`routes/console.php`; sul server serve `php artisan schedule:run` ogni minuto). Si tengono 30 giorni (`EQUO_BACKUP_GIORNI`) e almeno gli ultimi 5. I file non si scaricano dal web; il ripristino si fa solo dal server.
+- Restano **non modificabili dal pannello**: prezzi, codici, ore, tariffe, ricarichi, fonti. Entrano solo dall'import.
+- Prova del 19/11/2026: import di prova del file vero dal servizio Laravel, esito OK, niente salvato (11 versioni, 170 righe di composizione, 89 codici, 73 prezzi, 129 riferimenti, 104 ore, 60 tariffe, 6 ricarichi, 10 valori di mercato).
+
 ## Test
 
 ```powershell
@@ -77,7 +88,7 @@ C:\php85\php.exe artisan test
 - I test usano solo il database di prova `equo_test` (impostato in `phpunit.xml`); `tests/TestCase.php` li ferma se un collegamento puntasse a `equo`.
 - A ogni esecuzione il comando `equo:copia-dati-test` copia i dati veri in `equo_test` (con l'utente `equo_schema`; rifiuta di copiare verso qualunque database diverso da `equo_test`).
 - Le scritture di prova (una richiesta, una riga di registro) stanno in una transazione annullata alla fine.
-- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Dopo L5: **42 test, tutti verdi** (API: risposte, 422 sui dati sbagliati, 405 sui metodi non previsti, 429 oltre i limiti di traffico). Dopo L6: **52 test, tutti verdi** (tolti i 2 esempi di Laravel, aggiunti 12 test di sicurezza). Dopo L7: **64 test, tutti verdi** (12 sull'area riservata). Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
+- 16/11/2026, L3: **15 test, tutti verdi**. Dopo L4: **25 test, tutti verdi**. Dopo L5: **42 test, tutti verdi** (API: risposte, 422 sui dati sbagliati, 405 sui metodi non previsti, 429 oltre i limiti di traffico). Dopo L6: **52 test, tutti verdi** (tolti i 2 esempi di Laravel, aggiunti 12 test di sicurezza). Dopo L7: **64 test, tutti verdi** (12 sull'area riservata). Dopo L8: **73 test, tutti verdi** (9 sulle azioni: impostazioni, modelli, interventi, backup, import). Letture e relazioni sui dati veri (Panda: marca, cambio, composizione del tagliando, 1,41 ore da tempario; filtro olio W 610/3 verificato a 8,0615 € netti). Ogni modifica al catalogo rifiutata dal codice e, passando sotto i modelli, da MySQL (errore 1142). Richieste e registro: aggiunta permessa, modifica e cancellazione rifiutate. Dati veri invariati dopo i test.
 
 ## Prova del 16/11/2026 (L1)
 

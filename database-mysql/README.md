@@ -51,7 +51,13 @@ Dalla cartella `database-mysql`:
 
 ## Backup e ripristino
 
-Dalla cartella del progetto (usano `equo_app.local.cnf`, nessuna password da digitare):
+Dalla cartella del progetto (dal 19/11/2026 usano `equo_schema.local.cnf`, nessuna password da digitare).
+Le stesse cose si fanno dall'area riservata di Laravel (pagina Backup, backup automatico ogni notte alle 02:30) o con
+`C:\php85\php.exe artisan equo:backup`: i file hanno lo stesso formato, e `ripristina.ps1` li accetta tutti.
+
+**Procedure e utente `equo_schema`.** MySQL 8.4 lascia leggere il testo di una procedura (e quindi metterla nel backup)
+solo a chi l'ha creata. Dal 19/11/2026 le 4 procedure sono create da `equo_schema`: per ricaricarle, usare il suo file di credenziali:
+`mysql --defaults-extra-file=equo_schema.local.cnf equo -e "source queries/calcolo_stima.sql; source queries/controlli_copertura.sql; source queries/taratura.sql"`.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File database-mysql\maintenance\backup.ps1
@@ -63,7 +69,7 @@ powershell -ExecutionPolicy Bypass -File database-mysql\maintenance\ripristina.p
 - **`ripristina.ps1`** prende l'ultimo backup (oppure `-File <dump.sql>`), **svuota** il database di destinazione
   (`-Database`, di default `equo`), carica il dump e confronta il risultato con l'inventario: esce con 0 se è identico,
   con 1 e l'elenco delle differenze se non lo è. Chiede di scrivere il nome del database per conferma (`-Forza` la salta).
-- Il dump non contiene `CREATE DATABASE` né `USE`: si può caricare in un altro database, purché esista e `equo_app` ci possa scrivere
+- Il dump non contiene `CREATE DATABASE` né `USE`: si può caricare in un altro database, purché esista e `equo_schema` ci possa scrivere
   (lo crea root, come in `setup/`).
 - Quando farlo: prima di rieseguire `schema/01_schema.sql` (cancella i dati), prima di un import importante, e prima di ogni modifica
   allo schema. I dump restano solo su questo computer: per una copia esterna vanno copiati a mano su un disco o un cloud personale.

@@ -4,6 +4,11 @@ Uso, dalla cartella database-mysql:
     python import/importa_dati.py "<percorso>/dati-disponibili.xlsx"          # carica
     python import/importa_dati.py "<percorso>/dati-disponibili.xlsx" --prova  # controlla e annulla
 
+Opzioni (le usa l'area riservata di Laravel, task L8):
+    --cnf=<file>        credenziali MySQL (default equo_app.local.cnf; Laravel passa un file temporaneo con equo_import)
+    --database=<nome>   database di destinazione (default equo)
+    --mysql=<programma> client mysql (default quello di MySQL 8.4 su Windows)
+
 Cosa fa:
 1. legge i fogli Fonti, Varianti, Composizione, Codici, Prezzi, Riferimenti, Ore, Tariffe, Ricarichi, Mercato;
 2. controlla ogni riga (fonte in elenco, URL/documento, data, valori ammessi);
@@ -35,6 +40,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DB_DIR = os.path.dirname(HERE)
 CNF = os.path.join(DB_DIR, 'equo_app.local.cnf')
 MYSQL = r'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe'
+DATABASE = 'equo'
 SQL_OUT = os.path.join(HERE, 'ultimo-import.sql')
 REPORT = os.path.join(HERE, 'report-import.txt')
 
@@ -186,7 +192,7 @@ def main(path, prova):
     wb = load_workbook(path, data_only=True)
     fonti = leggi_fonti(wb)
     sql = ["-- Generato da import/importa_dati.py il " + dt.datetime.now().strftime('%Y-%m-%d %H:%M'),
-           "USE equo;", "START TRANSACTION;"]
+           f"USE `{DATABASE}`;", "START TRANSACTION;"]
     oggi = dt.date.today()
 
     # ------------------------------------------------------------ Varianti
@@ -702,4 +708,14 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print(__doc__)
         sys.exit(2)
+    for opzione in sys.argv[2:]:
+        if opzione.startswith('--cnf='):
+            CNF = opzione.split('=', 1)[1]
+        elif opzione.startswith('--database='):
+            DATABASE = opzione.split('=', 1)[1]
+            if not DATABASE.replace('_', '').isalnum():
+                print('Nome del database non valido.')
+                sys.exit(2)
+        elif opzione.startswith('--mysql='):
+            MYSQL = opzione.split('=', 1)[1]
     sys.exit(main(sys.argv[1], '--prova' in sys.argv[2:]))

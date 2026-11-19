@@ -34,3 +34,7 @@ Il report elenca le righe accettate e quelle scartate, con il motivo.
 - **Mercato** (taratura M8 senza fatture): tariffe orarie (`tariffa_oraria`, per tipo di officina e area) e prezzi al cliente (`prezzo_intervento`, per variante e intervento), con IVA sì/no e anno di riferimento. La tabella `market_benchmarks` si svuota e si ricarica a ogni import.
 - Tutto in una transazione: se qualcosa va storto nel database, non si salva niente.
 - Rieseguibile: un prezzo uguale non crea righe nuove; un prezzo diverso chiude il vecchio (`valido_al`) e apre il nuovo.
+
+## Dall'area riservata (task L8)
+
+L'area riservata di Laravel lancia questo stesso script dalla pagina Import dati, con tre opzioni in più: `--cnf=<file>` (credenziali di `equo_import` in un file temporaneo), `--database=<nome>` (di default `equo`) e `--mysql=<programma>`. Prima della prova senza salvare, poi, alla conferma, backup automatico e import vero.

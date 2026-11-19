@@ -1,11 +1,12 @@
 # EQUO - funzioni comuni a backup.ps1 e ripristina.ps1 (si include con: . "$PSScriptRoot\comune.ps1")
-# Usa l'utente equo_app tramite equo_app.local.cnf: nessuna password nei comandi o nei file su git.
+# Usa l'utente equo_schema tramite equo_schema.local.cnf (dal task L8: le procedure appartengono a equo_schema e MySQL 8.4
+# lascia leggerne il testo solo a chi le ha create). Nessuna password nei comandi o nei file su git.
 
 $Script:BinMysql = 'C:\Program Files\MySQL\MySQL Server 8.4\bin'
 $Script:Mysql    = Join-Path $BinMysql 'mysql.exe'
 $Script:Dump     = Join-Path $BinMysql 'mysqldump.exe'
 $Script:DbDir    = Split-Path $PSScriptRoot -Parent
-$Script:Cnf      = Join-Path $DbDir 'equo_app.local.cnf'
+$Script:Cnf      = Join-Path $DbDir 'equo_schema.local.cnf'
 $Script:BackupDir = Join-Path $DbDir 'backup'
 
 function Test-Requisiti {

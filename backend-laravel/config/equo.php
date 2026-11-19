@@ -52,4 +52,25 @@ return [
      */
     'gestione_due_fattori' => (bool) env('EQUO_GESTIONE_DUE_FATTORI', true),
 
+    /*
+     * Backup (task L8): cartella fuori dalla parte pubblica del sito, programma mysqldump, giorni da conservare
+     * (si tengono comunque gli ultimi 5). Backup automatico ogni notte alle 02:30 (routes/console.php).
+     */
+    'backup' => [
+        'cartella' => env('EQUO_BACKUP_DIR', dirname(base_path()).DIRECTORY_SEPARATOR.'database-mysql'.DIRECTORY_SEPARATOR.'backup'),
+        'mysqldump' => env('EQUO_MYSQLDUMP', 'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqldump.exe'),
+        'conserva_giorni' => (int) env('EQUO_BACKUP_GIORNI', 30),
+    ],
+
+    /*
+     * Import del file Excel dal pannello (task L8): usa lo script Python database-mysql/import/importa_dati.py,
+     * con l'utente MySQL equo_import. File massimo 10 MB.
+     */
+    'import' => [
+        'python' => env('EQUO_PYTHON', 'python'),
+        'script' => env('EQUO_IMPORT_SCRIPT', dirname(base_path()).DIRECTORY_SEPARATOR.'database-mysql'.DIRECTORY_SEPARATOR.'import'.DIRECTORY_SEPARATOR.'importa_dati.py'),
+        'mysql' => env('EQUO_MYSQL', 'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe'),
+        'dimensione_massima_kb' => 10240,
+    ],
+
 ];
