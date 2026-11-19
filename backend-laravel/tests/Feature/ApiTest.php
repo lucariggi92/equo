@@ -69,6 +69,11 @@ class ApiTest extends TestCase
         $fiat = collect($r->json('marche'))->firstWhere('nome', 'Fiat');
         $this->assertContains('Panda (319)', array_column($fiat['modelli'], 'nome'));
         $this->assertSame(['valore', 'etichetta'], array_keys($r->json('qualita.0')));
+        // data dei dati per il report: solo la data (AAAA-MM-GG), uguale al prezzo in uso più recente
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}$/', $r->json('prezzi_ricambi_al'));
+        $this->assertSame(
+            \Illuminate\Support\Facades\DB::table('part_prices')->whereNull('valido_al')->max('data_rilevazione'),
+            $r->json('prezzi_ricambi_al'));
     }
 
     public function test_opzioni_mostra_solo_i_modelli_completi_quando_richiesto(): void

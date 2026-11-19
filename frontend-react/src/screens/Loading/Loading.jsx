@@ -12,10 +12,10 @@ export default function Loading({ onCancel }) {
   }, []);
   return (
     <div className="screen">
-      <h1 className="h1">Analisi dei listini in corso...</h1>
-      <p className="muted">Confronto costi orari manodopera regionale e prezzi medi ricambi OEM/Aftermarket.</p>
+      <h1 className="h1">Calcolo della stima in corso...</h1>
+      <p className="muted">Confronto tra prezzi medi dei ricambi, tempi di lavoro e tariffa oraria della tua regione.</p>
       <ProgressBar value={p} />
-      <Card><p className="muted numeric">{p}% • banche dati tempario 2024</p></Card>
+      <Card><p className="muted numeric">{p}%</p></Card>
       <Button variant="secondary" onClick={onCancel}>Annulla operazione</Button>
     </div>
   );

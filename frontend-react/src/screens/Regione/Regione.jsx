@@ -2,23 +2,24 @@ import { useState } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar.jsx';
 import ListRow from '../../components/ListRow/ListRow.jsx';
 import Button from '../../components/Button/Button.jsx';
-import { REGIONI } from '../../data/regioni.js';
+import StatoCaricamento from '../../components/StatoCaricamento/StatoCaricamento.jsx';
 import '../Welcome/Welcome.css';
 
-export default function Regione({ value, onSelect, onNext, onBack }) {
+export default function Regione({ regioni, errore, onRiprova, value, onSelect, onNext, onBack }) {
   const [q, setQ] = useState('');
-  const list = REGIONI.filter((r) => r.toLowerCase().includes(q.toLowerCase()));
+  const list = (regioni || []).filter((r) => r.nome.toLowerCase().includes(q.toLowerCase()));
   return (
     <div className="screen">
       <h1 className="h1">Qual è la tua Regione?</h1>
-      <p className="muted">Usiamo le tariffe orarie medie da dati camerali/artigianato.</p>
+      <p className="muted">Usiamo una tariffa oraria media stimata per ogni regione.</p>
       <SearchBar value={q} onChange={setQ} placeholder="Cerca regione..." />
+      {!regioni && <StatoCaricamento errore={errore} onRiprova={onRiprova} />}
       <div className="list-wrap">
         {list.map((r) => (
           <ListRow
-            key={r}
-            label={r}
-            selected={value === r}
+            key={r.id}
+            label={r.nome}
+            selected={value?.id === r.id}
             onClick={() => onSelect(r)}
           />
         ))}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Intervention;
+use App\Models\PartPrice;
 use App\Models\Region;
 use Illuminate\Http\JsonResponse;
 
@@ -49,6 +50,8 @@ class OpzioniController extends Controller
             'qualita' => self::elenco(self::QUALITA),
             'tipi_officina' => self::elenco(self::TIPI_OFFICINA),
             'regioni' => Region::orderBy('nome')->get(['id', 'nome'])->map(fn ($r) => ['id' => $r->id, 'nome' => $r->nome]),
+            // data del prezzo di ricambio in uso più recente: il report la mostra come "data dei dati" (task R6)
+            'prezzi_ricambi_al' => PartPrice::correnti()->max('data_rilevazione'),
         ]);
     }
 
