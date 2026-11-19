@@ -5,7 +5,7 @@ Uso, dalla cartella database-mysql:
     python import/importa_dati.py "<percorso>/dati-disponibili.xlsx" --prova  # controlla e annulla
 
 Opzioni (le usa l'area riservata di Laravel, task L8):
-    --cnf=<file>        credenziali MySQL (default equo_app.local.cnf; Laravel passa un file temporaneo con equo_import)
+    --cnf=<file>        credenziali MySQL (default equo_import.local.cnf; Laravel passa un file temporaneo con lo stesso utente)
     --database=<nome>   database di destinazione (default equo)
     --mysql=<programma> client mysql (default quello di MySQL 8.4 su Windows)
 
@@ -25,7 +25,7 @@ Cosa fa:
 
 È rieseguibile: le anagrafiche si aggiornano, un prezzo uguale a quello corrente non crea righe nuove,
 un prezzo diverso chiude il vecchio (valido_al) e apre il nuovo.
-Nessuna dipendenza oltre a openpyxl; il database si raggiunge con il client mysql e equo_app.local.cnf.
+Nessuna dipendenza oltre a openpyxl; il database si raggiunge con il client mysql e equo_import.local.cnf.
 """
 import datetime as dt
 import os
@@ -38,7 +38,7 @@ from openpyxl import load_workbook
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DB_DIR = os.path.dirname(HERE)
-CNF = os.path.join(DB_DIR, 'equo_app.local.cnf')
+CNF = os.path.join(DB_DIR, 'equo_import.local.cnf')     # dal task L9: equo_import (solo dati), non più equo_app
 MYSQL = r'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe'
 DATABASE = 'equo'
 SQL_OUT = os.path.join(HERE, 'ultimo-import.sql')

@@ -1,0 +1,10 @@
+# Controllo settimanale delle librerie del backend (task L9, sicurezza della catena di fornitura):
+# GitHub propone un aggiornamento quando una libreria ha una versione nuova o una falla nota.
+# Gli aggiornamenti non si applicano da soli: vanno approvati.
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: /backend-laravel
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

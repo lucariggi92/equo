@@ -9,6 +9,7 @@ Il backend di EQUO: legge il database `equo` (vedi [`../database-mysql`](../data
 - **PHP 8.5** in `C:\php85` (separato dal PHP 8.2 di XAMPP, che resta per il resto), con le estensioni `intl`, `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `curl`, `zip`, `sodium`.
 - **Composer** lanciato con quel PHP: `C:\php85\php.exe C:\ProgramData\ComposerSetup\bin\composer.phar install`.
 - Copia `.env.example` in `.env`, poi `C:\php85\php.exe artisan key:generate` e la password di `equo_api` in `DB_PASSWORD` (da `../database-mysql/setup/01_utenti_separati.local.sql`).
+  `.env.example` ha i valori di produzione (`APP_ENV=production`, `APP_DEBUG=false`): sul computer di sviluppo mettere `APP_ENV=local` e `APP_DEBUG=true`.
 - I tre utenti MySQL si creano una volta con `../database-mysql/setup/crea_utenti_root.ps1` (chiede la password di root).
 - Prova: `C:\php85\php.exe artisan test`.
 
