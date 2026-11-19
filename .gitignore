@@ -25,6 +25,9 @@ npm-debug.log*
 # Raccolta dati e processi operativi (solo locale, non versionati)
 _v2/
 
+# Documenti HTML di organizzazione del progetto: piano lavori, resoconti, proposte (solo locale)
+organizzazione-progetto/
+
 # File di lock di Office
 ~$*
 

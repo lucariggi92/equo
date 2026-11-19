@@ -2,7 +2,7 @@
 
 Il backend di EQUO: legge il database `equo` (vedi [`../database-mysql`](../database-mysql/README.md)), calcola la stima e il verdetto per il sito React, salva le richieste anonime in `quote_requests` e offre un'area riservata all'amministratore.
 
-**Stato:** L1 fatto (16/11/2026): Laravel 13.42 su PHP 8.5, collegato al database come `equo_api`. Struttura e sicurezza approvate il 16/11/2026: [`../docs/architettura/struttura-backend-laravel.html`](../docs/architettura/struttura-backend-laravel.html).
+**Stato:** fase Laravel chiusa e approvata il 19/11/2026: Laravel 13.42 su PHP 8.5, collegato al database come `equo_api`. Struttura e sicurezza approvate il 16/11/2026 (decisione D8); il documento della proposta è conservato in locale, fuori da GitHub.
 
 ## Requisiti e avvio
 
