@@ -1,6 +1,6 @@
 # Frontend React
 
-App web mobile-first di EQUO: React 19 + Vite + Tailwind CSS. Otto schermate: benvenuto, regione, auto (marca → modello → versione, anno facoltativo), intervento (pacchetti e pezzi singoli, o descritto a parole), ricambi e officina, prezzo con IVA, attesa, report con verdetto.
+App web mobile-first di EQUO: React 19 + Vite + Tailwind CSS. Otto schermate: benvenuto, regione, auto (un solo elenco come nella V1: modello sopra, motore sotto; anno facoltativo), intervento (pacchetti e pezzi singoli, o descritto a parole), ricambi e officina, prezzo con IVA, attesa, report con verdetto.
 
 **Stato:** stile della V1, collegata all'API di [`../backend-laravel`](../backend-laravel/README.md) (fase React del pilota, passi R2-R7). Tutti gli elenchi arrivano dall'API; nessun dato è scritto nel sito.
 
@@ -34,5 +34,5 @@ Se l'API non risponde, il sito lo dice e mostra il pulsante Riprova; gli errori 
 
 ## Report
 
-Mostra il verdetto dell'API (equo, sopra la media, anomalo) oppure "dati insufficienti" quando manca un prezzo: in quel caso niente verdetto, l'elenco di cosa manca e la stima indicata come parziale. Poi lo spaccato (ricambi, ricarico, manodopera con ore e tariffa, IVA, forbice), i ricambi considerati con l'affidabilità di ognuno (verificato, indicativo, stimato), la data dei prezzi e il messaggio per il meccanico. Il preventivo senza IVA viene portato al lordo dall'API prima del confronto.
+Disposizione della V1: semaforo, verdetto e una sola scheda (manodopera, ricambi e materiali, IVA, totale); tutto il resto è dietro il pulsante "Vedi il dettaglio della stima". Mostra il verdetto dell'API (equo, sopra la media, anomalo) oppure "dati insufficienti" quando manca un prezzo: in quel caso niente verdetto, l'elenco di cosa manca e la stima indicata come parziale. Nel dettaglio: ricambi, ricarico, manodopera con ore e tariffa, forbice, i ricambi considerati con l'affidabilità di ognuno (verificato, indicativo, stimato), la data dei prezzi e il messaggio per il meccanico. Il preventivo senza IVA viene portato al lordo dall'API prima del confronto.
 

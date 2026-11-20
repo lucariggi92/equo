@@ -4,7 +4,7 @@ import Keypad from '../../components/Keypad/Keypad.jsx';
 import { euro, nomeAuto } from '../../lib/format.js';
 import '../Welcome/Welcome.css';
 
-export default function Prezzo({ regione, auto, intervento, altro, qualita, officina, prezzo, ivaInclusa, errore, onPrezzo, onIva, onNext, onBack }) {
+export default function Prezzo({ regione, auto, intervento, altro, prezzo, ivaInclusa, errore, onPrezzo, onIva, onNext, onBack }) {
   // al massimo 2 decimali, come accetta l'API
   const addDigit = (d) => {
     if ((String(prezzo).split(',')[1] ?? '').length >= 2) return;
@@ -16,9 +16,8 @@ export default function Prezzo({ regione, auto, intervento, altro, qualita, offi
       <Card title="Riepilogo">
         <div className="recap">
           <span>Regione: <strong>{regione?.nome}</strong></span>
-          <span>Veicolo: <strong>{nomeAuto(auto)}</strong> {auto?.variante?.etichetta}{auto?.anno ? ` (${auto.anno})` : ''}</span>
+          <span>Veicolo: <strong>{nomeAuto(auto)}</strong></span>
           <span>Intervento: <strong>{intervento?.nome || altro}</strong></span>
-          <span>Ricambi: <strong>{qualita?.etichetta}</strong> · Officina: <strong>{officina?.etichetta}</strong></span>
         </div>
       </Card>
       <div className="amount numeric">{euro(prezzo === '' ? 0 : Number(String(prezzo).replace(',', '.')))} EUR</div>

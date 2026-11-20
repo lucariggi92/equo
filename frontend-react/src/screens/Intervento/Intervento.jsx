@@ -16,14 +16,14 @@ export default function Intervento({ interventi, errore, onRiprova, nonPrevisti 
   return (
     <div className="screen">
       <h1 className="h1">Che intervento devi fare?</h1>
-      <SearchBar value={q} onChange={setQ} placeholder="Cerca intervento o pezzo..." />
+      <SearchBar value={q} onChange={setQ} placeholder="Cerca intervento..." />
       {!interventi && <StatoCaricamento errore={errore} onRiprova={onRiprova} />}
       <div className="list-wrap">
         {list.map((i) => (
           <ListRow
             key={i.id}
             label={i.nome}
-            sub={`${i.tipo === 'pacchetto' ? 'Pacchetto' : 'Pezzo singolo'} · ${i.descrizione}`}
+            sub={i.descrizione}
             selected={value?.id === i.id}
             onClick={() => { onSelect(i); onAltro(''); }}
           />

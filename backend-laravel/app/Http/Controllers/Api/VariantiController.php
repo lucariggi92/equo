@@ -24,16 +24,22 @@ class VariantiController extends Controller
                 ->where(fn ($q) => $q->whereNull('anno_produzione_fine')->orWhere('anno_produzione_fine', '>=', $anno)))
             ->orderBy('etichetta')
             ->get()
-            ->map(fn (Variant $v) => [
-                'id' => $v->id,
-                'etichetta' => $v->etichetta,
-                'alimentazione' => $v->alimentazione,
-                'cambio' => $v->cambio,
-                'anno_produzione_inizio' => $v->anno_produzione_inizio,
-                'anno_produzione_fine' => $v->anno_produzione_fine,
-                'interventi_non_previsti' => $previsti->nonPrevisti($v),
-            ]);
+            ->map(fn (Variant $v) => self::formato($v, $previsti));
 
         return response()->json(['varianti' => $varianti]);
+    }
+
+    /** Una versione come la vede il sito React; usata anche da /api/opzioni. */
+    public static function formato(Variant $v, InterventiPrevisti $previsti): array
+    {
+        return [
+            'id' => $v->id,
+            'etichetta' => $v->etichetta,
+            'alimentazione' => $v->alimentazione,
+            'cambio' => $v->cambio,
+            'anno_produzione_inizio' => $v->anno_produzione_inizio,
+            'anno_produzione_fine' => $v->anno_produzione_fine,
+            'interventi_non_previsti' => $previsti->nonPrevisti($v),
+        ];
     }
 }

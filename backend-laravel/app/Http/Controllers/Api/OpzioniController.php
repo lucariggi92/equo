@@ -7,10 +7,13 @@ use App\Models\Brand;
 use App\Models\Intervention;
 use App\Models\PartPrice;
 use App\Models\Region;
+use App\Services\Stima\InterventiPrevisti;
 use Illuminate\Http\JsonResponse;
 
 /**
- * GET /api/opzioni — gli elenchi del form: marche con i loro modelli, interventi, qualità, tipi di officina, regioni.
+ * GET /api/opzioni — gli elenchi del form: marche con i loro modelli e le versioni di ogni modello, interventi,
+ * qualità, tipi di officina, regioni. Le versioni sono qui perché il sito mostra un solo elenco di auto:
+ * così basta una chiamata invece di una per modello (che con il limite di 120 letture al minuto sarebbe un rischio).
  */
 class OpzioniController extends Controller
 {
@@ -26,19 +29,24 @@ class OpzioniController extends Controller
         'catena' => 'Catena di assistenza',
     ];
 
-    public function __invoke(): JsonResponse
+    public function __invoke(InterventiPrevisti $previsti): JsonResponse
     {
         $soloCompleti = config('equo.solo_modelli_completi');
 
         $marche = Brand::query()
-            ->with(['modelli' => fn ($q) => $q->when($soloCompleti, fn ($q) => $q->where('info_completed', true))->orderBy('nome')])
+            ->with(['modelli' => fn ($q) => $q->when($soloCompleti, fn ($q) => $q->where('info_completed', true))->orderBy('nome'),
+                'modelli.varianti' => fn ($q) => $q->orderBy('etichetta')])
             ->orderBy('nome')
             ->get()
             ->filter(fn (Brand $marca) => $marca->modelli->isNotEmpty())
             ->map(fn (Brand $marca) => [
                 'id' => $marca->id,
                 'nome' => $marca->nome,
-                'modelli' => $marca->modelli->map(fn ($m) => ['id' => $m->id, 'nome' => $m->nome])->values(),
+                'modelli' => $marca->modelli->map(fn ($m) => [
+                    'id' => $m->id,
+                    'nome' => $m->nome,
+                    'varianti' => $m->varianti->map(fn ($v) => VariantiController::formato($v, $previsti))->values(),
+                ])->values(),
             ])
             ->values();
 

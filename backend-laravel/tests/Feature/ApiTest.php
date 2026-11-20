@@ -68,6 +68,11 @@ class ApiTest extends TestCase
 
         $fiat = collect($r->json('marche'))->firstWhere('nome', 'Fiat');
         $this->assertContains('Panda (319)', array_column($fiat['modelli'], 'nome'));
+        // le versioni arrivano con i modelli, uguali a quelle di /api/varianti (il sito fa una sola chiamata)
+        $panda = collect($fiat['modelli'])->firstWhere('nome', 'Panda (319)');
+        $this->assertSame($this->getJson('/api/varianti?modello_id='.$panda['id'])->json('varianti'), $panda['varianti']);
+        $yaris = collect($r->json('marche'))->firstWhere('nome', 'Toyota')['modelli'][0]['varianti'][0];
+        $this->assertNotEmpty($yaris['interventi_non_previsti']);
         $this->assertSame(['valore', 'etichetta'], array_keys($r->json('qualita.0')));
         // data dei dati per il report: solo la data (AAAA-MM-GG), uguale al prezzo in uso più recente
         $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}$/', $r->json('prezzi_ricambi_al'));

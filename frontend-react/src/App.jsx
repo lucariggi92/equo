@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header/Header.jsx';
 import Welcome from './screens/Welcome/Welcome.jsx';
 import Regione from './screens/Regione/Regione.jsx';
@@ -42,6 +42,10 @@ export default function App() {
     setErroreOpzioni(null);
     leggiOpzioni();
   }
+
+  // elenco unico delle versioni, come la lista auto della V1: arrivano con gli elenchi del form, in una sola chiamata
+  const versioni = useMemo(() => opzioni && opzioni.marche.flatMap((marca) => marca.modelli.flatMap((modello) =>
+    modello.varianti.map((variante) => ({ marca, modello, variante })))), [opzioni]);
 
   // cambiando versione, un intervento non previsto per la nuova versione si toglie
   function scegliAuto(a) {
@@ -94,8 +98,6 @@ export default function App() {
     setErroreVerifica(null);
   }
 
-  const etichetta = (elenco, valore) => (elenco || []).find((x) => x.valore === valore);
-
   return (
     <div className="phone">
       <Header right={step === ATTESA ? 'Analisi...' : null} />
@@ -105,7 +107,7 @@ export default function App() {
           <Regione regioni={opzioni?.regioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={regione} onSelect={setRegione} onNext={() => setStep(AUTO)} onBack={() => setStep(BENVENUTO)} />
         )}
         {step === AUTO && (
-          <Auto marche={opzioni?.marche} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={auto} onSelect={scegliAuto} onNext={() => setStep(INTERVENTO)} onBack={() => setStep(REGIONE)} />
+          <Auto versioni={versioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={auto} onSelect={scegliAuto} onNext={() => setStep(INTERVENTO)} onBack={() => setStep(REGIONE)} />
         )}
         {step === INTERVENTO && (
           <Intervento
@@ -139,8 +141,6 @@ export default function App() {
             auto={auto}
             intervento={intervento}
             altro={altro}
-            qualita={etichetta(opzioni?.qualita, qualita)}
-            officina={etichetta(opzioni?.tipi_officina, officina)}
             prezzo={prezzo}
             ivaInclusa={ivaInclusa}
             errore={erroreVerifica}
