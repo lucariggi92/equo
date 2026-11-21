@@ -8,194 +8,229 @@
 <h1 align="center">Is your mechanic's quote fair?</h1>
 
 <p align="center">
-  <strong>EQUO</strong> — web app mobile-first che verifica in 60 secondi la congruità di un preventivo auto,<br>
-  confrontandolo con le tariffe orarie regionali e i prezzi medi dei ricambi.
+  <strong>EQUO</strong> — web app mobile-first che dice in 60 secondi se il preventivo del meccanico è in linea con il mercato,<br>
+  e spiega perché, voce per voce: ricambi, ricarico, manodopera, IVA.
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=%23ffffff" alt="React 19">
-  <img src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=%23ffffff" alt="Vite 8">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwindcss&logoColor=%23ffffff" alt="Tailwind CSS">
-  <img src="https://img.shields.io/badge/n8n-webhook-EF5DA8?logo=n8n&logoColor=%23ffffff" alt="n8n webhook">
-  <img src="https://img.shields.io/badge/Stato-v1%20in%20corso-38A169" alt="Stato: v1 in corso">
+  <img src="https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=%23ffffff" alt="Laravel 13">
+  <img src="https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=%23ffffff" alt="PHP 8.5">
+  <img src="https://img.shields.io/badge/MySQL-8.4-4479A1?logo=mysql&logoColor=%23ffffff" alt="MySQL 8.4">
+  <img src="https://img.shields.io/badge/Test-73%2F73-38A169" alt="73 test verdi">
+  <img src="https://img.shields.io/badge/Stato-pilota%20completo%2C%20dati%20da%20affinare-ECC94B" alt="Stato: pilota completo, dati da affinare">
 </p>
 
 <p align="center">
+  <a href="#in-breve">In breve</a> ·
   <a href="#il-problema">Problema</a> ·
-  <a href="#la-soluzione">Soluzione</a> ·
-  <a href="#come-funziona">Come funziona</a> ·
-  <a href="#le-schermate">Schermate</a> ·
-  <a href="#stack-e-architettura">Stack</a> ·
-  <a href="#struttura-del-repo">Struttura</a> ·
-  <a href="#stato-e-roadmap">Stato</a> ·
-  <a href="#getting-started">Getting started</a> ·
-  <a href="#documenti-chiave">Docs</a>
+  <a href="#lobiettivo">Obiettivo</a> ·
+  <a href="#da-dove-sono-partito-la-v1">Da dove sono partito</a> ·
+  <a href="#come-lho-implementato-la-v2">Come l'ho implementato</a> ·
+  <a href="#come-si-calcola-la-stima">La stima</a> ·
+  <a href="#il-problema-vero-i-dati">Il problema vero: i dati</a> ·
+  <a href="#su-cosa-mi-concentro-adesso">Prossimi passi</a> ·
+  <a href="#avvio-in-locale">Avvio</a>
 </p>
 
 ---
 
+## In breve
+
+| | |
+|---|---|
+| **Cosa fa** | Scegli regione, auto, intervento, qualità dei ricambi, tipo di officina e importo del preventivo. EQUO calcola una stima equa, la confronta con il preventivo e dà un verdetto a semaforo con lo spaccato dei costi e un messaggio cordiale da mandare al meccanico. |
+| **A che punto è** | Il **pilota funziona da capo a fondo** su 10 modelli (11 versioni), 10 interventi e 20 regioni: database, API, area riservata e sito sono completi, provati e protetti. **Non è ancora online.** |
+| **Il limite** | Non è il software: sono **i dati**. Solo 2 prezzi dei ricambi su 73 sono verificati su più negozi; tariffe orarie e ricarichi sono ancora ipotesi dichiarate. La sezione [Il problema vero: i dati](#il-problema-vero-i-dati) lo spiega con i numeri. |
+| **Il prossimo lavoro** | La ricerca dei dati: fonti ufficiali per i prezzi dei ricambi, ore di lavoro per motore, regole di confronto con i prezzi pubblicati online, e dopo il lancio i preventivi veri degli utenti. |
+
 ## Il problema
 
-_The problem_
+In Italia chi riceve un preventivo per l'auto non ha un riferimento oggettivo con cui confrontarlo. Le tariffe orarie della manodopera cambiano molto da regione a regione e tra concessionaria e officina indipendente; i prezzi dei ricambi sono opachi (originale, equivalente, economico) e il tempo di lavoro non viene quasi mai spiegato. Chiedere chiarimenti a voce mette a disagio. Il risultato è un'**asimmetria informativa**: chi paga non ha gli strumenti per capire se il prezzo è giusto.
 
-In Italia l'automobilista riceve un preventivo senza alcun riferimento oggettivo con cui confrontarlo: le tariffe orarie della manodopera variano forte da regione a regione, i prezzi dei ricambi sono opachi (originali OEM vs compatibili) e chiedere chiarimenti a voce con il meccanico mette a disagio. Ne risulta un'**asimmetria informativa** strutturale — chi paga non ha gli strumenti per capire se il prezzo è equo.
+## L'obiettivo
 
-## La soluzione
+Dare all'automobilista un **verdetto spiegato**, non solo un numero:
 
-_The solution_
+- **stima equa scomponibile**: ricambi + ricarico dell'officina + manodopera (ore × tariffa oraria) + IVA, con una forbice "da… a…";
+- **verdetto a semaforo**: equo (fino a +10%), sopra la media (fino a +25%), anomalo (oltre); e quando i dati non bastano, **"dati insufficienti"** invece di un verdetto inventato;
+- **trasparenza sui dati**: per ogni ricambio si vede se il prezzo è verificato, indicativo o stimato, e da quando;
+- **un messaggio cordiale** da copiare per riaprire il dialogo con l'officina, senza conflitto.
 
-**EQUO** è una web app a bassissimo attrito: **zero registrazioni**, nessun PDF da caricare, nessuna targa, nessun GPS. Quattro passaggi — regione, auto, tipo di intervento, importo preventivato — e in meno di 60 secondi si ottiene un report con:
+Tre principi fissi dalla prima versione: **zero registrazioni**, **nessun dato personale** (niente targa, PDF, GPS), **60 secondi**.
 
-- **verdetto semaforico** (entro la media / sopra la media +10–25% / molto sopra la media +25%);
-- **scostamento in euro** rispetto ai benchmark regionali;
-- **bozza di messaggio WhatsApp** cordiale e non conflittuale, pronta da copiare con un tocco per riaprire il dialogo con l'officina.
+## Da dove sono partito: la V1
 
-| Tempo | Copertura | Costo | Privacy |
-|---|---|---|---|
-| **< 60 sec** | **20 regioni** italiane | **100% gratuito** | **Zero dati** — no account, no PDF, no GPS, no targa |
+EQUO nasce nel corso **Boolean — VIBE CODING AI** con una pipeline di design AI-first in 9 fasi: scoping → MVP → paper prototype → wireframe → asset → design system → mockup e handoff → contesto per l'agente → build. Tutto il materiale è in [`docs/preparazione/`](docs/preparazione/00_LEGGIMI-PRIMA/README.md).
 
-## Come funziona
-
-_How it works_
-
-```mermaid
-flowchart TD
-    A["0 · Benvenuto<br/>Mission &amp; Start"] --> B["1 · Regione<br/>tariffa oraria locale"]
-    B --> C["2 · Auto<br/>costo ricambi"]
-    C --> D["3 · Intervento<br/>tempi officina"]
-    D --> E["4 · Prezzo<br/>cifra in euro"]
-    E --> F["5 · Loading<br/>Analisi listini in corso..."]
-    F --> G["6 · Report<br/>verdetto semaforico"]
-    G --> H["Copia messaggio<br/>per il meccanico"]
-```
-
-Il frontend invia solo quattro nomi + importo (`POST` JSON). A calcolare è il **backend n8n**: un nodo Code con benchmark regionali in-memory (20 regioni, 10 auto, 5 interventi) restituisce verdetto e spaccato dei costi. Nessun database, nessuna persistenza: il report si copia e si chiude.
-
-## Le schermate
-
-_The screens_ — dark UI, viewport target 360×800
+La **V1** (ottobre 2026) era un sito React con 7 schermate collegato a un webhook **n8n**: un nodo di codice con valori medi scritti a mano (20 regioni, 10 auto, 5 interventi), senza database.
 
 <table>
   <tr>
-    <td align="center">
-      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/0._benvenuto_mission_start_dark/screen.png" width="190" alt="Schermata 0 — Benvenuto e Mission"><br>
-      <sub><strong>0 · Benvenuto</strong></sub>
-    </td>
-    <td align="center">
-      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/1._regione_step_1_4_dark/screen.png" width="190" alt="Schermata 1 — Regione"><br>
-      <sub><strong>1 · Regione</strong></sub>
-    </td>
-    <td align="center">
-      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/2._auto_step_2_4_dark/screen.png" width="190" alt="Schermata 2 — Auto"><br>
-      <sub><strong>2 · Auto</strong></sub>
-    </td>
-    <td align="center">
-      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/3._intervento_step_3_4_dark/screen.png" width="190" alt="Schermata 3 — Intervento"><br>
-      <sub><strong>3 · Intervento</strong></sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/4._prezzo_verifica_step_4_4_dark/screen.png" width="190" alt="Schermata 4 — Prezzo e Verifica"><br>
-      <sub><strong>4 · Prezzo</strong></sub>
-    </td>
-    <td align="center">
-      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/5._loading_feedback_calcolo_dark/screen.png" width="190" alt="Schermata 5 — Loading"><br>
-      <sub><strong>5 · Loading</strong></sub>
-    </td>
-    <td align="center">
-      <img src="docs/preparazione/05_Fase5-Asset/output%20Stich/6._report_verdetto_azione_dark/screen.png" width="190" alt="Schermata 6 — Report e Azione"><br>
-      <sub><strong>6 · Report</strong></sub>
-    </td>
-    <td></td>
+    <td align="center"><img src="docs/preparazione/05_Fase5-Asset/output%20Stich/0._benvenuto_mission_start_dark/screen.png" width="170" alt="Benvenuto"><br><sub><strong>Benvenuto</strong></sub></td>
+    <td align="center"><img src="docs/preparazione/05_Fase5-Asset/output%20Stich/2._auto_step_2_4_dark/screen.png" width="170" alt="Auto"><br><sub><strong>Auto</strong></sub></td>
+    <td align="center"><img src="docs/preparazione/05_Fase5-Asset/output%20Stich/4._prezzo_verifica_step_4_4_dark/screen.png" width="170" alt="Prezzo"><br><sub><strong>Prezzo</strong></sub></td>
+    <td align="center"><img src="docs/preparazione/05_Fase5-Asset/output%20Stich/6._report_verdetto_azione_dark/screen.png" width="170" alt="Report"><br><sub><strong>Report</strong></sub></td>
   </tr>
 </table>
+<p align="center"><sub>Il design della V1 (dark UI, 360×800). Il sito attuale mantiene questa grafica e questa disposizione.</sub></p>
 
-## Stack e architettura
+**Perché non bastava.** La V1 funzionava, ma i suoi numeri non si potevano verificare: medie fisse nel codice, nessuna fonte, nessuna data, nessuna distinzione tra motori, qualità dei ricambi o tipo di officina. Un verdetto su un preventivo reale ha bisogno di numeri che si possano ricontrollare. Da qui la **V2**: un pilota su 10 modelli in cui ogni prezzo ha una fonte, una data e un livello di affidabilità.
 
-_Tech stack_
+## Come l'ho implementato: la V2
+
+### Metodo di lavoro
+
+Tre fasi in ordine fisso, ognuna chiusa da un resoconto e da un'approvazione prima di passare alla successiva: **MySQL → Laravel → React**. Due regole valide per tutto il progetto:
+
+- **ogni cambiamento ai dati o al metodo si applica solo se i numeri prima/dopo dimostrano che migliora**; altrimenti si torna indietro dal backup (è successo: un tentativo di mediare i prezzi di più siti dello stesso gruppo portava l'affidabilità da 72,6% a 72,5%, ed è stato annullato);
+- **niente dati inventati**: dove manca un dato il sistema lo dice, e le ipotesi sono dichiarate come tali nel database.
+
+### Architettura
+
+```mermaid
+flowchart LR
+    U["Automobilista<br/>(browser, telefono)"] --> R["Sito React<br/>frontend-react/"]
+    R -- "JSON: 3 chiamate" --> A["API Laravel<br/>backend-laravel/"]
+    A -- "utente equo_api<br/>sola lettura + richieste anonime" --> D[("MySQL 8.4<br/>database-mysql/")]
+    G["Gestore"] --> F["Area riservata /gestione<br/>(Filament)"]
+    F -- "utente equo_import<br/>import, impostazioni, backup" --> D
+    X["Excel dei dati<br/>(non su GitHub)"] --> I["importa_dati.py<br/>controlli + tutto o niente"] --> D
+```
+
+### Fase 1 — Database (MySQL 8.4)
+
+- **24 tabelle**: catalogo (marche, modelli, versioni, interventi, componenti, 73 codici ricambio), prezzi con **storico** (un prezzo non si sovrascrive mai, si chiude e se ne apre uno nuovo), 150 fonti con il loro livello di affidabilità, ore di lavoro, tariffe orarie per regione e tipo di officina, ricarichi, valori di mercato pubblicati, richieste anonime. Schema: [`database-mysql/SCHEMA.md`](database-mysql/SCHEMA.md).
+- **Scala di affidabilità dei prezzi**: *rilevato* (2 o più negozi indipendenti), *indicativo* (1 negozio), *stimato* (mediana dei pezzi simili della stessa marca o della stessa categoria, con il metodo dichiarato).
+- **4 procedure**: calcolo di stima e verdetto, controlli di copertura (cosa manca per ogni versione), taratura con i valori di mercato pubblicati.
+- **Import da Excel** con controlli (fonti, date, IVA, scarto dei prezzi oltre il ±50% dalla mediana) e caricamento "tutto o niente"; backup e ripristino verificati con un inventario.
+
+### Fase 2 — Backend (Laravel 13, PHP 8.5)
+
+- **API per il sito**: 4 rotte (`/api/opzioni`, `/api/varianti`, `/api/verifica`, `/api/salute`), dati controllati campo per campo, errori in italiano, limiti di traffico (120 letture e 20 verifiche al minuto).
+- **Calcolo della stima rifatto in PHP** con aritmetica decimale esatta: confrontato con la procedura MySQL su **14.202 casi, identico al centesimo**, verdetti compresi.
+- **Sicurezza in 6 strati contro la manomissione dei dati**: nessuna rotta di modifica, controlli sui dati, modelli in sola lettura, **tre utenti MySQL separati** (l'API può solo leggere e aggiungere richieste anonime: MySQL rifiuta ogni modifica anche se il codice fosse compromesso), storico e vincoli, registro delle azioni non modificabile e backup.
+- **Area riservata `/gestione`** (Filament): import dei dati in due passi (prova, poi conferma con backup automatico), impostazioni, accensione dei modelli e degli interventi, backup notturno, registro di accessi e azioni.
+- **Controllo OWASP Top 10 (2025)**: 8 voci coperte, 2 parziali e dichiarate (verifica in due passaggi pronta ma spenta, avvisi automatici da fare). Nessuna password è mai finita su GitHub. **73 test automatici**, tutti verdi.
+
+### Fase 3 — Sito (React 19, Vite, Tailwind)
+
+La grafica e la disposizione della V1 sono rimaste; sono cambiati i dati e sono state aggiunte solo le scelte che il calcolo richiede:
+
+1. regione → 2. auto (un elenco unico, una riga per versione, anno facoltativo) → 3. intervento (pacchetti e pezzi singoli, o descritto a parole se manca) → 4. qualità dei ricambi e tipo di officina → 5. importo, con o senza IVA → 6. report.
+
+Il report ha il semaforo, lo spaccato e il messaggio per il meccanico; il dettaglio (ricambi uno per uno, affidabilità, forbice, data dei prezzi) si apre con un pulsante. Gli interventi impossibili per una versione non compaiono (es. la frizione su una Yaris ibrida con cambio automatico).
+
+## Come si calcola la stima
+
+```
+stima = ricambi + ricarico dell'officina sui ricambi + manodopera (ore × tariffa oraria) + IVA 22%
+verdetto = (preventivo − stima) / stima   →   equo ≤ +10%  ·  sopra la media ≤ +25%  ·  anomalo oltre
+```
+
+Se manca anche un solo prezzo, o il tempo di lavoro, il verdetto è **"dati insufficienti"**: il sito mostra cosa manca e la stima parziale, senza semaforo. Un preventivo molto più basso della stima (oltre −25%) resta equo, con un avviso a controllare cosa comprende.
+
+**Esempio reale** — Fiat Panda 1.2, tagliando completo, Lombardia, ricambi equivalenti, officina generica, preventivo 250 € IVA inclusa:
+
+| Voce | Importo |
+|---|---|
+| Ricambi (candele, filtri olio/aria/abitacolo, olio) | 98,33 € |
+| Ricarico dell'officina sui ricambi | 24,58 € |
+| Manodopera: 1,41 ore × 54 €/ora | 76,14 € |
+| IVA | 43,79 € |
+| **Stima equa** (forbice 218,43 – 259,79 €) | **242,84 €** |
+| Preventivo | 250,00 € → **+2,9% → Preventivo Equo** |
+
+## Il problema vero: i dati
+
+Il software fa quello che deve. **Il punto debole è la qualità dei numeri da cui parte.** Questa è la situazione misurata, senza abbellimenti.
+
+### Quanto sono affidabili oggi
+
+| Dato | Quantità | Da dove viene |
+|---|---|---|
+| Prezzi dei ricambi | 73 | **2 verificati** su 2 o più negozi, 13 indicativi (1 negozio), 35 stimati dalla mediana della stessa marca, 23 dalla mediana della categoria |
+| Prezzi "solidi" (verificati, concordi entro il 25%, recenti) | **0** | anche i 2 verificati hanno negozi in disaccordo (es. filtro olio: 4,41 € contro 11,71 €) |
+| Ore di lavoro | 104 | 62 da tempario, **42 ipotesi** |
+| Tariffe orarie (20 regioni × 3 tipi di officina) | 60 | **tutte ipotesi**: le fonti pubblicate non sono concordi |
+| Ricarichi sui ricambi | 6 | **ipotesi** |
+| Affidabilità media dei ricambi | circa **70%** | obiettivo prima del lancio: 85% su tagliando e freni |
+
+### Perché è difficile
+
+1. **Un solo gruppo domina.** Tutti i 129 prezzi di riferimento vengono da siti dello stesso gruppo (Autodoc SE): quattro negozi che sembrano diversi sono in realtà un'unica fonte.
+2. **I negozi non si lasciano leggere.** Un programma che si presenta con il proprio nome e rispetta le regole dei siti ha letto **0 prezzi su 13 pagine**: i negozi più grandi bloccano la lettura automatica già all'ingresso. Non aggiro i blocchi e non uso dati a pagamento.
+3. **I costi per modello e motore quasi non esistono online.** Un censimento di 28 fonti sulle 109 combinazioni versione × intervento del pilota: 1 combinazione ha 3 o più fonti italiane, 4 ne hanno 2, 67 ne hanno 1 (quasi sempre un sito che a sua volta stima), 37 nessuna. E nessuna di queste fonti indica motore o generazione, quindi servono solo come controllo.
+4. **Niente fatture reali**: la taratura si fa senza fatture, con i valori di mercato pubblicati.
+
+**Un esempio concreto.** Per il tagliando della Panda in officina generica, le due forbici pubblicate (una rivista: 160–180 €; un sito che stima: 115–255 €) hanno una mediana di circa 177,50 €; la stima di EQUO è 242,84 €, circa il **37% sopra**. La tariffa oraria sembra in linea (54 €/ora contro una mediana pubblicata di 50 €/ora): lo scarto viene soprattutto da ricambi e ricarico. Con due sole fonti non basta per correggere, ma indica dove guardare.
+
+## Su cosa mi concentro adesso
+
+La fase successiva è l'**affinamento dei prezzi**. Il metodo: confrontare ogni nostro dato con tutte le fonti leggibili in modo lecito, calcolare la mediana, scartare i valori lontani oltre il 50%, ottenere una forbice di mercato e **correggere solo dove almeno 3 fonti indipendenti concordano**, e solo se i numeri prima/dopo migliorano.
+
+| Priorità | Cosa | Perché |
+|---|---|---|
+| 1 | **Prezzi dei ricambi da canali ufficiali**: feed dei programmi di affiliazione (es. Awin) di più negozi e interfaccia per sviluppatori di eBay | è la parte più grande dello scarto, e l'unico modo lecito per avere più negozi indipendenti |
+| 2 | **Ore di lavoro per motore** dai siti che le pubblicano (anche stranieri: le ore sono le stesse in ogni paese) | 42 ore su 104 sono ancora ipotesi |
+| 3 | **Regole di confronto comuni**: stesso contenuto dell'intervento, stesso motore o generazione, IVA, data, un proprietario = una fonte | senza, si confrontano cose diverse |
+| 4 | **Tariffe orarie e ricarichi** tarati sulle fonti pubblicate concordi | oggi sono ipotesi |
+| 5 | **Dopo il lancio: i preventivi veri degli utenti**, già salvati in forma anonima | sono la fonte più forte; servono almeno 10 preventivi per combinazione |
+
+**Prima di mettere il sito online** restano anche: riattivare la verifica in due passaggi dell'area riservata, configurazione di produzione con nuove credenziali, HTTPS, database non raggiungibile da internet, copia dei backup fuori dal server, avvisi automatici, e segnare i modelli pronti (il sito pubblico mostra solo quelli).
+
+## Stack
 
 | Livello | Tecnologia | Dettagli |
 |---|---|---|
-| **Frontend** | React 19 · Vite 8 · Tailwind CSS 3.4 | Mobile-first, 7 schermate, componenti custom (`Keypad`, `Semaforo`, `StickyFooter`, `SearchBar`, `ListRow`, `ProgressBar`) |
-| **Backend** | n8n webhook | Nodo Code con benchmark in-memory: 20 regioni, 10 auto, 5 interventi — **zero database** |
-| **Protocollo** | REST / JSON | `POST { regione, auto, intervento, prezzo }` → verdetto + spaccato costi; mock locale se l'env è vuoto |
-| **Design** | Pipeline AI-first (Stitch → Figma) | Dark UI: Deep Night `#0B0F19` · Steel Blue `#1A365D` · Equo Mint `#38A169` |
+| **Sito** | React 19 · Vite 8 · Tailwind CSS 3.4 | mobile-first, 8 schermate, componenti propri (Keypad, Semaforo, ListRow…) |
+| **API e area riservata** | Laravel 13 · PHP 8.5 · Filament 5 | 4 rotte API, calcolo in aritmetica decimale (bcmath), sicurezza a strati |
+| **Database** | MySQL 8.4 | 24 tabelle, 4 procedure, tre utenti con permessi separati |
+| **Import** | Python 3 · openpyxl | dall'Excel dei dati, con controlli e caricamento "tutto o niente" |
+| **Design** | pipeline AI-first (Stitch → Figma) | dark UI: Deep Night `#0B0F19` · Steel Blue `#1A365D` · Equo Mint `#38A169` |
 
-## Struttura del repo
-
-_Repository structure_
+## Struttura del repository
 
 ```
 equo/
-├── database-mysql/        # Database MySQL 8.4: setup, schema, seed, import, query
-├── backend-laravel/       # API Laravel (fase successiva al database)
-├── frontend-react/        # App React 19 + Vite + Tailwind
+├── database-mysql/   # setup, schema storico, dati fissi, import, procedure, backup  → README e SCHEMA.md
+├── backend-laravel/  # API per il sito, calcolo della stima, area riservata, test   → README
+├── frontend-react/   # sito React (grafica della V1, dati dall'API)                 → README
 └── docs/
-    ├── architettura/      # Diagramma del database e decisioni tecniche
-    ├── preparazione/      # Fasi 00-08 della pipeline AI-first (scoping → handoff)
-    └── progetto/          # Documenti di progetto del database (presentazione, prompt)
+    ├── preparazione/ # le 9 fasi della pipeline di design (V1)
+    ├── architettura/ # diagramma del database (della fase 1)
+    └── progetto/     # documenti di progetto del database
 ```
 
-Tre cartelle di codice, una per livello: **database**, **backend**, **frontend**. Tutto il materiale preparatorio sta in `docs/`; ogni cartella `0X_` in `docs/preparazione/` è una fase della pipeline, e i gate di fase ne certificano la chiusura.
+I dati raccolti (l'Excel con prezzi e fonti), i resoconti di lavoro e tutte le credenziali **non sono su GitHub**.
 
-## Stato e roadmap
+## Avvio in locale
 
-_Status & roadmap_
+Requisiti: MySQL 8.4 · PHP 8.2 o più recente (sviluppato con 8.5) con `bcmath` · Composer · Node.js 20+ · Python 3 con `openpyxl`.
 
-| Fase | Output | Stato |
-|---|---|---|
-| 01 Scoping | scheda scoping | Da recuperare (la Fase 2 è stata chiusa senza scoping formale) |
-| 02 MVP0 | scheda-mvp, Agent, workspace | **Chiusa — 2026-09-10** |
-| 03 Paper Prototype | flusso schermate | Completa |
-| 04 Wireframe | wireframe + export | Completa |
-| 05 Asset | logo, palette, schermate | Completa |
-| 06 Design System + Layout | DESIGN.md + layout | Completa |
-| 07 Mockup + Handoff | mockup hi-fi + handoff | Completa |
-| 08 Agent + Workspace | Agent.md, workspace.md | Completa |
-| 09 App Frontend | React + n8n (`frontend-react/`) | v1 con 7 schermate |
-| 10 Database | MySQL (`database-mysql/`) | **In corso** — schema pronto, raccolta prezzi reali |
-| 11 Backend | Laravel (`backend-laravel/`) | Da iniziare dopo il database |
+L'installazione da zero **non è ancora un comando unico**: servono alcuni passi come amministratore di MySQL, perché il
+database usa tre utenti con permessi separati. In sintesi, nell'ordine:
 
-**Non-goal (mai):** export PDF del report · geolocalizzazione GPS · login/account e database.
-
-**Post-MVP:** ricerca auto via targa (API esterna) · distinzione pezzi OEM vs aftermarket · storico verifiche.
-
-## Getting started
-
-_Run it locally_
-
-**Prerequisiti:** Node.js 20+ · n8n (opzionale, per il backend reale)
-
-```bash
-git clone https://github.com/lucariggi92/equo.git
-cd equo/frontend-react
-npm install
-npm run dev
-```
-
-**Backend n8n** (opzionale — senza env il frontend usa un mock locale):
-
-1. Importa il workflow `equo-n8n-backend-v1.json` in n8n (non è nel repo);
-2. attiva il webhook `equo-verifica`;
-3. copia `.env.example` in `.env` e imposta `VITE_N8N_VERIFICA_URL`.
-
-Comandi utili: `npm run dev` · `npm run build` · `npm run lint`.
+1. **database e utenti**: gli script in `database-mysql/setup/` creano il database e i tre utenti; le password si generano a caso e restano solo in file locali esclusi da git ([`database-mysql/README.md`](database-mysql/README.md));
+2. **tabelle**: con le migration di Laravel (`php artisan migrate --database=schema`), poi i dati fissi e le procedure ([`backend-laravel/README.md`](backend-laravel/README.md));
+3. **dati**: dall'Excel con `database-mysql/import/importa_dati.py` (l'Excel non è nel repository: senza, il sito si avvia ma non ci sono auto né prezzi da stimare);
+4. **avvio**, una volta installato:
+   ```bash
+   cd backend-laravel && php artisan serve
+   ```
+   ```bash
+   cd frontend-react && npm install && npm run dev
+   ```
+   Il sito si apre su http://localhost:5173 e usa l'API su http://localhost:8000. Il modello `backend-laravel/.env.example` ha le impostazioni di produzione: in locale vanno messi `APP_ENV=local` e `APP_DEBUG=true`.
 
 ## Documenti chiave
 
-_Key documents_
-
-- [PRD & Product Brief v3.0](docs/preparazione/05_Fase5-Asset/output%20Stich/equo_prd_product_brief_v3.0.md)
-- [Agent.md — istruzioni vive del progetto](docs/preparazione/08_Fase8-Agent-Workspace/Agent.md)
-- [workspace.md — log append-only delle decisioni](docs/preparazione/08_Fase8-Agent-Workspace/workspace.md)
-- [DESIGN.md — design system](docs/preparazione/06_Fase6-Design-System-Layout/DESIGN.md)
-- [Handoff per il build](docs/preparazione/07_Fase7-Mockup-Handoff/HANDOFF-PreventivoCheck.md)
-- [Indice del progetto](docs/preparazione/00_LEGGIMI-PRIMA/INDICE.md)
-- [Pipeline AI-first a 9 fasi](docs/preparazione/00_LEGGIMI-PRIMA/README.md)
-- [Database: installazione e tabelle](database-mysql/README.md)
-- [Database: schema delle tabelle](database-mysql/SCHEMA.md)
+- [Database: installazione e tabelle](database-mysql/README.md) · [schema delle tabelle](database-mysql/SCHEMA.md) · [import](database-mysql/import/README.md) · [procedure](database-mysql/queries/README.md)
+- [Backend: API, sicurezza, area riservata](backend-laravel/README.md)
+- [Sito React](frontend-react/README.md)
+- [PRD & Product Brief v3.0 (V1)](docs/preparazione/05_Fase5-Asset/output%20Stich/equo_prd_product_brief_v3.0.md) · [DESIGN.md](docs/preparazione/06_Fase6-Design-System-Layout/DESIGN.md) · [Handoff](docs/preparazione/07_Fase7-Mockup-Handoff/HANDOFF-PreventivoCheck.md)
+- [Pipeline AI-first a 9 fasi](docs/preparazione/00_LEGGIMI-PRIMA/README.md) · [Indice](docs/preparazione/00_LEGGIMI-PRIMA/INDICE.md)
 
 ## Credits
 
-Progetto realizzato nel corso **Boolean — VIBE CODING AI** con una pipeline di design AI-first a 9 fasi: scoping → MVP → paper prototype → wireframe → asset → design system → handoff → contesto agent → build. Prodotto: **EQUO** (ex PreventivoCheck.web).
+Progetto nato nel corso **Boolean — VIBE CODING AI** (prodotto: **EQUO**, ex PreventivoCheck.web), sviluppato poi in tre fasi: database, backend e sito.
