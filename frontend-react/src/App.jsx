@@ -29,6 +29,9 @@ const OPZIONI_IVA = [
 
 export default function App() {
   const [step, setStep] = useState(BENVENUTO);
+  // ogni passo è anche una voce della cronologia del browser: il gesto "indietro" del telefono
+  // torna alla domanda precedente invece di uscire dal sito (indice = posizione del passo nella cronologia)
+  const indice = useRef(0);
   // elenchi del form dall'API (regioni, interventi, marche, modelli e versioni, qualità, tipi di officina, data dei prezzi)
   const [opzioni, setOpzioni] = useState(null);
   const [erroreOpzioni, setErroreOpzioni] = useState(null);
@@ -44,6 +47,33 @@ export default function App() {
   const [ivaInclusa, setIvaInclusa] = useState(null);
   const [result, setResult] = useState(null);
   const verificaInCorso = useRef(0); // per ignorare la risposta di una verifica annullata
+  const haRisultato = useRef(false);
+
+  useEffect(() => {
+    // lo scorrimento lo decide il sito (ogni schermata parte dall'alto), non il browser
+    window.history.scrollRestoration = 'manual';
+    window.history.replaceState({ passo: BENVENUTO, indice: 0 }, '');
+    function quandoTornaIndietro(e) {
+      const s = e.state;
+      if (!s || typeof s.passo !== 'number') return;
+      indice.current = s.indice ?? 0;
+      verificaInCorso.current += 1; // uscendo dall'attesa, la verifica in corso si annulla
+      // attesa e report non si riaprono senza un risultato: si torna all'ultima domanda
+      setStep(s.passo >= ATTESA && !haRisultato.current ? IVA : s.passo);
+    }
+    window.addEventListener('popstate', quandoTornaIndietro);
+    return () => window.removeEventListener('popstate', quandoTornaIndietro);
+  }, []);
+
+  // a ogni cambio di schermata si riparte dall'alto della pagina
+  useEffect(() => { window.scrollTo(0, 0); }, [step]);
+
+  function avanza(passo) {
+    indice.current += 1;
+    window.history.pushState({ passo, indice: indice.current }, '');
+    setStep(passo);
+  }
+  const indietro = () => window.history.back();
 
   const prezzoNum = Number(String(prezzo).replace(',', '.')) || 0;
   const nonPrevisti = auto?.variante?.interventi_non_previsti || [];
@@ -70,9 +100,9 @@ export default function App() {
   }
 
   async function goVerify() {
-    const id = ++verificaInCorso.current;
-    setStep(ATTESA);
     setErroreVerifica(null);
+    avanza(ATTESA);
+    const id = ++verificaInCorso.current;
     try {
       const [r] = await Promise.all([
         verifica({
@@ -90,21 +120,26 @@ export default function App() {
       ]);
       if (id !== verificaInCorso.current) return;
       setResult(r);
+      haRisultato.current = true;
+      // il report prende il posto dell'attesa: "indietro" dal report riporta all'ultima domanda
+      window.history.replaceState({ passo: REPORT, indice: indice.current }, '');
       setStep(REPORT);
     } catch (e) {
       if (id !== verificaInCorso.current) return;
       setErroreVerifica(e.message);
-      setStep(IVA);
+      indietro();
     }
   }
 
   function annullaVerifica() {
-    verificaInCorso.current += 1;
-    setStep(IVA);
+    indietro();
   }
 
   function reset() {
-    setStep(BENVENUTO);
+    // si torna al benvenuto riavvolgendo la cronologia del sito
+    haRisultato.current = false;
+    if (indice.current > 0) window.history.go(-indice.current);
+    else setStep(BENVENUTO);
     setRegione(null);
     setAuto(null);
     setAnno('');
@@ -118,21 +153,21 @@ export default function App() {
     setErroreVerifica(null);
   }
 
-  const vai = (passo) => () => setStep(passo);
+  const vai = (passo) => () => avanza(passo);
 
   return (
     <div className="phone">
-      <Header right={step === ATTESA ? 'Analisi...' : null} />
+      <Header right={step === ATTESA ? 'Analisi...' : null} onBack={DOMANDE[step] || step === REPORT ? indietro : null} />
       {DOMANDE[step] && <Avanzamento passo={step} totale={TOTALE_DOMANDE} nome={DOMANDE[step]} />}
       <main className="phone-main">
         {step === BENVENUTO && <Welcome prezziAl={opzioni?.prezzi_ricambi_al} onStart={vai(REGIONE)} />}
         {step === REGIONE && (
-          <Regione regioni={opzioni?.regioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={regione} onSelect={setRegione} onNext={vai(AUTO)} onBack={vai(BENVENUTO)} />
+          <Regione regioni={opzioni?.regioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={regione} onSelect={setRegione} onNext={vai(AUTO)} onBack={indietro} />
         )}
         {step === AUTO && (
-          <Auto versioni={versioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={auto} onSelect={scegliAuto} onNext={vai(ANNO)} onBack={vai(REGIONE)} />
+          <Auto versioni={versioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={auto} onSelect={scegliAuto} onNext={vai(ANNO)} onBack={indietro} />
         )}
-        {step === ANNO && <Anno auto={auto} value={anno} onChange={setAnno} onNext={vai(INTERVENTO)} onBack={vai(AUTO)} />}
+        {step === ANNO && <Anno auto={auto} value={anno} onChange={setAnno} onNext={vai(INTERVENTO)} onBack={indietro} />}
         {step === INTERVENTO && (
           <Intervento
             interventi={opzioni?.interventi}
@@ -144,7 +179,7 @@ export default function App() {
             onSelect={setIntervento}
             onAltro={setAltro}
             onNext={vai(QUALITA)}
-            onBack={vai(ANNO)}
+            onBack={indietro}
           />
         )}
         {step === QUALITA && (
@@ -155,7 +190,7 @@ export default function App() {
             value={qualita}
             onSelect={setQualita}
             onNext={vai(OFFICINA)}
-            onBack={vai(INTERVENTO)}
+            onBack={indietro}
           />
         )}
         {step === OFFICINA && (
@@ -166,11 +201,11 @@ export default function App() {
             value={officina}
             onSelect={setOfficina}
             onNext={vai(PREZZO)}
-            onBack={vai(QUALITA)}
+            onBack={indietro}
           />
         )}
         {step === PREZZO && (
-          <Prezzo regione={regione} auto={auto} intervento={intervento} altro={altro} prezzo={prezzo} onPrezzo={setPrezzo} onNext={vai(IVA)} onBack={vai(OFFICINA)} />
+          <Prezzo regione={regione} auto={auto} intervento={intervento} altro={altro} prezzo={prezzo} onPrezzo={setPrezzo} onNext={vai(IVA)} onBack={indietro} />
         )}
         {step === IVA && (
           <SceltaSingola
@@ -181,7 +216,7 @@ export default function App() {
             testoAvanti="Verifica Preventivo →"
             onSelect={setIvaInclusa}
             onNext={goVerify}
-            onBack={vai(PREZZO)}
+            onBack={indietro}
           />
         )}
         {step === ATTESA && <Loading onCancel={annullaVerifica} />}
