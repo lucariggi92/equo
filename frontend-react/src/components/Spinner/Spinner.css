@@ -1,0 +1,17 @@
+.spinner {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 24px auto 8px;
+  border-radius: 50%;
+  border: 8px solid #2D4A7A;
+  border-top-color: #38A169;
+  animation: spinner-gira 0.9s linear infinite;
+}
+@keyframes spinner-gira {
+  to { transform: rotate(360deg); }
+}
+/* chi preferisce meno movimento vede una rotazione molto più lenta */
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 4s; }
+}

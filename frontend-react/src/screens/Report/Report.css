@@ -1,0 +1,17 @@
+/* scarto tra preventivo e stima equa, in evidenza sotto il prezzo: colori del semaforo della V1 */
+.scarto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid;
+  text-align: center;
+}
+.scarto-valore { font-size: 30px; font-weight: 800; line-height: 1.15; }
+.scarto-testo { font-size: 15px; font-weight: 600; }
+.scarto-dettaglio { font-size: 13px; color: #A0AEC0; margin-top: 4px; }
+.scarto-ok { color: #38A169; border-color: #38A169; background: rgba(56, 161, 105, .12); }
+.scarto-warn { color: #ECC94B; border-color: #ECC94B; background: rgba(236, 201, 75, .12); }
+.scarto-err { color: #FC8181; border-color: #FC8181; background: rgba(252, 129, 129, .12); }

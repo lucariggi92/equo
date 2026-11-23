@@ -1,6 +1,6 @@
 # Frontend React
 
-App web mobile-first di EQUO: React 19 + Vite + Tailwind CSS. Otto schermate: benvenuto, regione, auto (un solo elenco come nella V1: modello sopra, motore sotto; anno facoltativo), intervento (pacchetti e pezzi singoli, o descritto a parole), ricambi e officina, prezzo con IVA, attesa, report con verdetto.
+App web mobile-first di EQUO: React 19 + Vite + Tailwind CSS. Una domanda per schermata, con una barra di avanzamento sotto l'intestazione ("Domanda 3 di 8"): regione, auto (un solo elenco come nella V1: modello sopra, motore sotto), anno di immatricolazione (facoltativo, da un menù a tendina con i soli anni di produzione della versione scelta), intervento (pacchetti e pezzi singoli, o descritto a parole), qualità dei ricambi, tipo di officina, importo, IVA. Poi l'attesa con la rotellina (almeno 3 secondi, anche se l'API risponde prima) e il report con il prezzo calcolato in grande e, subito sotto, lo scarto in euro (in più o in meno) con i colori del semaforo.
 
 **Stato:** stile della V1, collegata all'API di [`../backend-laravel`](../backend-laravel/README.md) (fase React del pilota, passi R2-R7). Tutti gli elenchi arrivano dall'API; nessun dato è scritto nel sito.
 
@@ -27,7 +27,7 @@ Se l'API non risponde, il sito lo dice e mostra il pulsante Riprova; gli errori 
 
 | Cartella | Contenuto |
 |---|---|
-| `src/screens/` | le 8 schermate |
+| `src/screens/` | benvenuto, le domande (`SceltaSingola` serve per qualità, officina e IVA), attesa, report |
 | `src/components/` | componenti riusabili (Button, Keypad, Semaforo, StickyFooter…) |
 | `src/api/` | `client.js`: le tre chiamate all'API Laravel (opzioni, varianti, verifica) e i messaggi di errore; `verifica.js`: testo del messaggio per il meccanico |
 | `src/lib/` | formattazione (euro, percentuali, date, nome dell'auto) e copia del messaggio |

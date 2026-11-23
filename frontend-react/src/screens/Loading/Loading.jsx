@@ -1,21 +1,14 @@
-import { useEffect, useState } from 'react';
-import Card from '../../components/Card/Card.jsx';
-import ProgressBar from '../../components/ProgressBar/ProgressBar.jsx';
+import Spinner from '../../components/Spinner/Spinner.jsx';
 import Button from '../../components/Button/Button.jsx';
 import '../Welcome/Welcome.css';
 
+// Attesa del calcolo: la rotellina resta almeno 3 secondi (lo decide App), poi compare il risultato.
 export default function Loading({ onCancel }) {
-  const [p, setP] = useState(5);
-  useEffect(() => {
-    const t = setInterval(() => setP((v) => Math.min(95, v + 9)), 220);
-    return () => clearInterval(t);
-  }, []);
   return (
     <div className="screen">
-      <h1 className="h1">Calcolo della stima in corso...</h1>
-      <p className="muted">Confronto tra prezzi medi dei ricambi, tempi di lavoro e tariffa oraria della tua regione.</p>
-      <ProgressBar value={p} />
-      <Card><p className="muted numeric">{p}%</p></Card>
+      <Spinner />
+      <h1 className="h1" style={{ textAlign: 'center' }}>Calcolo della stima in corso...</h1>
+      <p className="muted" style={{ textAlign: 'center' }}>Confronto tra prezzi medi dei ricambi, tempi di lavoro e tariffa oraria della tua regione.</p>
       <Button variant="secondary" onClick={onCancel}>Annulla operazione</Button>
     </div>
   );

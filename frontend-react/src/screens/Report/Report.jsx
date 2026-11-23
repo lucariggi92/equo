@@ -7,6 +7,7 @@ import MessageBox from '../../components/MessageBox/MessageBox.jsx';
 import { euro, percentuale, numero, data, nomeAuto, copyText } from '../../lib/format.js';
 import { messaggioMeccanico } from '../../api/verifica.js';
 import '../Welcome/Welcome.css';
+import './Report.css';
 
 // esiti dell'API: equo fino a +10%, sopra la media fino a +25%, oltre anomalo; senza dati sufficienti nessun verdetto
 const META = {
@@ -51,9 +52,25 @@ export default function Report({ auto, intervento, result, prezziAl, onReset }) 
       <div className="center"><Badge tone={m.tone}>Verdetto Finale</Badge></div>
       {m.tone !== 'info' && <div className="center"><Semaforo tone={m.tone} large /></div>}
       <h1 className="verdict-title">{m.label}</h1>
+      {/* il prezzo calcolato, in grande, subito dopo l'attesa */}
       {r.completo && (
-        <div className="center">
-          <Badge tone={m.tone}>{differenza >= 0 ? '+' : '−'}{euro(Math.abs(differenza))} rispetto alla stima equa</Badge>
+        <>
+          <div className="center"><span className="msg-label">Stima equa, IVA inclusa</span></div>
+          <div className="amount numeric">{euro(r.stima_iva_inclusa)}</div>
+        </>
+      )}
+      {/* subito dopo il prezzo equo, in evidenza: quanto il preventivo è sopra o sotto, in euro */}
+      {r.completo && (
+        <div className={`scarto scarto-${m.tone}`}>
+          {Math.abs(differenza) < 0.005 ? (
+            <span className="scarto-valore">In linea con la stima</span>
+          ) : (
+            <>
+              <span className="scarto-valore numeric">{differenza > 0 ? '+' : '−'}{euro(Math.abs(differenza))}</span>
+              <span className="scarto-testo">{differenza > 0 ? 'in più' : 'in meno'} rispetto alla stima equa</span>
+            </>
+          )}
+          <span className="scarto-dettaglio numeric">Il tuo preventivo: {euro(preventivo)} ({percentuale(v.scostamento_pct)})</span>
         </div>
       )}
       {v.avviso && <Card><p className="muted">Attenzione: {v.avviso}.</p></Card>}

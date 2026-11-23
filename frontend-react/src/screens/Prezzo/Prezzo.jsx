@@ -4,7 +4,9 @@ import Keypad from '../../components/Keypad/Keypad.jsx';
 import { euro, nomeAuto } from '../../lib/format.js';
 import '../Welcome/Welcome.css';
 
-export default function Prezzo({ regione, auto, intervento, altro, prezzo, ivaInclusa, errore, onPrezzo, onIva, onNext, onBack }) {
+// Solo l'importo: la domanda sull'IVA è la schermata successiva.
+export default function Prezzo({ regione, auto, intervento, altro, prezzo, onPrezzo, onNext, onBack }) {
+  const importo = prezzo === '' ? 0 : Number(String(prezzo).replace(',', '.'));
   // al massimo 2 decimali, come accetta l'API
   const addDigit = (d) => {
     if ((String(prezzo).split(',')[1] ?? '').length >= 2) return;
@@ -20,21 +22,15 @@ export default function Prezzo({ regione, auto, intervento, altro, prezzo, ivaIn
           <span>Intervento: <strong>{intervento?.nome || altro}</strong></span>
         </div>
       </Card>
-      <div className="amount numeric">{euro(prezzo === '' ? 0 : Number(String(prezzo).replace(',', '.')))} EUR</div>
+      <div className="amount numeric">{euro(importo)} EUR</div>
       <Keypad
         onDigit={addDigit}
         onComma={() => { if (!String(prezzo).includes(',')) onPrezzo(prezzo === '' ? '0,' : prezzo + ','); }}
         onBack={() => onPrezzo(String(prezzo).slice(0, -1))}
       />
-      <span className="msg-label">L'importo comprende l'IVA?</span>
-      <div className="stats">
-        <Button variant={ivaInclusa === true ? 'primary' : 'secondary'} onClick={() => onIva(true)}>Sì, IVA inclusa</Button>
-        <Button variant={ivaInclusa === false ? 'primary' : 'secondary'} onClick={() => onIva(false)}>No, IVA esclusa</Button>
-      </div>
-      {errore && <Card><p className="muted">{errore}</p></Card>}
       <div className="stats">
         <Button variant="secondary" onClick={onBack}>Indietro</Button>
-        <Button disabled={prezzo === '' || ivaInclusa === null} onClick={onNext}>Verifica Preventivo →</Button>
+        <Button disabled={!(importo > 0)} onClick={onNext}>Avanti</Button>
       </div>
     </div>
   );

@@ -25,7 +25,10 @@ export default function Welcome({ prezziAl, onStart }) {
         <div className="stat"><span className="stat-label">Tempo medio</span><span className="stat-value">60 sec</span></div>
         <div className="stat"><span className="stat-label">Prezzi aggiornati al</span><span className="stat-value mint">{prezziAl ? data(prezziAl) : '—'}</span></div>
       </div>
-      <Button onClick={onStart}>Inizia la Verifica (60 sec)</Button>
+      <div className="avvio">
+        <Button variant="cta" onClick={onStart}>Inizia la verifica</Button>
+        <p className="avvio-nota">Gratis · 60 secondi · nessuna registrazione</p>
+      </div>
     </div>
   );
 }

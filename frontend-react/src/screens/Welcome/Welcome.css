@@ -43,3 +43,7 @@
   .stats { gap: 24px; }
   .recap { font-size: 14px; }
 }
+
+/* pulsante di partenza con la riga sotto */
+.avvio { display: flex; flex-direction: column; gap: 10px; }
+.avvio-nota { margin: 0; text-align: center; font-size: 12px; color: #A0AEC0; }

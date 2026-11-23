@@ -25,6 +25,15 @@ export function nomeAuto(auto) {
   return auto?.modello ? `${auto.marca.nome} ${auto.modello.nome}` : '';
 }
 
+// Anni in cui una versione era in produzione, dal più recente; senza fine produzione si arriva all'anno in corso.
+export function anniDiProduzione(variante) {
+  if (!variante) return [];
+  const fine = variante.anno_produzione_fine ?? new Date().getFullYear();
+  const anni = [];
+  for (let a = fine; a >= variante.anno_produzione_inizio; a -= 1) anni.push(String(a));
+  return anni;
+}
+
 export async function copyText(t) {
   try {
     await navigator.clipboard.writeText(t);

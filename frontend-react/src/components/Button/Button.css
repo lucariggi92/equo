@@ -31,3 +31,33 @@
 }
 .btn-secondary:hover { background: #1A365D; border-color: #38A169; }
 .btn:focus-visible { outline: 2px solid #38A169; outline-offset: 2px; }
+
+/* pillola con freccia (stile A, scelto dal PM il 23/11/2026): stessi colori, forma più moderna */
+.btn-cta {
+  min-height: 56px;
+  border-radius: 9999px;
+  background: #38A169;
+  border-color: #38A169;
+  color: #0B0F19;
+  justify-content: space-between;
+  padding: 0 6px 0 24px;
+  font-size: 16px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.btn-cta:hover { background: #2F855A; border-color: #2F855A; }
+.btn-cta:active { background: #276749; transform: scale(0.98); }
+.btn-cta-freccia {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0B0F19;
+  color: #38A169;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.btn-cta:hover .btn-cta-freccia { transform: translateX(3px); }
+.btn-cta:disabled { background: #2D3748; border-color: #2D3748; color: #718096; cursor: not-allowed; }
+.btn-cta:disabled .btn-cta-freccia { color: #718096; }

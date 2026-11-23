@@ -115,9 +115,9 @@ flowchart LR
 
 ### Fase 3 — Sito (React 19, Vite, Tailwind)
 
-La grafica e la disposizione della V1 sono rimaste; sono cambiati i dati e sono state aggiunte solo le scelte che il calcolo richiede:
+La grafica della V1 è rimasta (colori, componenti, e la barra di avanzamento e la rotellina del design originale); sono cambiati i dati e sono state aggiunte solo le domande che il calcolo richiede:
 
-1. regione → 2. auto (un elenco unico, una riga per versione, anno facoltativo) → 3. intervento (pacchetti e pezzi singoli, o descritto a parole se manca) → 4. qualità dei ricambi e tipo di officina → 5. importo, con o senza IVA → 6. report.
+Una domanda per schermata, con una barra di avanzamento: 1. regione → 2. auto (un elenco unico, una riga per versione) → 3. anno di immatricolazione (facoltativo, da un menù con i soli anni di produzione) → 4. intervento (pacchetti e pezzi singoli, o descritto a parole se manca) → 5. qualità dei ricambi → 6. tipo di officina → 7. importo → 8. IVA. Poi una rotellina di almeno 3 secondi e il report, con il prezzo calcolato in grande e subito sotto lo scarto in euro, in più o in meno.
 
 Il report ha il semaforo, lo spaccato e il messaggio per il meccanico; il dettaglio (ricambi uno per uno, affidabilità, forbice, data dei prezzi) si apre con un pulsante. Gli interventi impossibili per una versione non compaiono (es. la frizione su una Yaris ibrida con cambio automatico).
 
@@ -183,7 +183,7 @@ La fase successiva è l'**affinamento dei prezzi**. Il metodo: confrontare ogni 
 
 | Livello | Tecnologia | Dettagli |
 |---|---|---|
-| **Sito** | React 19 · Vite 8 · Tailwind CSS 3.4 | mobile-first, 8 schermate, componenti propri (Keypad, Semaforo, ListRow…) |
+| **Sito** | React 19 · Vite 8 · Tailwind CSS 3.4 | mobile-first, una domanda per schermata (8 domande), componenti propri (Keypad, Semaforo, ListRow…) |
 | **API e area riservata** | Laravel 13 · PHP 8.5 · Filament 5 | 4 rotte API, calcolo in aritmetica decimale (bcmath), sicurezza a strati |
 | **Database** | MySQL 8.4 | 24 tabelle, 4 procedure, tre utenti con permessi separati |
 | **Import** | Python 3 · openpyxl | dall'Excel dei dati, con controlli e caricamento "tutto o niente" |
