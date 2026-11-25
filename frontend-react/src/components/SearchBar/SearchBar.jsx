@@ -1,6 +1,6 @@
 import './SearchBar.css';
 
-export default function SearchBar({ value, onChange, placeholder = 'Cerca...' }) {
+export default function SearchBar({ value, onChange, placeholder = 'Cerca…' }) {
   return (
     <input
       className="search"

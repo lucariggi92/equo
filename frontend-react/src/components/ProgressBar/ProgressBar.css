@@ -1,12 +1,14 @@
 .progress {
   height: 8px;
   border-radius: 9999px;
-  background: #0B0F19;
-  border: 1px solid #2D4A7A;
+  background: var(--night);
+  border: 1px solid var(--line);
   overflow: hidden;
 }
 .progress-fill {
   height: 100%;
-  background: #38A169;
-  transition: width 0.3s ease;
+  width: 100%;
+  transform-origin: left;
+  background: var(--mint);
+  transition: transform 0.3s ease;
 }

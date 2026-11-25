@@ -4,8 +4,8 @@
   height: 96px;
   margin: 24px auto 8px;
   border-radius: 50%;
-  border: 8px solid #2D4A7A;
-  border-top-color: #38A169;
+  border: 8px solid var(--line);
+  border-top-color: var(--mint);
   animation: spinner-gira 0.9s linear infinite;
 }
 @keyframes spinner-gira {

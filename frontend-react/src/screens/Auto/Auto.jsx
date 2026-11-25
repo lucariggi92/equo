@@ -23,7 +23,7 @@ export default function Auto({ versioni, errore, onRiprova, value, onSelect, onN
   return (
     <div className="screen">
       <h1 className="h1">Che auto guidi?</h1>
-      <SearchBar value={q} onChange={setQ} placeholder="Cerca modello..." />
+      <SearchBar value={q} onChange={setQ} placeholder="Cerca modello…" />
       {!versioni && <StatoCaricamento errore={errore} onRiprova={onRiprova} />}
       {list.length > 0 && (
         <div className="list-wrap">

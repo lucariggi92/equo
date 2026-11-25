@@ -7,7 +7,7 @@ import './Welcome.css';
 export default function Welcome({ prezziAl, onStart }) {
   return (
     <div className="screen">
-      <Badge tone="info">Zero registrazioni • Gratuito • 60 secondi</Badge>
+      <Badge tone="info">Zero registrazioni, gratuito, 60 secondi</Badge>
       <h1 className="h1">Il tuo preventivo auto è davvero equo?</h1>
       <p className="muted">Confronta all'istante i costi di ricambi e manodopera con i prezzi medi dei ricambi e le tariffe orarie della tua regione.</p>
       <Card title="La nostra mission">
@@ -27,7 +27,7 @@ export default function Welcome({ prezziAl, onStart }) {
       </div>
       <div className="avvio">
         <Button variant="cta" onClick={onStart}>Inizia la verifica</Button>
-        <p className="avvio-nota">Gratis · 60 secondi · nessuna registrazione</p>
+        <p className="avvio-nota">Gratis, in 60 secondi, senza registrazione</p>
       </div>
     </div>
   );

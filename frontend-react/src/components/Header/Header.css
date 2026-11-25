@@ -4,14 +4,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  background: #0B0F19;
-  border-bottom: 1px solid #2D4A7A;
+  background: var(--night);
+  border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
   z-index: 20;
 }
-.app-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
-.app-header-right { font-size: 12px; color: #A0AEC0; }
+.app-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
+.app-header-right { font-size: 12px; color: var(--muted); }
 .app-header-left { display: flex; align-items: center; gap: 4px; }
 /* freccia indietro: area di tocco di 44 px, colori della V1 */
 .app-back {
@@ -21,11 +21,11 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: #FFFFFF;
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 }
-.app-back:hover { background: #1A365D; color: #38A169; }
-.app-back:focus-visible { outline: 2px solid #38A169; outline-offset: 2px; }
+.app-back:hover { background: var(--steel); color: var(--mint); }
+.app-back:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }

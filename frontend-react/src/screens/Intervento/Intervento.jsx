@@ -16,19 +16,21 @@ export default function Intervento({ interventi, errore, onRiprova, nonPrevisti 
   return (
     <div className="screen">
       <h1 className="h1">Che intervento devi fare?</h1>
-      <SearchBar value={q} onChange={setQ} placeholder="Cerca intervento..." />
+      <SearchBar value={q} onChange={setQ} placeholder="Cerca intervento…" />
       {!interventi && <StatoCaricamento errore={errore} onRiprova={onRiprova} />}
-      <div className="list-wrap">
-        {list.map((i) => (
-          <ListRow
-            key={i.id}
-            label={i.nome}
-            sub={i.descrizione}
-            selected={value?.id === i.id}
-            onClick={() => { onSelect(i); onAltro(''); }}
-          />
-        ))}
-      </div>
+      {list.length > 0 && (
+        <div className="list-wrap">
+          {list.map((i) => (
+            <ListRow
+              key={i.id}
+              label={i.nome}
+              sub={i.descrizione}
+              selected={value?.id === i.id}
+              onClick={() => { onSelect(i); onAltro(''); }}
+            />
+          ))}
+        </div>
+      )}
       <textarea
         className="note-input"
         value={altro}

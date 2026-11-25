@@ -7,7 +7,7 @@ export default function Loading({ onCancel }) {
   return (
     <div className="screen">
       <Spinner />
-      <h1 className="h1" style={{ textAlign: 'center' }}>Calcolo della stima in corso...</h1>
+      <h1 className="h1" style={{ textAlign: 'center' }}>Calcolo della stima in corso…</h1>
       <p className="muted" style={{ textAlign: 'center' }}>Confronto tra prezzi medi dei ricambi, tempi di lavoro e tariffa oraria della tua regione.</p>
       <Button variant="secondary" onClick={onCancel}>Annulla operazione</Button>
     </div>

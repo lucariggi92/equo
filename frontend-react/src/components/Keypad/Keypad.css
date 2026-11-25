@@ -2,24 +2,24 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  background: #1A365D;
-  border: 1px solid #2D4A7A;
+  background: var(--steel);
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 12px;
 }
 .key {
   min-height: 52px;
   border-radius: 10px;
-  background: #0B0F19;
-  color: #fff;
-  border: 1px solid #2D4A7A;
+  background: var(--night);
+  color: var(--text);
+  border: 1px solid var(--line);
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
 }
-.key:hover { background: #234574; }
-.key:active { border-color: #38A169; }
-.key:focus-visible { outline: 2px solid #38A169; outline-offset: 2px; }
+.key:hover { background: var(--steel-hover); }
+.key:active { border-color: var(--mint); }
+.key:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
 
 @media (min-width: 768px) {
   .keypad { gap: 12px; padding: 16px; max-width: 440px; width: 100%; margin: 0 auto; }

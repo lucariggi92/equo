@@ -157,7 +157,7 @@ export default function App() {
 
   return (
     <div className="phone">
-      <Header right={step === ATTESA ? 'Analisi...' : null} onBack={DOMANDE[step] || step === REPORT ? indietro : null} />
+      <Header right={step === ATTESA ? 'Analisi…' : null} onBack={DOMANDE[step] || step === REPORT ? indietro : null} />
       {DOMANDE[step] && <Avanzamento passo={step} totale={TOTALE_DOMANDE} nome={DOMANDE[step]} />}
       <main className="phone-main">
         {step === BENVENUTO && <Welcome prezziAl={opzioni?.prezzi_ricambi_al} onStart={vai(REGIONE)} />}

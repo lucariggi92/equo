@@ -1,3 +1,10 @@
+/* Hallmark · checked: 2026-11-25 · genre: modern-minimal (inferred) · shape: app screen
+ * floor: 0 FAIL · fixed: 7 (10a, 34, 48, 26a, 54, 63, 67) · structural: 0 printed
+ * built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · dismissed 40 · .btn-primary:disabled and .btn-cta:disabled are inactive controls, which WCAG 1.4.3 exempts; the V1 grey stays */
+/* Hallmark · dismissed 40 · .app-back:hover is an icon-only control: the mint arrow on steel needs 3:1 (WCAG 1.4.11) and has 3.74:1 */
+/* Hallmark · dismissed 41 · .card and .sticky-footer inherit the white text set on body */
+/* Hallmark · answered F1 · the Italian copy keeps straight apostrophes throughout, one rule for every string */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,23 +12,41 @@
 :root {
   --night: #0B0F19;
   --steel: #1A365D;
+  --steel-hover: #234574;
   --line: #2D4A7A;
+  --line-soft: rgba(45, 74, 122, 0.3);
   --text: #FFFFFF;
   --muted: #A0AEC0;
   --mint: #38A169;
   --mint-hover: #2F855A;
   --mint-active: #276749;
+  --mint-light: #74db9d;
+  --mint-tint: rgba(56, 161, 105, 0.15);
+  --mint-tint-soft: rgba(56, 161, 105, 0.12);
   --warn: #ECC94B;
+  --warn-tint: rgba(236, 201, 75, 0.15);
+  --warn-tint-soft: rgba(236, 201, 75, 0.12);
   --danger: #FC8181;
+  --danger-tint: rgba(252, 129, 129, 0.15);
+  --danger-tint-soft: rgba(252, 129, 129, 0.12);
+  --disabled: #2D3748;
+  --disabled-text: #718096;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --radius-card: 12px;
   --radius-ctl: 10px;
+}
+
+/* niente scorrimento orizzontale della pagina: clip, non hidden, così il bordo appiccicoso dell'intestazione funziona */
+html,
+body {
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   background: var(--night);
   color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
 }
 
 .numeric {
