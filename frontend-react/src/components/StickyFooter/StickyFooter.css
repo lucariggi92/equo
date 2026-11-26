@@ -1,11 +1,13 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .sticky-footer {
   position: sticky;
   bottom: 0;
-  background: var(--night);
-  border-top: 1px solid var(--line);
-  padding: 12px 16px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border-top: var(--rule-hair) solid var(--color-rule);
+  padding: var(--space-sm) var(--space-md);
   display: flex;
-  gap: 8px;
-  z-index: 20;
+  gap: var(--space-xs);
+  z-index: var(--z-sticky);
 }
 .sticky-footer .btn { flex: 1; }

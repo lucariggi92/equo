@@ -1,27 +1,27 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* tastierino a righe sottili: nessun riquadro, solo le linee tra i tasti */
 .keypad {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  background: var(--steel);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: var(--rule-hair) solid var(--color-rule-strong);
 }
 .key {
-  min-height: 52px;
-  border-radius: 10px;
-  background: var(--night);
-  color: var(--text);
-  border: 1px solid var(--line);
-  font-size: 18px;
-  font-weight: 700;
+  min-height: 56px;
+  background: transparent;
+  color: var(--color-ink);
+  border: 0;
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
   cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out);
 }
-.key:hover { background: var(--steel-hover); }
-.key:active { border-color: var(--mint); }
-.key:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+.key:not(:nth-child(3n)) { border-right: var(--rule-hair) solid var(--color-rule); }
+.key:hover { background: var(--color-paper-2); }
+.key:active { background: var(--color-paper-3); }
+.key:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
 
 @media (min-width: 768px) {
-  .keypad { gap: 12px; padding: 16px; max-width: 440px; width: 100%; margin: 0 auto; }
-  .key { min-height: 56px; font-size: 20px; }
+  .keypad { max-width: 440px; width: 100%; margin: 0 auto; }
 }

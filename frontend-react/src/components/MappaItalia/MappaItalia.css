@@ -1,0 +1,23 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* l'Italia sullo sfondo: regioni blu acciaio, quella scelta verde menta e illuminata */
+.mappa { margin: 0; height: 100%; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-sm); }
+.mappa-svg { width: 100%; max-width: 440px; max-height: calc(100% - 64px); overflow: visible; }
+.mappa-regione {
+  fill: var(--color-paper-2);
+  stroke: var(--color-rule-strong);
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+  cursor: pointer;
+  transition: fill var(--dur-short) var(--ease-out);
+}
+.mappa-regione:hover { fill: var(--color-paper-3); }
+.mappa-regione.is-attiva {
+  fill: var(--color-accent);
+  stroke: var(--color-accent-text);
+  stroke-width: 1.4;
+  cursor: default;
+  filter: drop-shadow(0 0 10px var(--color-btn-glow)) drop-shadow(0 0 2px var(--color-accent));
+}
+.mappa-didascalia { display: flex; flex-direction: column; align-items: center; gap: var(--space-3xs); text-align: center; }
+.mappa-nome { font-size: var(--text-2xl); font-weight: 800; letter-spacing: -0.02em; color: var(--color-ink); min-height: 1.2em; }
+.mappa-fonte { font-size: var(--text-xs); color: var(--color-muted); }

@@ -1,35 +1,35 @@
 import { useState } from 'react';
-import SearchBar from '../../components/SearchBar/SearchBar.jsx';
-import ListRow from '../../components/ListRow/ListRow.jsx';
-import Button from '../../components/Button/Button.jsx';
+import Domanda from '../../components/Domanda/Domanda.jsx';
+import Ruota from '../../components/Ruota/Ruota.jsx';
+import MappaItalia from '../../components/MappaItalia/MappaItalia.jsx';
 import StatoCaricamento from '../../components/StatoCaricamento/StatoCaricamento.jsx';
 import '../Welcome/Welcome.css';
 
+// La regione si sceglie facendo girare la ruota (o cercandola): lo schermo resta fermo, scorre solo l'elenco.
+// Su computer a destra c'è l'Italia: la regione nella lente si illumina mentre la ruota gira;
+// cliccando una regione sulla mappa la ruota gira fino a lei e la sceglie.
 export default function Regione({ regioni, errore, onRiprova, value, onSelect, onNext, onBack }) {
-  const [q, setQ] = useState('');
-  const list = (regioni || []).filter((r) => r.nome.toLowerCase().includes(q.toLowerCase()));
+  const [evidenziata, setEvidenziata] = useState(value);
   return (
-    <div className="screen">
-      <h1 className="h1">Qual è la tua Regione?</h1>
-      <p className="muted">Usiamo una tariffa oraria media stimata per ogni regione.</p>
-      <SearchBar value={q} onChange={setQ} placeholder="Cerca regione…" />
+    <Domanda
+      titolo="Qual è la tua Regione?"
+      spiegazione="Usiamo una tariffa oraria media stimata per ogni regione."
+      onBack={onBack}
+      onNext={onNext}
+      avantiDisabilitato={!value}
+      lato={regioni && <MappaItalia regioni={regioni} evidenziata={evidenziata || value} onScegli={onSelect} />}
+    >
       {!regioni && <StatoCaricamento errore={errore} onRiprova={onRiprova} />}
-      {list.length > 0 && (
-        <div className="list-wrap">
-          {list.map((r) => (
-            <ListRow
-              key={r.id}
-              label={r.nome}
-              selected={value?.id === r.id}
-              onClick={() => onSelect(r)}
-            />
-          ))}
-        </div>
+      {regioni && (
+        <Ruota
+          etichetta="Regione"
+          cerca="Cerca regione…"
+          opzioni={regioni.map((r) => ({ chiave: String(r.id), etichetta: r.nome, dato: r }))}
+          valore={value ? String(value.id) : null}
+          onChange={onSelect}
+          onCentro={setEvidenziata}
+        />
       )}
-      <div className="stats">
-        <Button variant="secondary" onClick={onBack}>Indietro</Button>
-        <Button disabled={!value} onClick={onNext}>Avanti</Button>
-      </div>
-    </div>
+    </Domanda>
   );
 }

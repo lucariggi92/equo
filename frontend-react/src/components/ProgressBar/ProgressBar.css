@@ -1,14 +1,14 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .progress {
-  height: 8px;
-  border-radius: 9999px;
-  background: var(--night);
-  border: 1px solid var(--line);
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-rule);
   overflow: hidden;
 }
 .progress-fill {
   height: 100%;
   width: 100%;
   transform-origin: left;
-  background: var(--mint);
-  transition: transform 0.3s ease;
+  background: var(--color-accent);
+  transition: transform var(--dur-short) var(--ease-out);
 }

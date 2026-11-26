@@ -1,9 +1,10 @@
+/* una colonna centrata, larga come un telefono grande anche sullo schermo del computer */
 .phone {
   width: 100%;
-  max-width: 100%;
+  max-width: var(--column);
   min-height: 100svh;
   margin: 0 auto;
-  background: var(--night);
+  background: var(--color-paper);
   display: flex;
   flex-direction: column;
 }
@@ -14,25 +15,42 @@
   width: 100%;
 }
 
-/* Tablet (768–1023): 8 colonne, margini 24 */
+/* domande: la pagina e alta esattamente quanto lo schermo; dentro scorre solo il corpo della domanda */
+.phone.is-domanda {
+  height: 100svh;
+  height: 100dvh;
+  min-height: 0;
+}
+.phone.is-domanda .phone-main { min-height: 0; }
+.phone.is-domanda .piede { display: none; }
+
+/* home: alone verde in alto e blu in basso (sfondo della proposta B), intestazione trasparente sopra */
+.phone.is-home {
+  background:
+    radial-gradient(120% 55% at 50% 0%, var(--color-glow-top), transparent 62%),
+    radial-gradient(90% 45% at 50% 100%, var(--color-glow-bottom), transparent 70%),
+    var(--color-paper);
+}
+.phone.is-home .app-header {
+  background: transparent;
+  border-bottom-color: transparent;
+  /* trasparente quindi non fissa: scorrendo il titolo non le passa sotto */
+  position: relative;
+}
+
+/* tablet e computer: nessuna delimitazione della colonna. Niente bordi laterali, e niente linee orizzontali
+   che finirebbero a meta schermo (sotto l'intestazione e sopra i pulsanti): la colonna si fonde con lo sfondo */
 @media (min-width: 768px) {
-  .phone {
-    max-width: 600px;
-    min-height: 100svh;
-    border-left: 1px solid var(--line-soft);
-    border-right: 1px solid var(--line-soft);
-  }
+  .phone .app-header { border-bottom-color: transparent; }
+  .phone .domanda-piede { border-top-color: transparent; }
 }
 
-/* Desktop (>=1024): 12 colonne, margini 32 */
+/* computer: la home occupa tutto lo schermo (sfondo da bordo a bordo); il contenuto resta centrato in 1120 px */
 @media (min-width: 1024px) {
-  .phone {
-    max-width: 760px;
-    border-left: 1px solid var(--line);
-    border-right: 1px solid var(--line);
+  .phone.is-home {
+    max-width: none;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  .phone.is-home .app-header {
+    padding-inline: max(var(--space-xl), calc((100% - 1120px) / 2 + var(--space-xl)));
+  }
 }

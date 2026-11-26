@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header/Header.jsx';
 import Avanzamento from './components/Avanzamento/Avanzamento.jsx';
+import Footer from './components/Footer/Footer.jsx';
 import Welcome from './screens/Welcome/Welcome.jsx';
 import Regione from './screens/Regione/Regione.jsx';
+import Marca from './screens/Marca/Marca.jsx';
 import Auto from './screens/Auto/Auto.jsx';
 import Anno from './screens/Anno/Anno.jsx';
+import Versione from './screens/Versione/Versione.jsx';
 import Intervento from './screens/Intervento/Intervento.jsx';
 import SceltaSingola from './screens/SceltaSingola/SceltaSingola.jsx';
 import Prezzo from './screens/Prezzo/Prezzo.jsx';
@@ -12,14 +15,19 @@ import Loading from './screens/Loading/Loading.jsx';
 import Report from './screens/Report/Report.jsx';
 import { opzioni as caricaOpzioni, verifica } from './api/client.js';
 import { anniDiProduzione } from './lib/format.js';
+import { anniDelGruppo, versioniPerAnno } from './lib/versioni.js';
 import './App.css';
 
-// passi: benvenuto, 8 domande (una per schermata), attesa, report
-const BENVENUTO = 0, REGIONE = 1, AUTO = 2, ANNO = 3, INTERVENTO = 4, QUALITA = 5, OFFICINA = 6, PREZZO = 7, IVA = 8,
-  ATTESA = 9, REPORT = 10;
-const DOMANDE = { [REGIONE]: 'regione', [AUTO]: 'auto', [ANNO]: 'anno', [INTERVENTO]: 'intervento', [QUALITA]: 'ricambi',
+// passi: benvenuto, 9 domande (una per schermata), attesa, report
+const BENVENUTO = 0, REGIONE = 1, MARCA = 2, AUTO = 3, ANNO = 4, INTERVENTO = 5, QUALITA = 6, OFFICINA = 7, PREZZO = 8, IVA = 9,
+  ATTESA = 10, REPORT = 11;
+const DOMANDE = { [REGIONE]: 'regione', [MARCA]: 'marca', [AUTO]: 'modello', [ANNO]: 'anno', [INTERVENTO]: 'intervento', [QUALITA]: 'ricambi',
   [OFFICINA]: 'officina', [PREZZO]: 'importo', [IVA]: 'IVA' };
 const TOTALE_DOMANDE = Object.keys(DOMANDE).length;
+// passo in più, solo se l'anno non basta a capire la versione (restyling): sta tra anno e intervento,
+// conta come la domanda sull'anno nella barra di avanzamento e resta sotto ATTESA (vedi il gesto indietro)
+const VERSIONE = 4.5;
+const eDomanda = (passo) => Boolean(DOMANDE[passo]) || passo === VERSIONE;
 const ATTESA_MINIMA_MS = 3000; // la rotellina resta almeno 3 secondi, anche se l'API risponde prima
 
 const OPZIONI_IVA = [
@@ -37,7 +45,9 @@ export default function App() {
   const [erroreOpzioni, setErroreOpzioni] = useState(null);
   const [erroreVerifica, setErroreVerifica] = useState(null);
   const [regione, setRegione] = useState(null);
-  const [auto, setAuto] = useState(null); // { marca, modello, variante }
+  const [marca, setMarca] = useState(null);
+  const [gruppo, setGruppo] = useState(null); // la scheda scelta: un modello con una o più versioni (restyling)
+  const [auto, setAuto] = useState(null); // la versione esatta: { marca, modello, variante }
   const [anno, setAnno] = useState(''); // facoltativo
   const [intervento, setIntervento] = useState(null);
   const [altro, setAltro] = useState(''); // intervento descritto a parole, se non è in elenco
@@ -87,9 +97,39 @@ export default function App() {
     leggiOpzioni();
   }
 
-  // elenco unico delle versioni, come la lista auto della V1: arrivano con gli elenchi del form, in una sola chiamata
-  const versioni = useMemo(() => opzioni && opzioni.marche.flatMap((marca) => marca.modelli.flatMap((modello) =>
-    modello.varianti.map((variante) => ({ marca, modello, variante })))), [opzioni]);
+  // versioni della marca scelta (modello sopra, motore sotto): arrivano con gli elenchi del form, in una sola chiamata
+  const versioni = useMemo(() => (marca ? marca.modelli.flatMap((modello) =>
+    modello.varianti.map((variante) => ({ marca, modello, variante }))) : []), [marca]);
+
+  // cambiando marca, l'auto scelta per l'altra marca si toglie
+  function scegliMarca(m) {
+    setMarca(m);
+    if (gruppo && gruppo.marca.nome !== m.nome) {
+      setGruppo(null);
+      setAuto(null);
+      setAnno('');
+    }
+  }
+
+  // scheda del modello: con una sola versione è già l'auto; con più versioni la sceglierà l'anno
+  function scegliGruppo(g) {
+    setGruppo(g);
+    if (anno && !anniDelGruppo(g).includes(anno)) setAnno('');
+    if (g.versioni.length === 1) scegliAuto(g.versioni[0]);
+    else if (!g.versioni.some((a) => a.variante.id === auto?.variante?.id)) setAuto(null);
+  }
+
+  // dopo l'anno: se basta a capire la versione si va avanti, altrimenti si chiede (foto del dettaglio che cambia)
+  const candidate = versioniPerAnno(gruppo, anno);
+  function dopoAnno() {
+    if (candidate.length === 1) {
+      scegliAuto(candidate[0]);
+      avanza(INTERVENTO);
+    } else {
+      if (!candidate.some((a) => a.variante.id === auto?.variante?.id)) setAuto(null);
+      avanza(VERSIONE);
+    }
+  }
 
   // cambiando versione, un intervento non previsto per la nuova versione si toglie
   function scegliAuto(a) {
@@ -141,6 +181,8 @@ export default function App() {
     if (indice.current > 0) window.history.go(-indice.current);
     else setStep(BENVENUTO);
     setRegione(null);
+    setMarca(null);
+    setGruppo(null);
     setAuto(null);
     setAnno('');
     setIntervento(null);
@@ -156,18 +198,25 @@ export default function App() {
   const vai = (passo) => () => avanza(passo);
 
   return (
-    <div className="phone">
-      <Header right={step === ATTESA ? 'Analisi…' : null} onBack={DOMANDE[step] || step === REPORT ? indietro : null} />
+    <div className={`phone${step === BENVENUTO ? ' is-home' : ''}${eDomanda(step) ? ' is-domanda' : ''}`}>
+      <Header right={step === ATTESA ? 'Analisi…' : null} onBack={eDomanda(step) || step === REPORT ? indietro : null} />
       {DOMANDE[step] && <Avanzamento passo={step} totale={TOTALE_DOMANDE} nome={DOMANDE[step]} />}
+      {step === VERSIONE && <Avanzamento passo={ANNO} totale={TOTALE_DOMANDE} nome="versione" />}
       <main className="phone-main">
         {step === BENVENUTO && <Welcome prezziAl={opzioni?.prezzi_ricambi_al} onStart={vai(REGIONE)} />}
         {step === REGIONE && (
-          <Regione regioni={opzioni?.regioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={regione} onSelect={setRegione} onNext={vai(AUTO)} onBack={indietro} />
+          <Regione regioni={opzioni?.regioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={regione} onSelect={setRegione} onNext={vai(MARCA)} onBack={indietro} />
+        )}
+        {step === MARCA && (
+          <Marca marche={opzioni?.marche} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={marca} onSelect={scegliMarca} onNext={vai(AUTO)} onBack={indietro} />
         )}
         {step === AUTO && (
-          <Auto versioni={versioni} errore={erroreOpzioni} onRiprova={riprovaOpzioni} value={auto} onSelect={scegliAuto} onNext={vai(ANNO)} onBack={indietro} />
+          <Auto marca={marca} versioni={versioni} value={gruppo} onSelect={scegliGruppo} onNext={vai(ANNO)} onBack={indietro} />
         )}
-        {step === ANNO && <Anno auto={auto} value={anno} onChange={setAnno} onNext={vai(INTERVENTO)} onBack={indietro} />}
+        {step === ANNO && <Anno gruppo={gruppo} value={anno} onChange={setAnno} onNext={dopoAnno} onBack={indietro} />}
+        {step === VERSIONE && (
+          <Versione gruppo={gruppo} candidate={candidate} value={auto} onSelect={scegliAuto} onNext={vai(INTERVENTO)} onBack={indietro} />
+        )}
         {step === INTERVENTO && (
           <Intervento
             interventi={opzioni?.interventi}
@@ -224,6 +273,7 @@ export default function App() {
           <Report auto={auto} intervento={intervento} result={result} prezziAl={opzioni?.prezzi_ricambi_al} onReset={reset} />
         )}
       </main>
+      <Footer prezziAl={opzioni?.prezzi_ricambi_al} />
     </div>
   );
 }

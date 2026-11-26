@@ -1,19 +1,19 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .avanzamento {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--line);
+  padding: var(--space-sm) var(--space-md);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: var(--night);
+  gap: var(--space-xs);
+  background: var(--color-paper);
 }
 .avanzamento-riga {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
-  color: var(--muted);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
 }
-.avanzamento-pct { color: var(--mint); font-weight: 700; }
+.avanzamento-pct { color: var(--color-accent-text); font-weight: 600; }
 
 @media (min-width: 768px) {
-  .avanzamento { padding: 12px 24px; }
+  .avanzamento { padding: var(--space-sm) var(--space-lg); }
 }

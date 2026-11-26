@@ -1,21 +1,34 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .row {
   min-height: 56px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
-  background: var(--steel);
-  color: var(--text);
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-2xs);
+  background: transparent;
+  color: var(--color-ink);
   border: 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
   cursor: pointer;
   text-align: left;
+  transition: background-color var(--dur-micro) var(--ease-out);
 }
-.row:hover { background: var(--steel-hover); }
-.row-selected { outline: 2px solid var(--mint); outline-offset: -2px; }
-.row:focus-visible { outline: 2px solid var(--mint); outline-offset: -2px; }
-.row-main { display: flex; flex-direction: column; }
-.row-label { font-weight: 600; font-size: 14px; }
-.row-sub { font-size: 12px; color: var(--muted); }
-.row-arrow { color: var(--muted); display: flex; flex-shrink: 0; }
+.row:hover { background: var(--color-paper-2); }
+.row:active { background: var(--color-paper-3); }
+.row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
+.row-main { display: flex; flex-direction: column; gap: var(--space-3xs); min-width: 0; }
+.row-label { font-weight: 600; font-size: var(--text-md); line-height: 1.3; }
+.row-sub { font-size: var(--text-sm); color: var(--color-muted); line-height: 1.4; }
+.row-arrow { color: var(--color-muted); display: flex; flex-shrink: 0; }
+/* la voce scelta: spunta verde acqua al posto della freccia */
+.row-selected .row-arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  align-items: center;
+  justify-content: center;
+}

@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0F19" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FAFCFE" media="(prefers-color-scheme: light)" />
+    <script>
+      // versione chiara o scura scelta l'ultima volta: applicata prima che la pagina compaia, per non vedere un lampo
+      try {
+        var t = localStorage.getItem('equo-tema');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <meta name="description" content="Verifica in 60 secondi se il preventivo del meccanico è equo: confronto con i prezzi medi dei ricambi e la tariffa oraria della tua regione." />
     <title>EQUO - Verifica preventivo</title>
   </head>

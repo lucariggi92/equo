@@ -2,9 +2,8 @@ import { useState } from 'react';
 import Button from '../../components/Button/Button.jsx';
 import Card from '../../components/Card/Card.jsx';
 import Badge from '../../components/Badge/Badge.jsx';
-import Semaforo from '../../components/Semaforo/Semaforo.jsx';
 import MessageBox from '../../components/MessageBox/MessageBox.jsx';
-import { euro, percentuale, numero, data, nomeAuto, copyText } from '../../lib/format.js';
+import { euro, percentuale, numero, nomeAuto, copyText } from '../../lib/format.js';
 import { messaggioMeccanico } from '../../api/verifica.js';
 import '../Welcome/Welcome.css';
 import './Report.css';
@@ -20,8 +19,21 @@ const META = {
 // affidabilità del prezzo di ogni riga (scala D5)
 const METODO = { rilevato: 'verificato', indicativo: 'indicativo' };
 const metodo = (m) => METODO[m] || 'stimato';
+const TONO_METODO = { verificato: 'ok', indicativo: 'warn', stimato: 'info' };
 
-export default function Report({ auto, intervento, result, prezziAl, onReset }) {
+// una voce del dettaglio: nome a sinistra, valore in grassetto a destra, nota piccola sotto
+function Voce({ nome, valore, nota, totale, mancante }) {
+  return (
+    <div className={`voce${totale ? ' voce-totale' : ''}${mancante ? ' voce-mancante' : ''}`}>
+      <dt className="voce-nome">{nome}</dt>
+      <dd className="voce-valore numeric">{valore}</dd>
+      {nota && <dd className="voce-nota">{nota}</dd>}
+    </div>
+  );
+}
+const Voci = ({ children }) => <dl className="voci">{children}</dl>;
+
+export default function Report({ auto, intervento, result, onReset }) {
   const [copied, setCopied] = useState(false);
   const [dettaglioAperto, setDettaglioAperto] = useState(false);
 
@@ -29,8 +41,10 @@ export default function Report({ auto, intervento, result, prezziAl, onReset }) 
   if (result.esito === 'non_calcolabile') {
     return (
       <div className="screen">
-        <div className="center"><Badge tone="info">Richiesta registrata</Badge></div>
-        <h1 className="verdict-title">Non possiamo ancora stimarlo</h1>
+        <div className="verdetto">
+          <Badge tone="info">Richiesta registrata</Badge>
+          <h1 className="verdict-title">Non possiamo ancora stimarlo</h1>
+        </div>
         <Card><p className="muted">{result.messaggio}</p></Card>
         <Button variant="secondary" onClick={onReset}>Nuova verifica</Button>
       </div>
@@ -49,21 +63,22 @@ export default function Report({ auto, intervento, result, prezziAl, onReset }) 
 
   return (
     <div className="screen">
-      <div className="center"><Badge tone={m.tone}>Verdetto Finale</Badge></div>
-      {m.tone !== 'info' && <div className="center"><Semaforo tone={m.tone} large /></div>}
-      <h1 className="verdict-title">{m.label}</h1>
-      {/* il prezzo calcolato, in grande, subito dopo l'attesa */}
-      {r.completo && (
-        <>
-          <div className="center"><span className="msg-label">Stima equa, IVA inclusa</span></div>
-          <div className="amount numeric">{euro(r.stima_iva_inclusa)}</div>
-        </>
-      )}
+      {/* il verdetto è un'etichetta di stato grande che fa da titolo: verde acqua equo, bordata sopra la media, nera anomalo */}
+      <div className="verdetto">
+        <h1 className={`verdetto-etichetta verdetto-${m.tone}`}>{m.label}</h1>
+        {/* il prezzo calcolato, in grande, subito dopo l'attesa */}
+        {r.completo && (
+          <div className="stima">
+            <span className="stima-etichetta">Stima equa, IVA inclusa</span>
+            <div className="amount numeric">{euro(r.stima_iva_inclusa)}</div>
+          </div>
+        )}
+      </div>
       {/* subito dopo il prezzo equo, in evidenza: quanto il preventivo è sopra o sotto, in euro */}
       {r.completo && (
         <div className={`scarto scarto-${m.tone}`}>
           {Math.abs(differenza) < 0.005 ? (
-            <span className="scarto-valore">In linea con la stima</span>
+            <span className="scarto-valore scarto-testo-solo">In linea con la stima</span>
           ) : (
             <>
               <span className="scarto-valore numeric">{differenza > 0 ? '+' : '−'}{euro(Math.abs(differenza))}</span>
@@ -86,12 +101,12 @@ export default function Report({ auto, intervento, result, prezziAl, onReset }) 
 
       {/* come nella V1: una sola scheda con le voci principali */}
       <Card title="Spaccato stima">
-        <div className="recap">
-          <span>Manodopera stimata: <strong className="numeric">{euro(r.manodopera_netto)}</strong></span>
-          <span>Ricambi e materiali: <strong className="numeric">{euro(Number(r.ricambi_netto) + Number(r.ricarico_netto))}</strong></span>
-          <span>IVA: <strong className="numeric">{euro(r.iva)}</strong></span>
-          <span>{r.completo ? 'Stima equa totale' : 'Stima parziale (solo voci con prezzo)'}: <strong className="numeric">{euro(r.stima_iva_inclusa)}</strong></span>
-        </div>
+        <Voci>
+          <Voce nome="Manodopera stimata" valore={euro(r.manodopera_netto)} />
+          <Voce nome="Ricambi e materiali" valore={euro(Number(r.ricambi_netto) + Number(r.ricarico_netto))} />
+          <Voce nome="IVA" valore={euro(r.iva)} />
+          <Voce totale nome={r.completo ? 'Stima equa totale' : 'Stima parziale (solo voci con prezzo)'} valore={euro(r.stima_iva_inclusa)} />
+        </Voci>
       </Card>
 
       {/* il dettaglio resta tutto, ma chiuso finché non lo si apre */}
@@ -101,37 +116,37 @@ export default function Report({ auto, intervento, result, prezziAl, onReset }) 
       {dettaglioAperto && (
         <>
           <Card title="Dettaglio">
-            <div className="recap">
-              <span>Ricambi: <strong className="numeric">{euro(r.ricambi_netto)}</strong></span>
-              <span>Ricarico dell'officina sui ricambi: <strong className="numeric">{euro(r.ricarico_netto)}</strong></span>
-              {manodopera && <span>Manodopera: <strong className="numeric">{numero(manodopera.quantita)} ore × {euro(manodopera.prezzo_unitario_netto)}/ora</strong></span>}
-              {r.completo && <span>Forbice della stima: <strong className="numeric">da {euro(r.stima_da)} a {euro(r.stima_a)}</strong></span>}
-              <span>Il tuo preventivo, IVA inclusa: <strong className="numeric">{euro(preventivo)}</strong>{r.completo ? ` (${percentuale(v.scostamento_pct)})` : ''}</span>
-            </div>
+            <Voci>
+              <Voce nome="Ricambi" valore={euro(r.ricambi_netto)} />
+              <Voce nome="Ricarico dell'officina sui ricambi" valore={euro(r.ricarico_netto)} />
+              {manodopera && (
+                <Voce nome="Manodopera" valore={`${numero(manodopera.quantita)} ore`} nota={`a ${euro(manodopera.prezzo_unitario_netto)}/ora`} />
+              )}
+              {r.completo && <Voce nome="Forbice della stima" valore={`${euro(r.stima_da)} – ${euro(r.stima_a)}`} />}
+              <Voce
+                totale
+                nome="Il tuo preventivo, IVA inclusa"
+                valore={euro(preventivo)}
+                nota={r.completo ? `${percentuale(v.scostamento_pct)} rispetto alla stima` : null}
+              />
+            </Voci>
           </Card>
           {ricambi.length > 0 && (
             <Card title="Ricambi considerati">
-              <div className="recap">
+              <Voci>
                 {ricambi.map((d) => (
-                  <span key={d.voce}>
-                    {d.voce}{Number(d.quantita) !== 1 ? ` × ${numero(d.quantita)}` : ''}:{' '}
-                    <strong className="numeric">{d.totale_netto === null ? 'prezzo mancante' : euro(d.totale_netto)}</strong>
-                    {d.totale_netto !== null && ` · ${metodo(d.metodo)}`}
-                  </span>
+                  <Voce
+                    key={d.voce}
+                    nome={`${d.voce}${Number(d.quantita) !== 1 ? ` × ${numero(d.quantita)}` : ''}`}
+                    valore={d.totale_netto === null ? 'prezzo mancante' : euro(d.totale_netto)}
+                    mancante={d.totale_netto === null}
+                    nota={d.totale_netto !== null ? <Badge tone={TONO_METODO[metodo(d.metodo)]}>{metodo(d.metodo)}</Badge> : null}
+                  />
                 ))}
-              </div>
+              </Voci>
             </Card>
           )}
-          <Card title="Quanto sono affidabili questi numeri">
-            <div className="recap">
-              {r.ricambi_verificati_pct !== null && (
-                <span>Valore dei ricambi: <strong>{r.ricambi_verificati_pct}% verificato</strong> (2 o più negozi), {r.ricambi_indicativi_pct}% indicativo (1 negozio), {r.ricambi_stimati_pct}% stimato.</span>
-              )}
-              {manodopera && <span>Tempo e tariffa della manodopera: <strong>{manodopera.metodo === 'rilevato' ? 'verificati' : 'stimati'}</strong>.</span>}
-              {prezziAl && <span>Prezzi dei ricambi aggiornati al <strong>{data(prezziAl)}</strong>.</span>}
-              <span>Ricambi e manodopera sono netti; il totale aggiunge l'IVA.</span>
-            </div>
-          </Card>
+          {/* la scheda "Quanto sono affidabili questi numeri" e tolta su richiesta del PM (25/11/2026) */}
         </>
       )}
 

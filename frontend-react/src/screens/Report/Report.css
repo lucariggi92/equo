@@ -1,17 +1,74 @@
-/* scarto tra preventivo e stima equa, in evidenza sotto il prezzo: colori del semaforo della V1 */
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* il verdetto: un'etichetta di stato grande, che fa da titolo */
+/* verdetto, stima e differenza stanno al centro della schermata */
+.verdetto { display: flex; flex-direction: column; align-items: center; gap: var(--space-md); text-align: center; padding-top: var(--space-sm); }
+.verdetto-etichetta {
+  display: inline-flex;
+  padding: var(--space-xs) var(--space-md);
+  /* 20 px: pillola piena su una riga, angoli morbidi se il testo va a capo */
+  border-radius: 20px;
+  justify-content: center;
+  font-size: var(--text-lg);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  max-width: none;
+}
+/* i colori del semaforo della V1: verde equo, giallo sopra la media, rosso anomalo */
+.verdetto-ok { background: var(--color-accent-soft); color: var(--color-accent-soft-ink); box-shadow: inset 0 0 0 var(--rule-hair) var(--color-accent); }
+.verdetto-warn { background: var(--color-warn-soft); color: var(--color-warn-ink); box-shadow: inset 0 0 0 var(--rule-hair) var(--color-warn); }
+.verdetto-err { background: var(--color-danger-soft); color: var(--color-danger-ink); box-shadow: inset 0 0 0 var(--rule-hair) var(--color-danger); }
+.verdetto-info { background: var(--color-paper-2); color: var(--color-ink-2); box-shadow: inset 0 0 0 var(--rule-hair) var(--color-rule); }
+
+/* la stima equa, in grande */
+.stima { display: flex; flex-direction: column; align-items: center; gap: var(--space-2xs); }
+.stima-etichetta { font-size: var(--text-sm); color: var(--color-muted); }
+.stima .amount { text-align: center; font-size: 2.5rem; }
+
+/* la differenza tra preventivo e stima: la cifra piu grande della schermata */
 .scarto {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid;
   text-align: center;
+  gap: var(--space-2xs);
+  padding-top: var(--space-md);
+  border-top: var(--rule-hair) solid var(--color-rule-strong);
 }
-.scarto-valore { font-size: 30px; font-weight: 800; line-height: 1.15; }
-.scarto-testo { font-size: 15px; font-weight: 600; }
-.scarto-dettaglio { font-size: 13px; color: var(--muted); margin-top: 4px; }
-.scarto-ok { color: var(--mint); border-color: var(--mint); background: var(--mint-tint-soft); }
-.scarto-warn { color: var(--warn); border-color: var(--warn); background: var(--warn-tint-soft); }
-.scarto-err { color: var(--danger); border-color: var(--danger); background: var(--danger-tint-soft); }
+.scarto-valore { font-size: 3.5rem; font-weight: 700; letter-spacing: var(--tracking-display); line-height: 1; overflow-wrap: break-word; min-width: 0; }
+.scarto-valore.scarto-testo-solo { font-size: var(--text-2xl); }
+.scarto-testo { font-size: var(--text-lg); font-weight: 600; color: var(--color-ink); }
+.scarto-dettaglio { font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-2xs); }
+.scarto-ok .scarto-valore { color: var(--color-accent-text); }
+.scarto-warn .scarto-valore { color: var(--color-warn); }
+.scarto-err .scarto-valore { color: var(--color-danger); }
+.scarto-info .scarto-valore { color: var(--color-ink); }
+
+@media (min-width: 768px) {
+  .stima .amount { font-size: 3rem; }
+  .scarto-valore { font-size: 4.5rem; }
+}
+
+/* voci del dettaglio: una riga per voce, nome a sinistra e valore a destra ben separati */
+.voci { margin: 0; display: flex; flex-direction: column; }
+.voce {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--space-md);
+  row-gap: var(--space-2xs);
+  align-items: baseline;
+  padding: var(--space-sm) 0;
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+.voce:first-child { padding-top: var(--space-2xs); }
+.voce:last-child { border-bottom: 0; padding-bottom: 0; }
+.voce-nome { margin: 0; font-size: 0.9375rem; line-height: 1.4; color: var(--color-ink-2); min-width: 0; }
+.voce-valore { margin: 0; font-size: 1.0625rem; font-weight: 700; color: var(--color-ink); text-align: right; white-space: nowrap; }
+.voce-nota { grid-column: 1 / -1; margin: 0; font-size: var(--text-sm); line-height: 1.4; color: var(--color-muted); }
+.voce-mancante .voce-valore { color: var(--color-warn); font-weight: 600; }
+/* il totale chiude la scheda: linea piu marcata e valore piu grande */
+/* la riga prima del totale non ha la sua linea: resta solo quella marcata del totale */
+.voce:has(+ .voce-totale) { border-bottom: 0; }
+.voce-totale { border-top: 2px solid var(--color-rule-strong); margin-top: var(--space-2xs); padding-top: var(--space-sm); }
+.voce-totale .voce-nome { color: var(--color-ink); font-weight: 700; }
+.voce-totale .voce-valore { font-size: var(--text-lg); color: var(--color-accent-text); }
+.voci-nota { margin-top: var(--space-sm); font-size: var(--text-sm); line-height: 1.45; color: var(--color-muted); }

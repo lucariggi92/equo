@@ -1,12 +1,15 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .search {
-  background: var(--steel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 16px;
-  color: var(--text);
+  min-height: var(--control);
+  background: var(--color-paper);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-ctl);
+  padding: 0 var(--space-md);
+  color: var(--color-ink);
   width: 100%;
-  font-size: 16px;
-  box-sizing: border-box;
+  font-size: var(--text-md);
+  transition: border-color var(--dur-micro) var(--ease-out);
 }
-.search::placeholder { color: var(--muted); }
-.search:focus-visible { outline: 2px solid var(--mint); border-color: var(--mint); }
+.search:hover { border-color: var(--color-muted); }
+.search::placeholder { color: var(--color-muted); }
+.search:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 0; border-color: var(--color-ink); }

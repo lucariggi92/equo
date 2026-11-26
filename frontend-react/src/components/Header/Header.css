@@ -1,31 +1,61 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .app-header {
   height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  background: var(--night);
-  border-bottom: 1px solid var(--line);
+  padding: 0 var(--space-md);
+  background: var(--color-paper);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: var(--z-sticky);
 }
-.app-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
-.app-header-right { font-size: 12px; color: var(--muted); }
-.app-header-left { display: flex; align-items: center; gap: 4px; }
-/* freccia indietro: area di tocco di 44 px, colori della V1 */
-.app-back {
+/* logo: solo la scritta EQUO, larga e spaziata, con la Q verde */
+.app-logo {
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  color: var(--color-ink);
+}
+.app-logo-q { color: var(--color-accent-text); }
+.app-header-right { display: flex; align-items: center; gap: var(--space-xs); font-size: var(--text-sm); color: var(--color-muted); }
+.app-header-left { display: flex; align-items: center; gap: var(--space-2xs); }
+
+/* interruttore chiaro / scuro */
+.app-tema {
   width: 44px;
   height: 44px;
-  margin-left: -10px;
+  margin-right: calc(var(--space-sm) * -1);
   border: none;
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   background: transparent;
-  color: var(--text);
+  color: var(--color-ink);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out);
 }
-.app-back:hover { background: var(--steel); color: var(--mint); }
-.app-back:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+.app-tema:hover { background: var(--color-paper-2); }
+.app-tema:active { background: var(--color-paper-3); }
+.app-tema:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 0; }
+/* freccia indietro: area di tocco di 44 px */
+.app-back {
+  width: 44px;
+  height: 44px;
+  margin-left: calc(var(--space-sm) * -1);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.app-back:hover { background: var(--color-paper-3); }
+.app-back:active { background: var(--color-rule); }
+.app-back:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 0; }

@@ -1,26 +1,28 @@
-import Button from '../../components/Button/Button.jsx';
-import { anniDiProduzione, nomeAuto } from '../../lib/format.js';
+import Domanda from '../../components/Domanda/Domanda.jsx';
+import { anniDelGruppo, motoreBase, nomeVisibile } from '../../lib/versioni.js';
+import '../../components/SearchBar/SearchBar.css';
 import '../Welcome/Welcome.css';
 import './Anno.css';
 
-// Anno di immatricolazione, facoltativo, scelto da un menù a tendina.
-export default function Anno({ auto, value, onChange, onNext, onBack }) {
-  const anni = anniDiProduzione(auto?.variante);
+// Anno di immatricolazione, facoltativo, da una tendina classica con gli anni di produzione del modello scelto.
+// Serve anche a scegliere la versione esatta quando il modello ha avuto un restyling.
+export default function Anno({ gruppo, value, onChange, onNext, onBack }) {
+  const anni = anniDelGruppo(gruppo);
+  const primo = gruppo?.versioni[0];
   return (
-    <div className="screen">
-      <h1 className="h1">In che anno è stata immatricolata?</h1>
-      <p className="muted">
-        Facoltativo. Ti proponiamo gli anni in cui la {nomeAuto(auto)} {auto?.variante?.etichetta} è stata prodotta
-        ({anni[anni.length - 1]}–{anni[0]}).
-      </p>
-      <select className="search anno-select" value={value} onChange={(e) => onChange(e.target.value)} aria-label="Anno di immatricolazione">
-        <option value="">Non lo so / preferisco non dirlo</option>
-        {anni.map((a) => <option key={a} value={a}>{a}</option>)}
-      </select>
-      <div className="stats">
-        <Button variant="secondary" onClick={onBack}>Indietro</Button>
-        <Button onClick={onNext}>Avanti</Button>
-      </div>
-    </div>
+    <Domanda
+      titolo="In che anno è stata immatricolata?"
+      spiegazione={`Facoltativo. Ti proponiamo gli anni in cui la ${nomeVisibile(primo)} ${motoreBase(primo?.variante)} è stata prodotta (${anni[anni.length - 1]}–${anni[0]}).`}
+      onBack={onBack}
+      onNext={onNext}
+    >
+      <label className="anno-campo">
+        <span className="anno-etichetta">Anno di immatricolazione</span>
+        <select className="search anno-select" value={value} onChange={(e) => onChange(e.target.value)}>
+          <option value="">Non lo so / preferisco non dirlo</option>
+          {anni.map((a) => <option key={a} value={a}>{a}</option>)}
+        </select>
+      </label>
+    </Domanda>
   );
 }

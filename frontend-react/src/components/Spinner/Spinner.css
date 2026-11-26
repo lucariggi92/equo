@@ -1,17 +1,18 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .spinner {
   display: block;
-  width: 96px;
-  height: 96px;
-  margin: 24px auto 8px;
-  border-radius: 50%;
-  border: 8px solid var(--line);
-  border-top-color: var(--mint);
+  width: 72px;
+  height: 72px;
+  margin: var(--space-xl) auto var(--space-xs);
+  border-radius: var(--radius-pill);
+  border: 6px solid var(--color-rule);
+  border-top-color: var(--color-accent);
   animation: spinner-gira 0.9s linear infinite;
 }
 @keyframes spinner-gira {
   to { transform: rotate(360deg); }
 }
-/* chi preferisce meno movimento vede una rotazione molto più lenta */
+/* chi preferisce meno movimento vede una rotazione molto piu lenta, invece di fermarsi del tutto */
 @media (prefers-reduced-motion: reduce) {
-  .spinner { animation-duration: 4s; }
+  .spinner { animation-duration: 4s !important; animation-iteration-count: infinite !important; }
 }

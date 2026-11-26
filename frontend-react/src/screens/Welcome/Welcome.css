@@ -1,49 +1,184 @@
-.screen { display: flex; flex-direction: column; gap: 16px; padding: 16px 16px 24px; }
-.h1 { font-size: 22px; line-height: 28px; font-weight: 700; margin: 0; color: var(--text); }
-.muted { color: var(--muted); font-size: 14px; line-height: 20px; margin: 0; }
-.white { color: var(--text); }
-.mission { font-size: 14px; font-weight: 600; color: var(--text); margin: 0; }
-.points { margin: 0; padding-left: 16px; color: var(--muted); font-size: 12px; display: flex; flex-direction: column; gap: 6px; }
-.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.stat { background: var(--steel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; }
-.stat-label { font-size: 12px; color: var(--muted); }
-.stat-value { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 4px; }
-.stat-value.mint { color: var(--mint); }
-.list-wrap { background: var(--steel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
-.recap { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
-.recap strong { color: var(--text); }
-.amount { font-size: 36px; font-weight: 800; color: var(--text); text-align: center; }
-.msg-label { font-size: 12px; font-weight: 700; color: var(--muted); }
-.verdict-title { font-size: 22px; font-weight: 700; margin: 0; text-align: center; }
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* stili comuni a tutte le schermate */
+.screen { display: flex; flex-direction: column; gap: var(--space-lg); padding: var(--space-lg) var(--space-md) var(--space-xl); }
+.h1 { font-size: var(--text-2xl); line-height: 1.05; color: var(--color-ink); max-width: 22ch; }
+.muted { color: var(--color-ink-2); font-size: var(--text-md); line-height: 1.55; margin: 0; }
+.white { color: var(--color-ink); font-weight: 600; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm); }
+.list-wrap { border-top: var(--rule-hair) solid var(--color-rule-strong); display: flex; flex-direction: column; }
+.amount { font-size: var(--text-3xl); font-weight: 700; letter-spacing: var(--tracking-display); line-height: 1; color: var(--color-ink); text-align: center; }
+.msg-label { font-size: var(--text-sm); font-weight: 600; color: var(--color-ink); }
+.verdict-title { font-size: var(--text-2xl); line-height: 1.05; margin: 0; }
 .center { display: flex; justify-content: center; }
-.note-input { background: var(--steel); border: 1px solid var(--line); border-radius: 10px; color: var(--text); padding: 12px; min-height: 96px; resize: vertical; font-size: 16px; font-family: inherit; }
-.note-input:focus-visible { outline: 2px solid var(--mint); border-color: var(--mint); }
+.note-input { background: var(--color-paper); border: var(--rule-hair) solid var(--color-rule); border-radius: var(--radius-ctl); color: var(--color-ink); padding: var(--space-sm) var(--space-md); min-height: 96px; resize: vertical; font-size: var(--text-md); transition: border-color var(--dur-micro) var(--ease-out); }
+.note-input:hover { border-color: var(--color-muted); }
+.note-input::placeholder { color: var(--color-muted); }
+.note-input:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 0; border-color: var(--color-ink); }
 
-/* Tablet (768–1023): margini 24, gutter 16 */
-@media (min-width: 768px) {
-  .screen { gap: 20px; padding: 24px 24px 32px; }
-  .h1 { font-size: 26px; line-height: 32px; }
-  .verdict-title { font-size: 26px; }
-  .amount { font-size: 42px; }
-  .stats { gap: 16px; }
-  .list-wrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-  .list-wrap .row:nth-child(odd) { border-right: 1px solid var(--line); }
+/* righe "voce: valore" (riepilogo e spaccato): il valore allineato a destra */
+.recap { display: flex; flex-direction: column; font-size: var(--text-md); color: var(--color-ink-2); }
+.recap > span { padding: var(--space-xs) 0; border-bottom: var(--rule-hair) solid var(--color-rule); line-height: 1.45; }
+.recap > span:last-child { border-bottom: 0; }
+.recap strong { color: var(--color-ink); font-weight: 600; }
+.recap-table > span { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-md); }
+.recap-table strong { text-align: right; flex-shrink: 0; }
+.recap-table > span:last-child { border-top: var(--rule-hair) solid var(--color-rule-strong); margin-top: var(--space-2xs); }
+
+/* ---------- home ----------
+   telefono: tutto centrato in colonna, schede verticali da scorrere, pillola in fondo
+   tablet: pillola piu grande
+   computer: due colonne, titolo e pulsante grande a sinistra, il carosello a destra */
+.home { flex: 1; align-items: center; text-align: center; gap: var(--space-lg); padding-top: var(--space-lg); }
+/* margin-top auto qui e sul pulsante: titolo e schede stanno a meta del vuoto, il pulsante in fondo */
+.home-testa { display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); margin-top: auto; }
+.home-titolo { font-size: 2rem; font-weight: 800; line-height: 1.08; letter-spacing: -0.03em; max-width: 12ch; margin-inline: auto; }
+.home-frase { max-width: 30ch; margin-inline: auto; }
+
+/* carosello a giro infinito: la scheda al centro dello schermo e grande e illuminata, le altre piu piccole e spente */
+.carosello { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; width: calc(100% + 2 * var(--space-md)); margin-inline: calc(var(--space-md) * -1); }
+.carosello-binario {
+  --scheda: min(280px, 72vw);
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--scheda);
+  column-gap: var(--space-sm);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
+  /* margine laterale pari a meta del vuoto: ogni scheda puo fermarsi esattamente al centro */
+  padding-inline: calc((100% - var(--scheda)) / 2);
+  padding-block: var(--space-md);
+  /* ai bordi dello schermo le schede vicine sfumano: si capisce che il giro continua */
+  mask-image: linear-gradient(90deg, transparent, var(--color-paper) 10%, var(--color-paper) 90%, transparent);
+}
+.carosello-binario::-webkit-scrollbar { display: none; }
+.carosello-scheda {
+  scroll-snap-align: center;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  background: var(--color-paper-2);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: 22px;
+  min-width: 0;
+  text-align: left;
+  transform: scale(0.84);
+  opacity: 0.4;
+  transition: transform var(--dur-long) var(--ease-out), opacity var(--dur-long) var(--ease-out), border-color var(--dur-long) var(--ease-out), box-shadow var(--dur-long) var(--ease-out);
+}
+/* la scheda al centro: piena, bordo verde e bagliore */
+.carosello-scheda.is-attiva {
+  transform: none;
+  opacity: 1;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent), 0 18px 44px var(--color-btn-glow);
+}
+/* durante il salto invisibile tra le copie nessuna animazione */
+.carosello-binario.is-salto .carosello-scheda { transition: none; }
+.carosello-titolo { font-size: 1.375rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--color-ink); max-width: none; }
+.carosello-testo { font-size: var(--text-md); line-height: 1.5; color: var(--color-ink-2); }
+.carosello-icona {
+  margin-top: auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* i puntini sono pulsanti: dicono dove sei e portano alla scheda */
+.carosello-punti { display: flex; justify-content: center; }
+.carosello-punto {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carosello-punto::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-rule);
+  transition: transform var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+}
+.carosello-punto:hover::before { background: var(--color-muted); }
+.carosello-punto.is-attivo::before { background: var(--color-accent); transform: scaleX(2.4); }
+.carosello-punto:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; border-radius: var(--radius-pill); }
+
+/* pillola di partenza e riga sotto, spinte in fondo alla schermata */
+.home-avvio { margin-top: auto; width: 100%; display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); }
+.avvio-nota { margin: 0; text-align: center; font-size: var(--text-sm); color: var(--color-muted); }
+
+/* tablet: pillola piu larga ma non da bordo a bordo */
+@media (min-width: 600px) {
+  .carosello { width: calc(100% + 2 * var(--space-lg)); margin-inline: calc(var(--space-lg) * -1); }
+  .home-avvio .btn-cta { max-width: 400px; min-height: 56px; font-size: 1.125rem; }
 }
 
-/* Desktop (>=1024): margini 32, gutter 24 */
+/* computer: due colonne; il pulsante grande sta subito sotto il titolo, a destra il carosello */
 @media (min-width: 1024px) {
-  .screen { gap: 24px; padding: 32px 32px 40px; max-width: 100%; }
-  .h1 { font-size: 28px; line-height: 36px; }
-  .muted { font-size: 16px; line-height: 24px; }
-  .amount { font-size: 44px; }
-  .stats { gap: 24px; }
-  .recap { font-size: 14px; }
+  .screen.home {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-areas: "testa caro" "avvio caro";
+    grid-template-rows: auto 1fr;
+    align-content: center;
+    column-gap: var(--space-2xl);
+    row-gap: var(--space-xl);
+    width: 100%;
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: left;
+  }
+  .home .home-testa { grid-area: testa; align-items: flex-start; margin-top: 0; align-self: end; }
+  .home .home-titolo { font-size: 3.25rem; max-width: 13ch; margin-inline: 0; }
+  .home .home-frase { margin-inline: 0; font-size: 1.125rem; max-width: 34ch; }
+  .home .home-avvio { grid-area: avvio; margin-top: 0; align-items: flex-start; align-self: start; width: auto; }
+  .home .home-avvio .btn-cta {
+    width: auto;
+    min-width: 340px;
+    max-width: none;
+    min-height: 64px;
+    padding: 0 var(--space-xl);
+    font-size: 1.25rem;
+    box-shadow: 0 0 0 8px var(--color-accent-soft), 0 18px 44px var(--color-btn-glow);
+  }
+  .home .home-avvio .btn-cta:hover:not(:disabled) { transform: translateY(-2px); }
+  .home .avvio-nota { text-align: left; padding-left: var(--space-xs); }
+  .home .carosello { grid-area: caro; width: 100%; margin-inline: 0; align-self: center; }
+  .home .carosello-binario {
+    --scheda: 260px;
+    /* ai bordi le schede sfumano, cosi il giro sembra continuare oltre la colonna */
+    mask-image: linear-gradient(90deg, transparent, var(--color-paper) 14%, var(--color-paper) 86%, transparent);
+  }
 }
 
-/* pulsante di partenza con la riga sotto */
-.avvio { display: flex; flex-direction: column; gap: 10px; }
-.avvio-nota { margin: 0; text-align: center; font-size: 12px; color: var(--muted); }
+/* schermata di attesa: rotellina e scritte al centro dello schermo */
+.screen-attesa { flex: 1; justify-content: center; align-items: center; text-align: center; }
+.screen-attesa .h1 { margin-inline: auto; }
+.screen-attesa .muted { max-width: 36ch; }
+.screen-attesa .btn { max-width: 320px; }
+
+/* tablet e computer: piu aria intorno, stessa colonna */
+@media (min-width: 768px) {
+  .screen { gap: var(--space-lg); padding: var(--space-xl) var(--space-lg) var(--space-2xl); }
+  .h1, .verdict-title { font-size: var(--text-3xl); }
+  .home-titolo { font-size: 2.5rem; }
+  .amount { font-size: 2.5rem; }
+}

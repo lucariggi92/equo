@@ -1,0 +1,62 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* la schermata di una domanda e alta quanto lo schermo: scorre solo il corpo */
+.screen.domanda {
+  --pad: var(--space-md);
+  flex: 1;
+  min-height: 0;
+  gap: 0;
+  padding: 0;
+}
+.domanda-testa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg) var(--pad) var(--space-md);
+}
+.domanda-testa .search { margin-top: var(--space-xs); }
+.domanda-corpo {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* barra di scorrimento sottile e discreta: niente righe verticali marcate */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule) transparent;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-2xs) var(--pad) var(--space-md);
+}
+/* la ruota sta a meta del corpo */
+.domanda-corpo > .ruota-blocco { margin-block: auto; }
+/* pulsanti sempre visibili in fondo, sopra la barra del telefono */
+.domanda-piede {
+  padding: var(--space-sm) var(--pad) calc(var(--space-sm) + env(safe-area-inset-bottom));
+  border-top: var(--rule-hair) solid var(--color-rule);
+  background: var(--color-paper);
+}
+
+@media (min-width: 768px) {
+  .screen.domanda { --pad: var(--space-lg); padding: 0; gap: 0; }
+  .domanda-testa { padding-top: var(--space-xl); }
+}
+
+/* contenuto a lato (la mappa): sullo sfondo a destra, fuori dalla colonna della domanda, senza linee.
+   Compare solo quando accanto alla colonna c'e abbastanza spazio (da 1180 px di larghezza). */
+.domanda-lato { display: none; }
+@media (min-width: 1180px) {
+  .ha-lato .domanda-lato {
+    display: block;
+    position: fixed;
+    top: 50%;
+    /* dal bordo destro della colonna al bordo dello schermo, con un po' di respiro */
+    left: calc(50% + var(--column) / 2 + var(--space-md));
+    right: var(--space-lg);
+    max-width: 560px;
+    margin-inline: auto;
+    transform: translateY(-50%);
+    height: min(78vh, 720px);
+    z-index: var(--z-base);
+    background: radial-gradient(65% 55% at 50% 50%, var(--color-glow-top), transparent 72%);
+  }
+}

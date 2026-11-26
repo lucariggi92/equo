@@ -1,0 +1,128 @@
+/* Colori di EQUO: la palette della V1 (notte, blu acciaio, verde menta) in due versioni.
+   Scura = la V1 com'era. Chiara = gli stessi blu e verde su fondo bianco.
+   Senza scelta dell'utente vale l'impostazione del telefono; il pulsante nell'intestazione la cambia
+   scrivendo data-theme="dark" o "light" su <html>. */
+:root {
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.2rem; --text-xl: 1.44rem; --text-2xl: 1.728rem; --text-3xl: 2.074rem;
+  --text-display-s: 1.44rem; --text-display: 1.728rem; --text-section: 1.2rem; --text-title: 1rem; --text-lead: 1rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
+  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif; --font-body: var(--font-display);
+  --font-outlier: "IBM Plex Mono", ui-monospace, monospace;
+  --radius-card: 12px; --radius-pill: 999px; --rule-hair: 1px;
+  --tracking-display: -0.04em; --display-weight: 700;
+
+  /* versione scura: la V1 */
+  color-scheme: dark;
+  --color-paper: #0B0F19;
+  --color-paper-2: #1A365D;
+  --color-paper-3: #234574;
+  --color-ink: #F7FAFC;
+  --color-ink-2: #E2E8F0;
+  --color-muted: #A0AEC0;
+  --color-rule: #2D4A7A;
+  --color-rule-2: #22395F;
+  --color-rule-strong: #4A6FA5;
+  --color-accent: #38A169;
+  --color-accent-hover: #2F855A;
+  --color-accent-active: #276749;
+  --color-accent-ink: #0B0F19;
+  --color-accent-soft: #173B33;
+  --color-accent-soft-ink: #74DB9D;
+  --color-accent-text: #74DB9D;
+  --color-warn: #ECC94B;
+  --color-warn-soft: #3A3420;
+  --color-warn-ink: #F6E05E;
+  --color-danger: #FC8181;
+  --color-danger-soft: #3D2430;
+  --color-danger-ink: #FEB2B2;
+  --color-focus: #38A169;
+  /* pulsanti: verde menta pieno con testo bianco (4.5:1 sul verde di base) */
+  --color-btn: #276749;
+  --color-btn-top: #2A7C53;
+  --color-btn-hover: #22543D;
+  --color-btn-active: #1C4532;
+  --color-btn-ink: #FAFCFE;
+  --color-btn-glow: rgba(56, 161, 105, 0.35);
+  /* alone della home */
+  --color-glow-top: rgba(56, 161, 105, 0.22);
+  --color-glow-bottom: rgba(26, 54, 93, 0.9);
+  --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* versione chiara: stessi blu e verde, fondo bianco, testi scuri per il contrasto */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --color-paper: #FAFCFE;
+    --color-paper-2: #EEF3F9;
+    --color-paper-3: #DCE6F2;
+    --color-ink: #0B0F19;
+    --color-ink-2: #1A365D;
+    --color-muted: #4A5568;
+    --color-rule: #C9D6E6;
+    --color-rule-2: #E2EAF4;
+    --color-rule-strong: #1A365D;
+    --color-accent: #276749;
+    --color-accent-hover: #22543D;
+    --color-accent-active: #1C4532;
+    --color-accent-ink: #FAFCFE;
+    --color-accent-soft: #E3F4EA;
+    --color-accent-soft-ink: #22543D;
+    --color-accent-text: #276749;
+    --color-warn: #B7791F;
+    --color-warn-soft: #FEF6D8;
+    --color-warn-ink: #744210;
+    --color-danger: #C53030;
+    --color-danger-soft: #FDE4E4;
+    --color-danger-ink: #9B2C2C;
+    --color-focus: #276749;
+    --color-btn: #276749;
+    --color-btn-top: #2A7C53;
+    --color-btn-hover: #22543D;
+    --color-btn-active: #1C4532;
+    --color-btn-ink: #FAFCFE;
+    --color-btn-glow: rgba(39, 103, 73, 0.28);
+    --color-glow-top: rgba(47, 133, 90, 0.16);
+    --color-glow-bottom: rgba(26, 54, 93, 0.12);
+    --shadow-card: 0 20px 40px rgba(26, 54, 93, 0.16);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-paper: #FAFCFE;
+  --color-paper-2: #EEF3F9;
+  --color-paper-3: #DCE6F2;
+  --color-ink: #0B0F19;
+  --color-ink-2: #1A365D;
+  --color-muted: #4A5568;
+  --color-rule: #C9D6E6;
+  --color-rule-2: #E2EAF4;
+  --color-rule-strong: #1A365D;
+  --color-accent: #276749;
+  --color-accent-hover: #22543D;
+  --color-accent-active: #1C4532;
+  --color-accent-ink: #FAFCFE;
+  --color-accent-soft: #E3F4EA;
+  --color-accent-soft-ink: #22543D;
+  --color-accent-text: #276749;
+  --color-warn: #B7791F;
+  --color-warn-soft: #FEF6D8;
+  --color-warn-ink: #744210;
+  --color-danger: #C53030;
+  --color-danger-soft: #FDE4E4;
+  --color-danger-ink: #9B2C2C;
+  --color-focus: #276749;
+  --color-btn: #276749;
+  --color-btn-top: #2A7C53;
+  --color-btn-hover: #22543D;
+  --color-btn-active: #1C4532;
+  --color-btn-ink: #FAFCFE;
+  --color-btn-glow: rgba(39, 103, 73, 0.28);
+  --color-glow-top: rgba(47, 133, 90, 0.16);
+  --color-glow-bottom: rgba(26, 54, 93, 0.12);
+  --shadow-card: 0 20px 40px rgba(26, 54, 93, 0.16);
+}

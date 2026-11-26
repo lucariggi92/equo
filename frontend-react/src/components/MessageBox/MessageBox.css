@@ -1,9 +1,10 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .msgbox {
-  background: var(--night);
-  border: 1px dashed var(--line);
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--muted);
+  background: var(--color-paper-2);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  font-size: var(--text-md);
+  line-height: 1.55;
+  color: var(--color-ink-2);
 }

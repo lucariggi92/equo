@@ -1,5 +1,7 @@
-.semaforo { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* non piu usato dal report (il verdetto e un'etichetta): resta per compatibilita */
+.semaforo { width: 16px; height: 16px; border-radius: var(--radius-pill); display: inline-block; }
 .semaforo-large { width: 56px; height: 56px; }
-.semaforo-ok { background: var(--mint); }
-.semaforo-warn { background: var(--warn); }
-.semaforo-err { background: var(--danger); }
+.semaforo-ok { background: var(--color-accent); }
+.semaforo-warn { background: var(--color-warn); }
+.semaforo-err { background: var(--color-danger); }

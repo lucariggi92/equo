@@ -1,13 +1,18 @@
-/* menù a tendina con l'aspetto dei campi della V1, freccia verde a destra */
-.anno-select {
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* tendina classica con lo stesso aspetto della casella di ricerca, freccia verde a destra */
+.anno-campo { display: flex; flex-direction: column; gap: var(--space-xs); width: 100%; max-width: 420px; margin-inline: auto; margin-block: auto; }
+.anno-etichetta { font-size: var(--text-sm); font-weight: 600; color: var(--color-ink-2); }
+.search.anno-select {
   appearance: none;
-  min-height: 48px;
-  font-size: 16px;
   cursor: pointer;
-  background-image: linear-gradient(45deg, transparent 50%, var(--mint) 50%), linear-gradient(135deg, var(--mint) 50%, transparent 50%);
-  background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%;
+  min-height: 56px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  background-color: var(--color-paper-2);
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-accent-text) 50%), linear-gradient(135deg, var(--color-accent-text) 50%, transparent 50%);
+  background-position: calc(100% - 24px) 50%, calc(100% - 18px) 50%;
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
-  padding-right: 40px;
+  padding-right: var(--space-xl);
 }
-.anno-select option { background: var(--steel); color: var(--text); }
+.search.anno-select option { background: var(--color-paper); color: var(--color-ink); }

@@ -1,63 +1,46 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 .btn {
-  min-height: 48px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 14px;
+  min-height: var(--control);
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-ctl);
+  font-weight: 600;
+  font-size: var(--text-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-xs);
   width: 100%;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: var(--rule-hair) solid transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
 }
-.btn-primary {
-  background: var(--mint);
-  color: var(--night);
-  border-color: var(--mint);
-}
-.btn-primary:hover { background: var(--mint-hover); }
-.btn-primary:active { background: var(--mint-active); }
-.btn-primary:disabled {
-  background: var(--disabled);
-  color: var(--disabled-text);
-  border-color: var(--disabled);
-  cursor: not-allowed;
-}
-.btn-secondary {
-  background: transparent;
-  color: var(--text);
-  border-color: var(--line);
-}
-.btn-secondary:hover { background: var(--steel); border-color: var(--mint); }
-.btn:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.btn:disabled { background: var(--color-paper-3); border-color: var(--color-paper-3); color: var(--color-muted); cursor: not-allowed; }
 
-/* pillola con freccia (stile A, scelto dal PM il 23/11/2026): stessi colori, forma più moderna */
+/* pulsante principale: verde menta con una leggera sfumatura e testo bianco */
+.btn-primary,
 .btn-cta {
-  min-height: 56px;
-  border-radius: 9999px;
-  background: var(--mint);
-  border-color: var(--mint);
-  color: var(--night);
-  justify-content: space-between;
-  padding: 0 6px 0 24px;
-  font-size: 16px;
-  transition: background 0.15s ease, transform 0.1s ease;
+  background-color: var(--color-btn);
+  background-image: linear-gradient(180deg, var(--color-btn-top), var(--color-btn));
+  border-color: var(--color-btn);
+  color: var(--color-btn-ink);
 }
-.btn-cta:hover { background: var(--mint-hover); border-color: var(--mint-hover); }
-.btn-cta:active { background: var(--mint-active); transform: scale(0.98); }
-.btn-cta-freccia {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--night);
-  color: var(--mint);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
+.btn-primary:hover:not(:disabled),
+.btn-cta:hover:not(:disabled) { background-image: none; background-color: var(--color-btn-hover); border-color: var(--color-btn-hover); }
+.btn-primary:active:not(:disabled),
+.btn-cta:active:not(:disabled) { background-image: none; background-color: var(--color-btn-active); border-color: var(--color-btn-active); }
+.btn:disabled { background-image: none; }
+
+.btn-secondary { background: var(--color-paper-2); border-color: var(--color-rule); color: var(--color-ink); }
+.btn-secondary:hover:not(:disabled) { background: var(--color-paper-3); }
+
+/* azione principale di una schermata: pillola alta, larga quanto lo schermo, con un bagliore verde */
+.btn-cta {
+  min-height: 52px;
+  border-radius: var(--radius-pill);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  box-shadow: 0 10px 30px var(--color-btn-glow);
 }
-.btn-cta:hover .btn-cta-freccia { transform: translateX(3px); }
-.btn-cta:disabled { background: var(--disabled); border-color: var(--disabled); color: var(--disabled-text); cursor: not-allowed; }
-.btn-cta:disabled .btn-cta-freccia { color: var(--disabled-text); }
+.btn-cta:active:not(:disabled) { transform: scale(0.98); }

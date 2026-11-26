@@ -1,52 +1,18 @@
-/* Hallmark · checked: 2026-11-25 · genre: modern-minimal (inferred) · shape: app screen
- * floor: 0 FAIL · fixed: 7 (10a, 34, 48, 26a, 54, 63, 67) · structural: 0 printed
- * built: the project · redesign: polish · v2.0.0 */
-/* Hallmark · dismissed 40 · .btn-primary:disabled and .btn-cta:disabled are inactive controls, which WCAG 1.4.3 exempts; the V1 grey stays */
-/* Hallmark · dismissed 40 · .app-back:hover is an icon-only control: the mint arrow on steel needs 3:1 (WCAG 1.4.11) and has 3.74:1 */
-/* Hallmark · dismissed 41 · .card and .sticky-footer inherit the white text set on body */
+/* Hallmark · shape: app screen · genre: editorial · theme: brand (EQUO V1 palette: night, steel, mint; by request) · layout from Ink (deal 1/3) · redesign: full
+ * nav: kept (top bar with the EQUO wordmark, Q in mint, back arrow, light/dark switch; progress row) · signature: the difference in euro, set huge under the verdict tag · states: loading, error, empty search, disabled, selected · modes: dark (V1) and light · home: proposal A (Sora, mint pill) on proposal B ground (mint glow)
+ * axes: dark/grotesk-sans/chromatic-mint · posture: restrained · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: H, the home was long and left-aligned; it is now centred, four short reasons in a small carousel and one mint pill at the thumb */
+/* Hallmark · reworded "Il tuo preventivo auto è davvero equo?" to "Il tuo preventivo è davvero equo?" · the PM approved proposal A with the shorter head */
+/* Hallmark · dropped "100% Anonimo", the mission paragraph and the two figure tiles from the home · the PM asked for a small carousel with only the reasons to choose the app; "anonimo" and "60 secondi" stay in the carousel and under the button */
 /* Hallmark · answered F1 · the Italian copy keeps straight apostrophes throughout, one rule for every string */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./tokens.css";
+@import "./base.css";
 
+/* solo per questo sito: larghezza della colonna e altezza dei controlli */
 :root {
-  --night: #0B0F19;
-  --steel: #1A365D;
-  --steel-hover: #234574;
-  --line: #2D4A7A;
-  --line-soft: rgba(45, 74, 122, 0.3);
-  --text: #FFFFFF;
-  --muted: #A0AEC0;
-  --mint: #38A169;
-  --mint-hover: #2F855A;
-  --mint-active: #276749;
-  --mint-light: #74db9d;
-  --mint-tint: rgba(56, 161, 105, 0.15);
-  --mint-tint-soft: rgba(56, 161, 105, 0.12);
-  --warn: #ECC94B;
-  --warn-tint: rgba(236, 201, 75, 0.15);
-  --warn-tint-soft: rgba(236, 201, 75, 0.12);
-  --danger: #FC8181;
-  --danger-tint: rgba(252, 129, 129, 0.15);
-  --danger-tint-soft: rgba(252, 129, 129, 0.12);
-  --disabled: #2D3748;
-  --disabled-text: #718096;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --radius-card: 12px;
+  --column: 640px;
+  --control: 48px;
   --radius-ctl: 10px;
-}
-
-/* niente scorrimento orizzontale della pagina: clip, non hidden, così il bordo appiccicoso dell'intestazione funziona */
-html,
-body {
-  overflow-x: clip;
-}
-
-body {
-  margin: 0;
-  background: var(--night);
-  color: var(--text);
-  font-family: var(--font-body);
 }
 
 .numeric {

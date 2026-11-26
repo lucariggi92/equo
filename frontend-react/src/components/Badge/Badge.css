@@ -1,13 +1,14 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* etichette di stato con i colori del semaforo della V1 */
 .badge {
-  border-radius: 9999px;
-  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  padding: var(--space-2xs) var(--space-sm);
   font-weight: 600;
-  font-size: 12px;
-  border: 1px solid;
+  font-size: var(--text-sm);
   display: inline-flex;
   align-items: center;
 }
-.badge-ok { color: var(--mint); border-color: var(--mint); background: var(--mint-tint); }
-.badge-warn { color: var(--warn); border-color: var(--warn); background: var(--warn-tint); }
-.badge-err { color: var(--danger); border-color: var(--danger); background: var(--danger-tint); }
-.badge-info { color: var(--mint-light); border-color: var(--line); background: var(--steel); }
+.badge-ok { background: var(--color-accent-soft); color: var(--color-accent-soft-ink); }
+.badge-warn { background: var(--color-warn-soft); color: var(--color-warn-ink); }
+.badge-err { background: var(--color-danger-soft); color: var(--color-danger-ink); }
+.badge-info { background: var(--color-paper-2); color: var(--color-accent-text); box-shadow: inset 0 0 0 var(--rule-hair) var(--color-rule); }
