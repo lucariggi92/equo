@@ -25,7 +25,6 @@ export default function Versione({ gruppo, candidate, value, onSelect, onNext, o
   return (
     <Domanda
       titolo={diff?.domanda || `Quale ${nomeComune(primo?.modello?.nome)} hai?`}
-      spiegazione={diff?.suggerimento || "Dall'anno non riusciamo a capire la versione esatta: scegli quella che somiglia alla tua."}
       onBack={onBack}
       onNext={onNext}
       avantiDisabilitato={!value || !candidate.some((a) => a.variante.id === value.variante?.id)}

@@ -33,7 +33,6 @@ export default function Auto({ marca, versioni, value, onSelect, onNext, onBack 
   return (
     <Domanda
       titolo={`Quale ${marca?.nome || 'auto'} guidi?`}
-      spiegazione="Scorri le foto e fermati sulla tua. Non la trovi? Scegli la più simile."
       fisso={<SearchBar value={q} onChange={setQ} placeholder="Cerca modello o motore…" />}
       onBack={onBack}
       onNext={onNext}

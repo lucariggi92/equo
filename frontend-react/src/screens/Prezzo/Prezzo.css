@@ -1,6 +1,6 @@
 /* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 /* campo dell'importo: grande, al centro, con il simbolo dell'euro davanti */
-.importo { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); margin-block: auto; width: 100%; }
+.importo { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); width: 100%; }
 .importo-etichetta { font-size: var(--text-sm); font-weight: 600; color: var(--color-ink-2); }
 .importo-campo {
   display: flex;
@@ -21,7 +21,7 @@
 .importo-input {
   flex: 1;
   min-width: 0;
-  min-height: 72px;
+  min-height: 60px;
   border: 0;
   background: transparent;
   color: var(--color-ink);
@@ -34,3 +34,30 @@
 .importo-input::placeholder { color: var(--color-muted); opacity: 0.6; }
 .importo-nota { margin: 0; font-size: var(--text-sm); color: var(--color-muted); text-align: center; }
 .importo-nota strong { color: var(--color-ink); }
+
+/* IVA inclusa o esclusa: due pulsanti affiancati sotto il campo, quello scelto verde */
+.iva-scelta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2xs);
+  width: 100%;
+  max-width: 320px;
+  padding: var(--space-2xs);
+  border-radius: var(--radius-pill);
+  background: var(--color-paper-2);
+  border: var(--rule-hair) solid var(--color-rule);
+}
+.iva-pulsante {
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--text-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+.iva-pulsante:hover { color: var(--color-ink); }
+.iva-pulsante.is-attivo { background: var(--color-btn); color: var(--color-btn-ink); }
+.iva-pulsante:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }

@@ -10,7 +10,6 @@ export default function Marca({ marche, errore, onRiprova, value, onSelect, onNe
   return (
     <Domanda
       titolo="Di che marca è la tua auto?"
-      spiegazione="Cerca o fai girare l'elenco: la marca nel riquadro al centro è quella scelta."
       onBack={onBack}
       onNext={onNext}
       avantiDisabilitato={!value}

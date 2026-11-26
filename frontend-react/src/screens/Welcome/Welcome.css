@@ -55,17 +55,19 @@
   mask-image: linear-gradient(90deg, transparent, var(--color-paper) 10%, var(--color-paper) 90%, transparent);
 }
 .carosello-binario::-webkit-scrollbar { display: none; }
+/* scheda compatta: icona a sinistra, titolo e testo a destra, alta solo quanto il contenuto */
 .carosello-scheda {
   scroll-snap-align: center;
-  aspect-ratio: 4 / 5;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-sm);
-  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-areas: "icona titolo" "icona testo";
+  column-gap: var(--space-sm);
+  row-gap: var(--space-3xs);
+  align-content: center;
+  padding: var(--space-md);
   background: var(--color-paper-2);
   border: var(--rule-hair) solid var(--color-rule);
-  border-radius: 22px;
+  border-radius: 18px;
   min-width: 0;
   text-align: left;
   transform: scale(0.84);
@@ -81,13 +83,14 @@
 }
 /* durante il salto invisibile tra le copie nessuna animazione */
 .carosello-binario.is-salto .carosello-scheda { transition: none; }
-.carosello-titolo { font-size: 1.375rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--color-ink); max-width: none; }
-.carosello-testo { font-size: var(--text-md); line-height: 1.5; color: var(--color-ink-2); }
+.carosello-titolo { grid-area: titolo; font-size: 1.0625rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--color-ink); max-width: none; }
+.carosello-testo { grid-area: testo; font-size: var(--text-sm); line-height: 1.4; color: var(--color-ink-2); }
 .carosello-icona {
-  margin-top: auto;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+  grid-area: icona;
+  align-self: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: var(--color-accent-soft);
   color: var(--color-accent-text);
   display: flex;

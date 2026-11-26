@@ -1,6 +1,7 @@
 /* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
 /* schede con la foto: scorrono in orizzontale, quella al centro e grande e illuminata */
-.schede { display: flex; flex-direction: column; gap: var(--space-xs); margin-block: auto; margin-inline: calc(var(--pad, var(--space-md)) * -1); }
+/* le schede occupano lo spazio libero tra la ricerca e i pulsanti, mai di piu: la foto si adatta, il testo resta intero */
+.schede { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: var(--space-xs); margin-inline: calc(var(--pad, var(--space-md)) * -1); }
 .schede-binario {
   --scheda: min(280px, 68vw);
   /* le posizioni delle schede si misurano rispetto al carosello, non alla pagina */
@@ -8,6 +9,9 @@
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: var(--scheda);
+  grid-template-rows: minmax(0, 1fr);
+  flex: 0 1 400px;
+  min-height: 0;
   column-gap: var(--space-sm);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -21,6 +25,7 @@
 .schede-binario::-webkit-scrollbar { display: none; }
 .scheda-foto {
   scroll-snap-align: center;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
@@ -39,13 +44,13 @@
   box-shadow: 0 0 0 1px var(--color-accent), 0 18px 44px var(--color-btn-glow);
 }
 .schede-binario:focus-visible .scheda-foto.is-attiva { box-shadow: 0 0 0 3px var(--color-focus), 0 18px 44px var(--color-btn-glow); }
-.scheda-foto-immagine { aspect-ratio: 16 / 10; background: var(--color-paper-3); }
+.scheda-foto-immagine { flex: 1 1 auto; min-height: 72px; max-height: 220px; background: var(--color-paper-3); }
 .scheda-foto-immagine img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* senza foto: il nome del modello in grande al posto dell'immagine */
 .scheda-foto-vuota { display: flex; align-items: center; justify-content: center; height: 100%; padding: var(--space-md); font-size: var(--text-xl); font-weight: 800; color: var(--color-muted); text-align: center; }
-.scheda-foto-testo { display: flex; flex-direction: column; gap: var(--space-3xs); padding: var(--space-sm) var(--space-md) var(--space-md); }
+.scheda-foto-testo { flex-shrink: 0; display: flex; flex-direction: column; gap: var(--space-3xs); padding: var(--space-sm) var(--space-md) var(--space-md); }
 .scheda-foto-titolo { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--color-ink); }
-.scheda-foto-sotto { font-size: var(--text-sm); line-height: 1.4; color: var(--color-ink-2); }
+.scheda-foto-sotto { font-size: var(--text-sm); line-height: 1.4; color: var(--color-ink-2); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
 .scheda-foto.is-attiva .scheda-foto-sotto { color: var(--color-accent-text); }
 .schede-conta { margin: 0; text-align: center; font-size: var(--text-sm); color: var(--color-muted); }
 .schede-crediti { margin: 0; padding-inline: var(--space-md); text-align: center; font-size: var(--text-xs); line-height: 1.4; color: var(--color-muted); }

@@ -13,27 +13,26 @@ import SceltaSingola from './screens/SceltaSingola/SceltaSingola.jsx';
 import Prezzo from './screens/Prezzo/Prezzo.jsx';
 import Loading from './screens/Loading/Loading.jsx';
 import Report from './screens/Report/Report.jsx';
+import Riepilogo from './screens/Riepilogo/Riepilogo.jsx';
 import { opzioni as caricaOpzioni, verifica } from './api/client.js';
 import { anniDiProduzione } from './lib/format.js';
 import { anniDelGruppo, versioniPerAnno } from './lib/versioni.js';
 import './App.css';
 
-// passi: benvenuto, 9 domande (una per schermata), attesa, report
-const BENVENUTO = 0, REGIONE = 1, MARCA = 2, AUTO = 3, ANNO = 4, INTERVENTO = 5, QUALITA = 6, OFFICINA = 7, PREZZO = 8, IVA = 9,
+// passi: benvenuto, 8 domande (una per schermata; l'IVA si sceglie nella schermata dell'importo), attesa, report
+const BENVENUTO = 0, REGIONE = 1, MARCA = 2, AUTO = 3, ANNO = 4, INTERVENTO = 5, QUALITA = 6, OFFICINA = 7, PREZZO = 8,
   ATTESA = 10, REPORT = 11;
 const DOMANDE = { [REGIONE]: 'regione', [MARCA]: 'marca', [AUTO]: 'modello', [ANNO]: 'anno', [INTERVENTO]: 'intervento', [QUALITA]: 'ricambi',
-  [OFFICINA]: 'officina', [PREZZO]: 'importo', [IVA]: 'IVA' };
+  [OFFICINA]: 'officina', [PREZZO]: 'importo' };
 const TOTALE_DOMANDE = Object.keys(DOMANDE).length;
 // passo in più, solo se l'anno non basta a capire la versione (restyling): sta tra anno e intervento,
 // conta come la domanda sull'anno nella barra di avanzamento e resta sotto ATTESA (vedi il gesto indietro)
 const VERSIONE = 4.5;
-const eDomanda = (passo) => Boolean(DOMANDE[passo]) || passo === VERSIONE;
+// pagina di riepilogo, dopo l'ultima domanda e prima dell'attesa: da qui parte la verifica
+const RIEPILOGO = 8.5;
+const eDomanda = (passo) => Boolean(DOMANDE[passo]) || passo === VERSIONE || passo === RIEPILOGO;
 const ATTESA_MINIMA_MS = 3000; // la rotellina resta almeno 3 secondi, anche se l'API risponde prima
 
-const OPZIONI_IVA = [
-  { valore: true, etichetta: 'Sì, IVA inclusa', sotto: "Il totale del preventivo comprende già l'IVA" },
-  { valore: false, etichetta: 'No, IVA esclusa', sotto: "Al totale va aggiunta l'IVA (22%)" },
-];
 
 export default function App() {
   const [step, setStep] = useState(BENVENUTO);
@@ -69,7 +68,7 @@ export default function App() {
       indice.current = s.indice ?? 0;
       verificaInCorso.current += 1; // uscendo dall'attesa, la verifica in corso si annulla
       // attesa e report non si riaprono senza un risultato: si torna all'ultima domanda
-      setStep(s.passo >= ATTESA && !haRisultato.current ? IVA : s.passo);
+      setStep(s.passo >= ATTESA && !haRisultato.current ? RIEPILOGO : s.passo);
     }
     window.addEventListener('popstate', quandoTornaIndietro);
     return () => window.removeEventListener('popstate', quandoTornaIndietro);
@@ -199,9 +198,10 @@ export default function App() {
 
   return (
     <div className={`phone${step === BENVENUTO ? ' is-home' : ''}${eDomanda(step) ? ' is-domanda' : ''}`}>
-      <Header right={step === ATTESA ? 'Analisi…' : null} onBack={eDomanda(step) || step === REPORT ? indietro : null} />
+      <Header right={step === ATTESA ? 'Analisi…' : null} onBack={step === REPORT ? indietro : null} />
       {DOMANDE[step] && <Avanzamento passo={step} totale={TOTALE_DOMANDE} nome={DOMANDE[step]} />}
       {step === VERSIONE && <Avanzamento passo={ANNO} totale={TOTALE_DOMANDE} nome="versione" />}
+      {step === RIEPILOGO && <Avanzamento passo={TOTALE_DOMANDE} totale={TOTALE_DOMANDE} testo="Riepilogo" />}
       <main className="phone-main">
         {step === BENVENUTO && <Welcome prezziAl={opzioni?.prezzi_ricambi_al} onStart={vai(REGIONE)} />}
         {step === REGIONE && (
@@ -234,7 +234,6 @@ export default function App() {
         {step === QUALITA && (
           <SceltaSingola
             titolo="Che ricambi monterà l'officina?"
-            spiegazione="Se non lo sai, chiedilo all'officina: di solito è scritto sul preventivo."
             opzioni={opzioni?.qualita}
             value={qualita}
             onSelect={setQualita}
@@ -245,7 +244,6 @@ export default function App() {
         {step === OFFICINA && (
           <SceltaSingola
             titolo="Dove fai l'intervento?"
-            spiegazione="La tariffa oraria cambia molto tra concessionaria e officina indipendente."
             opzioni={opzioni?.tipi_officina}
             value={officina}
             onSelect={setOfficina}
@@ -254,16 +252,21 @@ export default function App() {
           />
         )}
         {step === PREZZO && (
-          <Prezzo regione={regione} auto={auto} intervento={intervento} altro={altro} prezzo={prezzo} onPrezzo={setPrezzo} onNext={vai(IVA)} onBack={indietro} />
+          <Prezzo prezzo={prezzo} onPrezzo={setPrezzo} ivaInclusa={ivaInclusa} onIva={setIvaInclusa} onNext={vai(RIEPILOGO)} onBack={indietro} />
         )}
-        {step === IVA && (
-          <SceltaSingola
-            titolo="L'importo comprende l'IVA?"
-            opzioni={OPZIONI_IVA}
-            value={ivaInclusa}
+        {step === RIEPILOGO && (
+          <Riepilogo
+            regione={regione}
+            auto={auto}
+            anno={anno}
+            intervento={intervento}
+            altro={altro}
+            qualita={qualita}
+            officina={officina}
+            prezzo={prezzo}
+            ivaInclusa={ivaInclusa}
+            opzioni={opzioni}
             errore={erroreVerifica}
-            testoAvanti="Verifica Preventivo →"
-            onSelect={setIvaInclusa}
             onNext={goVerify}
             onBack={indietro}
           />

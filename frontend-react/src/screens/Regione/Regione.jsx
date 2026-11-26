@@ -13,7 +13,6 @@ export default function Regione({ regioni, errore, onRiprova, value, onSelect, o
   return (
     <Domanda
       titolo="Qual è la tua Regione?"
-      spiegazione="Usiamo una tariffa oraria media stimata per ogni regione."
       onBack={onBack}
       onNext={onNext}
       avantiDisabilitato={!value}

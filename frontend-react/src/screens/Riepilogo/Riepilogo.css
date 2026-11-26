@@ -1,0 +1,11 @@
+/* Hallmark · part of the EQUO app screen, stamped in src/index.css · redesign: full · v2.0.0 */
+/* riepilogo: l'importo in grande in cima, poi le risposte una per riga */
+.riepilogo-importo { display: flex; flex-direction: column; align-items: center; gap: var(--space-3xs); padding: 0 0 var(--space-2xs); text-align: center; }
+.riepilogo-importo-etichetta { font-size: var(--text-sm); color: var(--color-muted); }
+.riepilogo-importo-valore { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: var(--color-ink); }
+/* i valori possono essere lunghi (nome dell'auto, intervento): vanno a capo, allineati a destra */
+.riepilogo-valore { white-space: normal; justify-self: end; text-align: right; max-width: 100%; font-size: 0.9375rem; line-height: 1.3; }
+/* righe compatte: tutte le risposte stanno nello schermo del telefono */
+.riepilogo-voci .voce { padding: var(--space-xs) 0; grid-template-columns: auto minmax(0, 1fr); }
+.riepilogo-voci .voce-nome { font-size: var(--text-sm); color: var(--color-muted); }
+.riepilogo-voci .voce:first-child { padding-top: 0; }

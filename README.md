@@ -17,12 +17,13 @@
   <img src="https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=%23ffffff" alt="Laravel 13">
   <img src="https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=%23ffffff" alt="PHP 8.5">
   <img src="https://img.shields.io/badge/MySQL-8.4-4479A1?logo=mysql&logoColor=%23ffffff" alt="MySQL 8.4">
-  <img src="https://img.shields.io/badge/Test-73%2F73-38A169" alt="73 test verdi">
+  <img src="https://img.shields.io/badge/Test%20backend-69%2F73-ECC94B" alt="69 test su 73 verdi">
   <img src="https://img.shields.io/badge/Stato-pilota%20completo%2C%20dati%20da%20affinare-ECC94B" alt="Stato: pilota completo, dati da affinare">
 </p>
 
 <p align="center">
   <a href="#in-breve">In breve</a> ·
+  <a href="#il-sito-oggi">Il sito</a> ·
   <a href="#il-problema">Problema</a> ·
   <a href="#lobiettivo">Obiettivo</a> ·
   <a href="#da-dove-sono-partito-la-v1">Da dove sono partito</a> ·
@@ -39,10 +40,38 @@
 
 | | |
 |---|---|
-| **Cosa fa** | Scegli regione, auto, intervento, qualità dei ricambi, tipo di officina e importo del preventivo. EQUO calcola una stima equa, la confronta con il preventivo e dà un verdetto a semaforo con lo spaccato dei costi e un messaggio cordiale da mandare al meccanico. |
-| **A che punto è** | Il **pilota funziona da capo a fondo** su 10 modelli (11 versioni), 10 interventi e 20 regioni: database, API, area riservata e sito sono completi, provati e protetti. **Non è ancora online.** |
-| **Il limite** | Non è il software: sono **i dati**. Solo 2 prezzi dei ricambi su 73 sono verificati su più negozi; tariffe orarie e ricarichi sono ancora ipotesi dichiarate. La sezione [Il problema vero: i dati](#il-problema-vero-i-dati) lo spiega con i numeri. |
+| **Cosa fa** | Scegli regione, marca, modello, intervento, qualità dei ricambi, tipo di officina e importo del preventivo. EQUO calcola una stima equa, la confronta con il preventivo e dà un verdetto (equo, sopra la media, anomalo) con lo spaccato dei costi e un messaggio cordiale da mandare al meccanico. |
+| **A che punto è** | Il **pilota funziona da capo a fondo** su 11 modelli (12 versioni), 10 interventi e 20 regioni: database, API, area riservata e sito sono completi, provati e protetti. **Non è ancora online.** |
+| **Il limite** | Non è il software: sono **i dati**. Solo 2 prezzi dei ricambi su 81 sono verificati su più negozi; tariffe orarie e ricarichi sono ancora ipotesi dichiarate. La sezione [Il problema vero: i dati](#il-problema-vero-i-dati) lo spiega con i numeri. |
 | **Il prossimo lavoro** | La ricerca dei dati: fonti ufficiali per i prezzi dei ricambi, ore di lavoro per motore, regole di confronto con i prezzi pubblicati online, e dopo il lancio i preventivi veri degli utenti. |
+
+## Il sito oggi
+
+Un percorso reale, con i dati del pilota: **Fiat Panda 1.2, tagliando completo, Lombardia, ricambi equivalenti, officina generica, preventivo 250 € IVA inclusa**. Le schermate sono quelle del telefono (390 px), in versione scura.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/01-home.jpg" width="190" alt="Home"><br><sub><strong>Home</strong><br>4 motivi da scorrere, un solo pulsante</sub></td>
+    <td align="center"><img src="docs/screenshots/02-regione.jpg" width="190" alt="Regione"><br><sub><strong>Regione</strong><br>ruota di scelta con ricerca</sub></td>
+    <td align="center"><img src="docs/screenshots/03-modello.jpg" width="190" alt="Modello"><br><sub><strong>Modello</strong><br>schede con la foto dell'auto</sub></td>
+    <td align="center"><img src="docs/screenshots/04-intervento.jpg" width="190" alt="Intervento"><br><sub><strong>Intervento</strong><br>schede con descrizione e ordine A-Z</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/05-importo.jpg" width="190" alt="Importo"><br><sub><strong>Importo</strong><br>tastiera numerica e IVA inclusa/esclusa</sub></td>
+    <td align="center"><img src="docs/screenshots/06-riepilogo.jpg" width="190" alt="Riepilogo"><br><sub><strong>Riepilogo</strong><br>tutte le risposte prima di verificare</sub></td>
+    <td align="center"><img src="docs/screenshots/07-risultato.jpg" width="190" alt="Risultato"><br><sub><strong>Risultato</strong><br>verdetto, scarto in euro e spaccato</sub></td>
+    <td></td>
+  </tr>
+</table>
+
+Su computer la home si apre su due colonne, con il pulsante grande in evidenza, e la scelta della regione mostra l'Italia sullo sfondo: la regione nella ruota si illumina sulla mappa, e un clic sulla mappa fa girare la ruota.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/08-home-desktop.png" width="420" alt="Home su computer"><br><sub><strong>Home su computer</strong></sub></td>
+    <td align="center"><img src="docs/screenshots/09-regione-desktop.jpg" width="420" alt="Regione su computer, con la mappa"><br><sub><strong>Regione su computer, con la mappa</strong></sub></td>
+  </tr>
+</table>
 
 ## Il problema
 
@@ -53,8 +82,8 @@ In Italia chi riceve un preventivo per l'auto non ha un riferimento oggettivo co
 Dare all'automobilista un **verdetto spiegato**, non solo un numero:
 
 - **stima equa scomponibile**: ricambi + ricarico dell'officina + manodopera (ore × tariffa oraria) + IVA, con una forbice "da… a…";
-- **verdetto a semaforo**: equo (fino a +10%), sopra la media (fino a +25%), anomalo (oltre); e quando i dati non bastano, **"dati insufficienti"** invece di un verdetto inventato;
-- **trasparenza sui dati**: per ogni ricambio si vede se il prezzo è verificato, indicativo o stimato, e da quando;
+- **verdetto a tre livelli**: equo (fino a +10%), sopra la media (fino a +25%), anomalo (oltre); e quando i dati non bastano, **"dati insufficienti"** invece di un verdetto inventato;
+- **trasparenza sui dati**: per ogni ricambio si vede se il prezzo è verificato, indicativo o stimato;
 - **un messaggio cordiale** da copiare per riaprire il dialogo con l'officina, senza conflitto.
 
 Tre principi fissi dalla prima versione: **zero registrazioni**, **nessun dato personale** (niente targa, PDF, GPS), **60 secondi**.
@@ -73,9 +102,9 @@ La **V1** (ottobre 2026) era un sito React con 7 schermate collegato a un webhoo
     <td align="center"><img src="docs/preparazione/05_Fase5-Asset/output%20Stich/6._report_verdetto_azione_dark/screen.png" width="170" alt="Report"><br><sub><strong>Report</strong></sub></td>
   </tr>
 </table>
-<p align="center"><sub>Il design della V1 (dark UI, 360×800). Il sito attuale mantiene questa grafica e questa disposizione.</sub></p>
+<p align="center"><sub>Il design della V1 (dark UI, 360×800). Il sito attuale ne conserva i colori (notte, blu acciaio, verde menta) con una grafica nuova: vedi <a href="#il-sito-oggi">Il sito oggi</a>.</sub></p>
 
-**Perché non bastava.** La V1 funzionava, ma i suoi numeri non si potevano verificare: medie fisse nel codice, nessuna fonte, nessuna data, nessuna distinzione tra motori, qualità dei ricambi o tipo di officina. Un verdetto su un preventivo reale ha bisogno di numeri che si possano ricontrollare. Da qui la **V2**: un pilota su 10 modelli in cui ogni prezzo ha una fonte, una data e un livello di affidabilità.
+**Perché non bastava.** La V1 funzionava, ma i suoi numeri non si potevano verificare: medie fisse nel codice, nessuna fonte, nessuna data, nessuna distinzione tra motori, qualità dei ricambi o tipo di officina. Un verdetto su un preventivo reale ha bisogno di numeri che si possano ricontrollare. Da qui la **V2**: un pilota su pochi modelli in cui ogni prezzo ha una fonte, una data e un livello di affidabilità.
 
 ## Come l'ho implementato: la V2
 
@@ -100,7 +129,7 @@ flowchart LR
 
 ### Fase 1 — Database (MySQL 8.4)
 
-- **24 tabelle**: catalogo (marche, modelli, versioni, interventi, componenti, 73 codici ricambio), prezzi con **storico** (un prezzo non si sovrascrive mai, si chiude e se ne apre uno nuovo), 150 fonti con il loro livello di affidabilità, ore di lavoro, tariffe orarie per regione e tipo di officina, ricarichi, valori di mercato pubblicati, richieste anonime. Schema: [`database-mysql/SCHEMA.md`](database-mysql/SCHEMA.md).
+- **24 tabelle**: catalogo (marche, modelli, versioni, interventi, componenti, 81 codici ricambio), prezzi con **storico** (un prezzo non si sovrascrive mai, si chiude e se ne apre uno nuovo), oltre 150 fonti con il loro livello di affidabilità, ore di lavoro, tariffe orarie per regione e tipo di officina, ricarichi, valori di mercato pubblicati, richieste anonime. Schema: [`database-mysql/SCHEMA.md`](database-mysql/SCHEMA.md).
 - **Scala di affidabilità dei prezzi**: *rilevato* (2 o più negozi indipendenti), *indicativo* (1 negozio), *stimato* (mediana dei pezzi simili della stessa marca o della stessa categoria, con il metodo dichiarato).
 - **4 procedure**: calcolo di stima e verdetto, controlli di copertura (cosa manca per ogni versione), taratura con i valori di mercato pubblicati.
 - **Import da Excel** con controlli (fonti, date, IVA, scarto dei prezzi oltre il ±50% dalla mediana) e caricamento "tutto o niente"; backup e ripristino verificati con un inventario.
@@ -111,15 +140,22 @@ flowchart LR
 - **Calcolo della stima rifatto in PHP** con aritmetica decimale esatta: confrontato con la procedura MySQL su **14.202 casi, identico al centesimo**, verdetti compresi.
 - **Sicurezza in 6 strati contro la manomissione dei dati**: nessuna rotta di modifica, controlli sui dati, modelli in sola lettura, **tre utenti MySQL separati** (l'API può solo leggere e aggiungere richieste anonime: MySQL rifiuta ogni modifica anche se il codice fosse compromesso), storico e vincoli, registro delle azioni non modificabile e backup.
 - **Area riservata `/gestione`** (Filament): import dei dati in due passi (prova, poi conferma con backup automatico), impostazioni, accensione dei modelli e degli interventi, backup notturno, registro di accessi e azioni.
-- **Controllo OWASP Top 10 (2025)**: 8 voci coperte, 2 parziali e dichiarate (verifica in due passaggi pronta ma spenta, avvisi automatici da fare). Nessuna password è mai finita su GitHub. **73 test automatici**, tutti verdi.
+- **Controllo OWASP Top 10 (2025)**: 8 voci coperte, 2 parziali e dichiarate (verifica in due passaggi pronta ma spenta, avvisi automatici da fare). Nessuna password è mai finita su GitHub.
+- **73 test automatici**: 69 verdi; 4 controllano il numero di righe del database e vanno aggiornati ai dati attuali (12 versioni e 81 prezzi invece di 11 e 73).
 
-### Fase 3 — Sito (React 19, Vite, Tailwind)
+### Fase 3 — Sito (React 19, Vite)
 
-La grafica della V1 è rimasta (colori, componenti, e la barra di avanzamento e la rotellina del design originale); sono cambiati i dati e sono state aggiunte solo le domande che il calcolo richiede:
+Il sito è stato ridisegnato tenendo i colori della V1 e cambiando tutto il resto: tipografia (Sora), componenti e disposizione delle schermate. Le scelte principali, prese provando le schermate su un iPhone vero:
 
-Una domanda per schermata, con una barra di avanzamento: 1. regione → 2. auto (un elenco unico, una riga per versione) → 3. anno di immatricolazione (facoltativo, da un menù con i soli anni di produzione) → 4. intervento (pacchetti e pezzi singoli, o descritto a parole se manca) → 5. qualità dei ricambi → 6. tipo di officina → 7. importo → 8. IVA. Poi una rotellina di almeno 3 secondi e il report, con il prezzo calcolato in grande e subito sotto lo scarto in euro, in più o in meno.
+- **8 domande, una per schermata**, con la barra di avanzamento in alto e **"Indietro"/"Avanti" sempre visibili in fondo**: la pagina non scorre mai, scorre solo il contenuto (elenco, ruota, schede). Il gesto "indietro" del telefono torna alla domanda precedente senza uscire dal sito.
+- **Regione e marca con una ruota di scelta** (come quelle del telefono) più la ricerca; su computer la regione si illumina su una **mappa dell'Italia** con i confini ufficiali ISTAT.
+- **Modello a schede con la foto** dell'auto, perché molti riconoscono la propria auto a vista ma non ne sanno il nome; le sigle di progetto ("Panda (319)") restano solo nel messaggio per il meccanico.
+- **Versioni che cambiano solo per il periodo** (per esempio la Fiat 500 prima e dopo il restyling del 2015) sono una sola scheda: la versione giusta la sceglie l'anno di immatricolazione, e solo se l'anno non basta compare una domanda con la foto del dettaglio che le distingue (i fanali posteriori).
+- **Intervento, ricambi e officina a schede** con il pallino di selezione; **importo** in un campo con la tastiera numerica del telefono e il selettore **IVA inclusa / esclusa** subito sotto.
+- **Riepilogo** prima della verifica, poi una rotellina di almeno 3 secondi e il **risultato**: verdetto, stima equa e scarto in euro in grande, spaccato dei costi, dettaglio voce per voce e messaggio da copiare.
+- **Versione chiara e scura** (segue il telefono, con un interruttore), **responsive** su telefono, tablet e computer (home a tutto schermo con footer), e un controllo automatico di qualità grafica e accessibilità ([Hallmark](https://github.com/nutlope/hallmark)) a ogni modifica: colori da un'unica tavolozza, contrasti, bordo visibile per chi usa la tastiera, rispetto di chi preferisce meno animazioni.
 
-Il report ha il semaforo, lo spaccato e il messaggio per il meccanico; il dettaglio (ricambi uno per uno, affidabilità, forbice, data dei prezzi) si apre con un pulsante. Gli interventi impossibili per una versione non compaiono (es. la frizione su una Yaris ibrida con cambio automatico).
+Gli interventi impossibili per una versione non compaiono (es. la frizione su una Yaris ibrida con cambio automatico).
 
 ## Come si calcola la stima
 
@@ -128,9 +164,9 @@ stima = ricambi + ricarico dell'officina sui ricambi + manodopera (ore × tariff
 verdetto = (preventivo − stima) / stima   →   equo ≤ +10%  ·  sopra la media ≤ +25%  ·  anomalo oltre
 ```
 
-Se manca anche un solo prezzo, o il tempo di lavoro, il verdetto è **"dati insufficienti"**: il sito mostra cosa manca e la stima parziale, senza semaforo. Un preventivo molto più basso della stima (oltre −25%) resta equo, con un avviso a controllare cosa comprende.
+Se manca anche un solo prezzo, o il tempo di lavoro, il verdetto è **"dati insufficienti"**: il sito mostra cosa manca e la stima parziale, senza verdetto. Un preventivo molto più basso della stima (oltre −25%) resta equo, con un avviso a controllare cosa comprende.
 
-**Esempio reale** — Fiat Panda 1.2, tagliando completo, Lombardia, ricambi equivalenti, officina generica, preventivo 250 € IVA inclusa:
+**Esempio reale** — è il percorso delle schermate qui sopra: Fiat Panda 1.2, tagliando completo, Lombardia, ricambi equivalenti, officina generica, preventivo 250 € IVA inclusa:
 
 | Voce | Importo |
 |---|---|
@@ -139,7 +175,7 @@ Se manca anche un solo prezzo, o il tempo di lavoro, il verdetto è **"dati insu
 | Manodopera: 1,41 ore × 54 €/ora | 76,14 € |
 | IVA | 43,79 € |
 | **Stima equa** (forbice 218,43 – 259,79 €) | **242,84 €** |
-| Preventivo | 250,00 € → **+2,9% → Preventivo Equo** |
+| Preventivo | 250,00 € → **+7,16 € (+2,9%) → Preventivo Equo** |
 
 ## Il problema vero: i dati
 
@@ -149,9 +185,9 @@ Il software fa quello che deve. **Il punto debole è la qualità dei numeri da c
 
 | Dato | Quantità | Da dove viene |
 |---|---|---|
-| Prezzi dei ricambi | 73 | **2 verificati** su 2 o più negozi, 13 indicativi (1 negozio), 35 stimati dalla mediana della stessa marca, 23 dalla mediana della categoria |
+| Prezzi dei ricambi | 81 | **2 verificati** su 2 o più negozi, 13 indicativi (1 negozio), 66 stimati dalla mediana della stessa marca o della categoria |
 | Prezzi "solidi" (verificati, concordi entro il 25%, recenti) | **0** | anche i 2 verificati hanno negozi in disaccordo (es. filtro olio: 4,41 € contro 11,71 €) |
-| Ore di lavoro | 104 | 62 da tempario, **42 ipotesi** |
+| Ore di lavoro | 114 | 70 da tempario, **44 ipotesi** |
 | Tariffe orarie (20 regioni × 3 tipi di officina) | 60 | **tutte ipotesi**: le fonti pubblicate non sono concordi |
 | Ricarichi sui ricambi | 6 | **ipotesi** |
 | Affidabilità media dei ricambi | circa **70%** | obiettivo prima del lancio: 85% su tagliando e freni |
@@ -172,7 +208,7 @@ La fase successiva è l'**affinamento dei prezzi**. Il metodo: confrontare ogni 
 | Priorità | Cosa | Perché |
 |---|---|---|
 | 1 | **Prezzi dei ricambi da canali ufficiali**: feed dei programmi di affiliazione (es. Awin) di più negozi e interfaccia per sviluppatori di eBay | è la parte più grande dello scarto, e l'unico modo lecito per avere più negozi indipendenti |
-| 2 | **Ore di lavoro per motore** dai siti che le pubblicano (anche stranieri: le ore sono le stesse in ogni paese) | 42 ore su 104 sono ancora ipotesi |
+| 2 | **Ore di lavoro per motore** dai siti che le pubblicano (anche stranieri: le ore sono le stesse in ogni paese) | 44 ore su 114 sono ancora ipotesi |
 | 3 | **Regole di confronto comuni**: stesso contenuto dell'intervento, stesso motore o generazione, IVA, data, un proprietario = una fonte | senza, si confrontano cose diverse |
 | 4 | **Tariffe orarie e ricarichi** tarati sulle fonti pubblicate concordi | oggi sono ipotesi |
 | 5 | **Dopo il lancio: i preventivi veri degli utenti**, già salvati in forma anonima | sono la fonte più forte; servono almeno 10 preventivi per combinazione |
@@ -183,11 +219,11 @@ La fase successiva è l'**affinamento dei prezzi**. Il metodo: confrontare ogni 
 
 | Livello | Tecnologia | Dettagli |
 |---|---|---|
-| **Sito** | React 19 · Vite 8 · Tailwind CSS 3.4 | mobile-first, una domanda per schermata (8 domande), componenti propri (Keypad, Semaforo, ListRow…) |
+| **Sito** | React 19 · Vite 8 · CSS con variabili | mobile-first e responsive, 8 domande, versione chiara e scura, componenti propri (ruota di scelta, schede con foto, mappa delle regioni, riepilogo…) |
 | **API e area riservata** | Laravel 13 · PHP 8.5 · Filament 5 | 4 rotte API, calcolo in aritmetica decimale (bcmath), sicurezza a strati |
 | **Database** | MySQL 8.4 | 24 tabelle, 4 procedure, tre utenti con permessi separati |
 | **Import** | Python 3 · openpyxl | dall'Excel dei dati, con controlli e caricamento "tutto o niente" |
-| **Design** | pipeline AI-first (Stitch → Figma) | dark UI: Deep Night `#0B0F19` · Steel Blue `#1A365D` · Equo Mint `#38A169` |
+| **Design** | V1: pipeline AI-first (Stitch → Figma) · V2: ridisegno con Hallmark | colori della V1: Deep Night `#0B0F19` · Steel Blue `#1A365D` · Equo Mint `#38A169`; carattere Sora |
 
 ## Struttura del repository
 
@@ -195,8 +231,9 @@ La fase successiva è l'**affinamento dei prezzi**. Il metodo: confrontare ogni 
 equo/
 ├── database-mysql/   # setup, schema storico, dati fissi, import, procedure, backup  → README e SCHEMA.md
 ├── backend-laravel/  # API per il sito, calcolo della stima, area riservata, test   → README
-├── frontend-react/   # sito React (grafica della V1, dati dall'API)                 → README
+├── frontend-react/   # sito React (8 domande, foto dei modelli, mappa, tema chiaro e scuro) → README
 └── docs/
+    ├── screenshots/  # le schermate di questo README
     ├── preparazione/ # le 9 fasi della pipeline di design (V1)
     ├── architettura/ # diagramma del database (della fase 1)
     └── progetto/     # documenti di progetto del database
@@ -234,3 +271,7 @@ database usa tre utenti con permessi separati. In sintesi, nell'ordine:
 ## Credits
 
 Progetto nato nel corso **Boolean — VIBE CODING AI** (prodotto: **EQUO**, ex PreventivoCheck.web), sviluppato poi in tre fasi: database, backend e sito.
+
+- **Foto dei modelli**: Wikimedia Commons, con licenze libere; autore e licenza di ogni foto sono indicati nel sito sotto la foto e in [`frontend-react/src/data/fotoModelli.js`](frontend-react/src/data/fotoModelli.js) (autori: M 93, Rudolf Stricker, Vauxford, Lothar Spurzem, Antoineets).
+- **Confini delle regioni**: [openpolis/geojson-italy](https://github.com/openpolis/geojson-italy), dati ISTAT, licenza CC BY 4.0.
+- **Controllo grafico del sito**: [Hallmark](https://github.com/nutlope/hallmark).
