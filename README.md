@@ -17,7 +17,7 @@
   <img src="https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=%23ffffff" alt="Laravel 13">
   <img src="https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=%23ffffff" alt="PHP 8.5">
   <img src="https://img.shields.io/badge/MySQL-8.4-4479A1?logo=mysql&logoColor=%23ffffff" alt="MySQL 8.4">
-  <img src="https://img.shields.io/badge/Test%20backend-69%2F73-ECC94B" alt="69 test su 73 verdi">
+  <img src="https://img.shields.io/badge/Test%20backend-73%2F73-38A169" alt="73 test su 73 verdi">
   <img src="https://img.shields.io/badge/Stato-pilota%20completo%2C%20dati%20da%20affinare-ECC94B" alt="Stato: pilota completo, dati da affinare">
 </p>
 
@@ -141,7 +141,7 @@ flowchart LR
 - **Sicurezza in 6 strati contro la manomissione dei dati**: nessuna rotta di modifica, controlli sui dati, modelli in sola lettura, **tre utenti MySQL separati** (l'API può solo leggere e aggiungere richieste anonime: MySQL rifiuta ogni modifica anche se il codice fosse compromesso), storico e vincoli, registro delle azioni non modificabile e backup.
 - **Area riservata `/gestione`** (Filament): import dei dati in due passi (prova, poi conferma con backup automatico), impostazioni, accensione dei modelli e degli interventi, backup notturno, registro di accessi e azioni.
 - **Controllo OWASP Top 10 (2025)**: 8 voci coperte, 2 parziali e dichiarate (verifica in due passaggi pronta ma spenta, avvisi automatici da fare). Nessuna password è mai finita su GitHub.
-- **73 test automatici**: 69 verdi; 4 controllano il numero di righe del database e vanno aggiornati ai dati attuali (12 versioni e 81 prezzi invece di 11 e 73).
+- **73 test automatici**, tutti verdi, provati anche su un'installazione da zero.
 
 ### Fase 3 — Sito (React 19, Vite)
 
@@ -229,7 +229,7 @@ La fase successiva è l'**affinamento dei prezzi**. Il metodo: confrontare ogni 
 
 ```
 equo/
-├── database-mysql/   # setup, schema storico, dati fissi, import, procedure, backup  → README e SCHEMA.md
+├── database-mysql/   # setup, dati del catalogo, import, procedure, backup  → README e SCHEMA.md
 ├── backend-laravel/  # API per il sito, calcolo della stima, area riservata, test   → README
 ├── frontend-react/   # sito React (8 domande, foto dei modelli, mappa, tema chiaro e scuro) → README
 └── docs/
@@ -239,26 +239,29 @@ equo/
     └── progetto/     # documenti di progetto del database
 ```
 
-I dati raccolti (l'Excel con prezzi e fonti), i resoconti di lavoro e tutte le credenziali **non sono su GitHub**.
+I dati del catalogo sono su GitHub (`database-mysql/seed/03_catalogo.sql`, senza dati personali); l'Excel di lavoro da cui vengono, i resoconti di lavoro e tutte le credenziali **no**.
 
 ## Avvio in locale
 
-Requisiti: MySQL 8.4 · PHP 8.2 o più recente (sviluppato con 8.5) con `bcmath` · Composer · Node.js 20+ · Python 3 con `openpyxl`.
+Requisiti: Windows · MySQL 8.4 · PHP 8.4 o più recente (sviluppato con 8.5) con `bcmath`, `intl`, `pdo_mysql` · Composer · Node.js 20+ · Python 3.
 
-L'installazione da zero **non è ancora un comando unico**: servono alcuni passi come amministratore di MySQL, perché il
-database usa tre utenti con permessi separati. In sintesi, nell'ordine:
+Il database usa tre utenti con permessi separati, quindi due passi si fanno come amministratore di MySQL. Le password si generano a caso e restano solo in file locali esclusi da git. I **dati del catalogo** (auto, ricambi, prezzi con le loro fonti, ore, tariffe) sono nel repository, in `database-mysql/seed/03_catalogo.sql`: dopo l'installazione il sito funziona subito con i 10 modelli del pilota.
 
-1. **database e utenti**: gli script in `database-mysql/setup/` creano il database e i tre utenti; le password si generano a caso e restano solo in file locali esclusi da git ([`database-mysql/README.md`](database-mysql/README.md));
-2. **tabelle**: con le migration di Laravel (`php artisan migrate --database=schema`), poi i dati fissi e le procedure ([`backend-laravel/README.md`](backend-laravel/README.md));
-3. **dati**: dall'Excel con `database-mysql/import/importa_dati.py` (l'Excel non è nel repository: senza, il sito si avvia ma non ci sono auto né prezzi da stimare);
-4. **avvio**, una volta installato:
+La guida completa, passo per passo, è in [`database-mysql/README.md` → Installazione da zero](database-mysql/README.md#installazione-da-zero): provata da zero su un MySQL vuoto, finisce con i 73 test verdi. In sintesi:
+
+1. genera password e configurazione (`database-mysql/setup/genera_utenti.py`);
+2. crea i database e l'utente della struttura, come root;
+3. crea le tabelle con le migration di Laravel;
+4. crea gli altri due utenti, come root;
+5. carica i dati del catalogo e le procedure;
+6. prova con `php artisan test` e avvia:
    ```bash
    cd backend-laravel && php artisan serve
    ```
    ```bash
    cd frontend-react && npm install && npm run dev
    ```
-   Il sito si apre su http://localhost:5173 e usa l'API su http://localhost:8000. Il modello `backend-laravel/.env.example` ha le impostazioni di produzione: in locale vanno messi `APP_ENV=local` e `APP_DEBUG=true`.
+   Il sito si apre su http://localhost:5173 e usa l'API su http://localhost:8000.
 
 ## Documenti chiave
 

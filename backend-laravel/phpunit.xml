@@ -29,6 +29,10 @@
         <env name="DB_SCHEMA_DATABASE" value="equo_test"/>
         <!-- i test provano l'area riservata con la verifica in due passaggi accesa, come dovrà essere online -->
         <env name="EQUO_GESTIONE_DUE_FATTORI" value="true"/>
+        <!-- i test girano in http, qualunque sia il .env (anche quello di produzione copiato da .env.example);
+             il test sull'HTTPS lo accende da solo -->
+        <env name="EQUO_FORZA_HTTPS" value="false"/>
+        <env name="SESSION_SECURE_COOKIE" value="false"/>
         <env name="DB_URL" value=""/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>

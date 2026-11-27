@@ -11,6 +11,7 @@ use App\Models\Region;
 use App\Models\Setting;
 use App\Models\SparePart;
 use App\Models\Variant;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
@@ -25,7 +26,9 @@ class ModelliTest extends TestCase
 
     public function test_le_tabelle_principali_si_leggono(): void
     {
-        $this->assertSame(11, Variant::count());
+        // il catalogo cresce (pilota: almeno 11 versioni): si controlla che il modello legga la tabella giusta
+        $this->assertGreaterThanOrEqual(11, Variant::count());
+        $this->assertSame(DB::table('variants')->count(), Variant::count());
         $this->assertSame(20, Region::count());
         $this->assertSame(10, Intervention::count());
         $this->assertSame('22.00', Setting::findOrFail('iva_pct')->valore);
@@ -67,8 +70,10 @@ class ModelliTest extends TestCase
 
     public function test_valori_correnti_di_prezzi_tariffe_e_ricarichi(): void
     {
-        $this->assertSame(73, PartPrice::correnti()->count());
-        $this->assertSame(60, LaborRate::correnti()->count());
+        // ogni ricambio ha un solo prezzo corrente, qualunque sia il numero di ricambi
+        $this->assertSame(SparePart::count(), PartPrice::correnti()->count());
+        // 20 regioni x 3 tipi di officina
+        $this->assertSame(Region::count() * 3, LaborRate::correnti()->count());
         $this->assertSame(6, Markup::correnti()->count());
     }
 

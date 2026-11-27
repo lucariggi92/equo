@@ -144,9 +144,11 @@ class GestioneTest extends TestCase
         $this->actingAs($this->utente());
 
         $this->get('/gestione')->assertOk()->assertSee('EQUO · gestione');
-        // i riquadri si caricano dopo la pagina: si provano da soli
+        // i riquadri si caricano dopo la pagina: si provano da soli, con i numeri letti dal database
+        $prezzi = DB::table('part_prices')->whereNull('valido_al');
+        $verificati = (clone $prezzi)->where('metodo', 'rilevato')->count();
         Livewire::test(\App\Filament\Widgets\StatoDati::class)->assertSee('Stato dei dati')
-            ->assertSee('Prezzi verificati su 2 negozi')->assertSee('2 su 73')->assertSee('Modelli pronti per il form');
+            ->assertSee('Prezzi verificati su 2 negozi')->assertSee("{$verificati} su {$prezzi->count()}")->assertSee('Modelli pronti per il form');
         $this->get('/gestione/richieste')->assertOk()->assertSee('Richieste ricevute');
         $this->get('/gestione/registro')->assertOk();
         $this->get('/gestione/impostazioni')->assertOk()->assertSee('iva_pct');

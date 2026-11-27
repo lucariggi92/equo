@@ -1,6 +1,7 @@
 -- =====================================================================
 -- EQUO — 01 · Tre utenti MySQL separati (decisione D8, task L1; tabelle Laravel e equo_test dal task L2)
--- Da eseguire come root, dopo 00_crea_database.sql e 02_database_test.sql. Rieseguibile: riallinea password e permessi.
+-- Da eseguire come root, dopo 00_crea_database.sql e dopo le migration (le tabelle devono esistere).
+-- Rieseguibile: riallinea password e permessi.
 -- Generato da genera_utenti.py: modificare quello, non questo file.
 --
 -- Questo file è il modello versionato: le password sono segnaposto.
@@ -12,7 +13,6 @@
 --   equo_schema  solo per creare e modificare le tabelle (migration), lanciato a mano.
 --
 -- I permessi sono dati tabella per tabella: una tabella nuova non è accessibile finché non la si aggiunge qui.
--- L'utente equo_app di 00_crea_database.sql dal task L9 non è più usato da nessuno strumento: si può togliere (DROP USER, come root).
 -- Gli stessi permessi valgono per equo (dati veri) e equo_test (database di prova dei test automatici);
 -- le tabelle devono esistere: equo_test si costruisce prima con le migration.
 -- =====================================================================

@@ -127,7 +127,8 @@ class GestioneAzioniTest extends TestCase
         $this->assertStringStartsWith('equo_test-', $r['file']);
         $this->assertSame(25, $r['tabelle']);
         $inventario = File::get($this->cartellaProva.'/'.str_replace('.sql', '.inventario.txt', $r['file']));
-        $this->assertStringContainsString("tabella\tvariants\t11", $inventario);
+        // l'inventario riporta le righe vere della tabella, qualunque sia il numero di versioni
+        $this->assertMatchesRegularExpression('/^tabella\tvariants\t'.DB::table('variants')->count().'\r?$/m', $inventario);
         $this->assertSame([], File::glob(storage_path('app/private/mysql-*.cnf')), 'il file temporaneo delle credenziali va cancellato');
         $this->assertCount(1, app(Backup::class)->elenco());
     }

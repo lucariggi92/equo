@@ -11,43 +11,84 @@ Database del pilota EQUO V2: stima scomponibile e verificabile del costo di un i
 
 | Cartella / file | Cosa contiene | Su git |
 |---|---|---|
-| `setup/00_crea_database.sql` | modello: database `equo` + utente `equo_app` | sì (password segnaposto) |
-| `setup/00_crea_database.local.sql` | come sopra, con la password vera | **no** |
-| `setup/crea_database_root.ps1` | esegue lo script 00 come root (chiede la password) | sì |
-| `setup/01_utenti_separati.sql` | modello: utenti `equo_api` (sola lettura + richieste anonime), `equo_import` (scrittura dati), `equo_schema` (struttura) | sì (password segnaposto) |
-| `setup/01_utenti_separati.local.sql` | come sopra, con le password vere (generate casuali) | **no** |
-| `setup/crea_utenti_root.ps1` | esegue lo script 01 come root (chiede la password); rieseguibile | sì |
-| `setup/genera_utenti.py` | rigenera lo script 01, i file `.local.cnf` e le credenziali in `backend-laravel/.env`; da rilanciare quando si aggiunge una tabella | sì |
-| `setup/02_database_test.sql`, `setup/crea_database_test_root.ps1` | database di prova `equo_test` per le migration e i test automatici (come root) | sì |
+| `setup/genera_utenti.py` | genera le password (casuali) dei tre utenti e scrive gli script `01_*.local.sql`, i file `.local.cnf` e le credenziali in `backend-laravel/.env`; da rilanciare quando si aggiunge una tabella | sì |
+| `setup/00_crea_database.sql` | i due database: `equo` (quello vero) ed `equo_test` (per i test automatici) | sì |
+| `setup/crea_database_root.ps1` | come root (chiede la password): esegue lo script 00 e crea l'utente `equo_schema` | sì |
+| `setup/01_utente_schema.local.sql` | solo l'utente `equo_schema`, con la password vera: serve prima che esistano le tabelle | **no** |
+| `setup/01_utenti_separati.sql` | modello: utenti `equo_api` (sola lettura + richieste anonime), `equo_import` (scrittura dati), `equo_schema` (struttura), con permessi tabella per tabella | sì (password segnaposto) |
+| `setup/01_utenti_separati.local.sql` | come sopra, con le password vere | **no** |
+| `setup/crea_utenti_root.ps1` | come root (chiede la password): esegue lo script 01; da lanciare dopo le migration (le tabelle devono esistere); rieseguibile | sì |
 | `schema/01_schema.sql` | riferimento storico dello schema della fase 1 (20 tabelle); non va più rieseguito: lo schema ora sta nelle migration | sì |
-| `seed/02_dati_fissi.sql` | regioni, interventi, componenti, parametri | sì |
+| `seed/03_catalogo.sql` | **i dati del catalogo**: auto, interventi, ricambi, prezzi con le loro fonti, ore, tariffe, ricarichi, valori di mercato, impostazioni. Nessun dato personale (niente account, sessioni, registro, richieste degli utenti) | sì |
+| `seed/02_dati_fissi.sql` | solo regioni, interventi, componenti e impostazioni, senza auto né prezzi: per partire con dati propri dall'Excel | sì |
 | `import/` | `importa_dati.py`: controlla e carica `dati-disponibili.xlsx` (M4) | sì (i dati no) |
 | `queries/` | procedure: stima e verdetto (M6), controlli di copertura (M7), taratura (M8) | sì |
-| `maintenance/` | `backup.ps1` e `ripristina.ps1` (M9) | sì |
+| `maintenance/` | `backup.ps1` e `ripristina.ps1` (M9); `esporta_catalogo.ps1` rigenera `seed/03_catalogo.sql` | sì |
 | `backup/` | dump locali del database con il loro inventario | **no** (solo la cartella) |
 | `SCHEMA.md` | tabelle, collegamenti, corrispondenza con i nomi vecchi | sì |
-| `.env.example` | modello delle variabili di connessione, password vuota | sì |
-| `.env`, `equo_app.local.cnf` | credenziali di `equo_app` | **no** |
-| `equo_api.local.cnf`, `equo_import.local.cnf`, `equo_schema.local.cnf` | credenziali dei tre utenti separati, per i comandi `mysql` | **no** |
+| `equo_api.local.cnf`, `equo_import.local.cnf`, `equo_schema.local.cnf` | credenziali dei tre utenti, per i comandi `mysql` | **no** |
 
 Il diagramma delle tabelle è in [`../docs/architettura/schema-database-equo.png`](../docs/architettura/schema-database-equo.png).
 
-Le password stanno solo nei file `.local.*` e `.env`, esclusi da git. Su una macchina nuova: copia `.env.example` in `.env`, copia `setup/00_crea_database.sql` in `setup/00_crea_database.local.sql` e scrivi in entrambi la stessa password; poi crea `equo_app.local.cnf` con le stesse credenziali (sezione `[client]`).
+Le password stanno solo nei file `.local.*` e in `backend-laravel/.env`, esclusi da git, e le genera `setup/genera_utenti.py`: nessuno le sceglie né le digita. L'utente `equo_app` delle prime versioni non è più usato da nessuno strumento: dove esiste ancora si può togliere (`DROP USER 'equo_app'@'localhost';`, come root).
 
 **Dal 16/11/2026 (task L2) lo schema si modifica solo con le migration di `backend-laravel/`.** La tabella delle fatture reali (`calibrations`) è stata tolta lo stesso giorno con una migration: le fatture non arriveranno (decisione D7) e la tabella era vuota. Oggi le tabelle dei dati sono 19. Sono state tolte anche quattro tabelle standard di Laravel che EQUO non usa (`password_reset_tokens`, `jobs`, `job_batches`, `failed_jobs`): in tutto il database ha 25 tabelle. Le 20 tabelle hanno ognuna la sua migration, con lo stesso `CREATE TABLE` di `schema/01_schema.sql`; la prova ha costruito `equo_test` solo dalle migration e le 20 tabelle sono risultate identiche a quelle di `equo`. `schema/01_schema.sql` resta come riferimento storico: non va più rieseguito sul database vero.
 
 ## Installazione da zero
 
-Dalla cartella `database-mysql`:
+Provata il 27/11/2026 su un MySQL 8.4 nuovo e vuoto, partendo da una copia appena scaricata del repository: alla fine i 73 test del backend passano e la stima del tagliando della Panda è quella del README principale (242,84 €).
 
-1. Come root, una volta sola:
+**Serve:** Windows con MySQL Server 8.4 (in `C:\Program Files\MySQL\MySQL Server 8.4`, porta 3306, con la password di root), PHP 8.4 o più recente con `bcmath`, `intl`, `pdo_mysql`, Composer, Node.js 20+, Python 3. Negli esempi PHP è `php`: se sul computer ce n'è più di uno, usa il percorso di quello giusto (qui `C:\php85\php.exe`).
+
+Tutti i comandi partono dalla cartella principale del progetto.
+
+1. **Password e file di configurazione.** Copia il modello del backend e genera le password dei tre utenti MySQL:
    ```powershell
-   powershell -NoProfile -ExecutionPolicy Bypass -File .\setup\crea_database_root.ps1
+   Copy-Item backend-laravel\.env.example backend-laravel\.env
+   python database-mysql\setup\genera_utenti.py
    ```
-2. Schema e dati fissi, con l'utente `equo_app`:
+   Lo script scrive le password nei file esclusi da git e, solo la prima volta, passa `backend-laravel\.env` alle impostazioni di sviluppo (`APP_ENV=local`, niente HTTPS obbligatorio, tutti i modelli visibili).
+2. **Database e utente della struttura**, come root di MySQL (chiede la password di root):
    ```powershell
-   & 'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe' --defaults-extra-file=equo_app.local.cnf -e "source schema/01_schema.sql; source seed/02_dati_fissi.sql"
+   powershell -NoProfile -ExecutionPolicy Bypass -File database-mysql\setup\crea_database_root.ps1
    ```
+3. **Librerie del backend e tabelle**, con le migration di Laravel, nel database vero e in quello dei test:
+   ```powershell
+   cd backend-laravel
+   composer install
+   php artisan key:generate
+   php artisan migrate --database=schema
+   $env:DB_SCHEMA_DATABASE = 'equo_test'; php artisan migrate --database=schema; Remove-Item Env:DB_SCHEMA_DATABASE
+   cd ..
+   ```
+4. **Gli altri due utenti**, come root (le tabelle ora esistono e i permessi si danno tabella per tabella):
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File database-mysql\setup\crea_utenti_root.ps1
+   ```
+5. **Dati del catalogo e procedure** (nessuna password da digitare: le prendono i file `.local.cnf`):
+   ```powershell
+   cd database-mysql
+   & 'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe' --defaults-extra-file=equo_import.local.cnf equo -e "source seed/03_catalogo.sql"
+   & 'C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe' --defaults-extra-file=equo_schema.local.cnf equo -e "source queries/calcolo_stima.sql`nsource queries/controlli_copertura.sql`nsource queries/taratura.sql"
+   cd ..
+   ```
+   Le procedure vanno create con `equo_schema` (vedi «Procedure e utente `equo_schema`» più sotto). Per partire senza i dati di EQUO, al posto di `03_catalogo.sql` si carica `seed/02_dati_fissi.sql` e poi il proprio Excel con `import/importa_dati.py`.
+6. **Prova** (copia i dati in `equo_test` e lancia i 73 test):
+   ```powershell
+   cd backend-laravel
+   php artisan test
+   ```
+7. **Avvio**, in due terminali:
+   ```powershell
+   cd backend-laravel; php artisan serve
+   ```
+   ```powershell
+   cd frontend-react; npm install; npm run dev
+   ```
+   Il sito si apre su http://localhost:5173 e usa l'API su http://localhost:8000.
+8. **Area riservata** (facoltativa): `php artisan equo:crea-amministratore` dalla cartella `backend-laravel`, poi http://localhost:8000/gestione.
+
+**Aggiornare i dati pubblicati.** Dopo un import, `powershell -ExecutionPolicy Bypass -File database-mysql\maintenance\esporta_catalogo.ps1` riscrive `seed/03_catalogo.sql` dal database `equo`.
 
 ## Backup e ripristino
 

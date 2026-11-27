@@ -1,12 +1,15 @@
 """EQUO - genera lo script dei tre utenti MySQL e i file di credenziali locali (decisione D8).
 
-Uso, dalla cartella del progetto:
+Uso, dalla cartella del progetto (l'ordine completo di un'installazione nuova è in database-mysql/README.md):
     python database-mysql/setup/genera_utenti.py
     powershell -ExecutionPolicy Bypass -File database-mysql/setup/crea_utenti_root.ps1   (chiede la password di root)
 
 Scrive:
   setup/01_utenti_separati.sql        modello con password segnaposto (su git)
   setup/01_utenti_separati.local.sql  stesso script con le password vere (escluso da git)
+  setup/01_utente_schema.local.sql    solo l'utente equo_schema (escluso da git): serve in un'installazione nuova,
+                                      prima delle migration, perché i permessi tabella per tabella degli altri due
+                                      utenti si possono dare solo quando le tabelle esistono
   equo_api/equo_import/equo_schema.local.cnf   credenziali per i comandi mysql (escluse da git)
   ../backend-laravel/.env             credenziali dei tre collegamenti Laravel (escluso da git)
   ../backend-laravel/.env.example     stessi nomi, password vuote (su git)
@@ -46,7 +49,8 @@ def utente(nome, pw):
 def script(pw_api, pw_import, pw_schema):
     s = ["-- =====================================================================",
          "-- EQUO — 01 · Tre utenti MySQL separati (decisione D8, task L1; tabelle Laravel e equo_test dal task L2)",
-         "-- Da eseguire come root, dopo 00_crea_database.sql e 02_database_test.sql. Rieseguibile: riallinea password e permessi.",
+         "-- Da eseguire come root, dopo 00_crea_database.sql e dopo le migration (le tabelle devono esistere).",
+         "-- Rieseguibile: riallinea password e permessi.",
          "-- Generato da genera_utenti.py: modificare quello, non questo file.",
          "--",
          "-- Questo file è il modello versionato: le password sono segnaposto.",
@@ -58,7 +62,6 @@ def script(pw_api, pw_import, pw_schema):
          "--   equo_schema  solo per creare e modificare le tabelle (migration), lanciato a mano.",
          "--",
          "-- I permessi sono dati tabella per tabella: una tabella nuova non è accessibile finché non la si aggiunge qui.",
-         "-- L'utente equo_app di 00_crea_database.sql dal task L9 non è più usato da nessuno strumento: si può togliere (DROP USER, come root).",
          "-- Gli stessi permessi valgono per equo (dati veri) e equo_test (database di prova dei test automatici);",
          "-- le tabelle devono esistere: equo_test si costruisce prima con le migration.",
          "-- =====================================================================",
@@ -87,6 +90,17 @@ def script(pw_api, pw_import, pw_schema):
     return '\n'.join(s) + '\n'
 
 
+def script_schema(pw_schema):
+    # solo equo_schema, con permessi sull'intero database: funziona anche prima che esistano le tabelle
+    s = ["-- EQUO — 01a · Solo l'utente equo_schema, per un'installazione nuova (generato da genera_utenti.py).",
+         "-- Da eseguire come root dopo 00_crea_database.sql (lo fa crea_database_root.ps1). Rieseguibile.",
+         ""]
+    s.append(utente('equo_schema', pw_schema))
+    for db in DATABASE:
+        s.append(f"GRANT ALL PRIVILEGES ON {db}.* TO 'equo_schema'@'localhost';")
+    return '\n'.join(s) + '\n'
+
+
 def imposta(path, valori):
     s = open(path, encoding='utf-8').read()
     for k, v in valori.items():
@@ -107,6 +121,7 @@ else:
 open(os.path.join(DB, 'setup', '01_utenti_separati.sql'), 'w', encoding='utf-8').write(
     script('CAMBIA_PASSWORD_API', 'CAMBIA_PASSWORD_IMPORT', 'CAMBIA_PASSWORD_SCHEMA'))
 open(locale, 'w', encoding='utf-8').write(script(pws['equo_api'], pws['equo_import'], pws['equo_schema']))
+open(os.path.join(DB, 'setup', '01_utente_schema.local.sql'), 'w', encoding='utf-8').write(script_schema(pws['equo_schema']))
 
 for u, pw in pws.items():
     open(os.path.join(DB, f'{u}.local.cnf'), 'w', encoding='utf-8').write(
@@ -127,10 +142,17 @@ comuni = {'APP_NAME': 'EQUO', 'APP_LOCALE': 'it', 'APP_FALLBACK_LOCALE': 'it', '
           'SESSION_SAME_SITE': 'strict', 'SESSION_COOKIE': 'equo_sessione',
           'CACHE_STORE': 'database', 'DB_CACHE_CONNECTION': 'import', 'DB_CACHE_LOCK_CONNECTION': 'import',
           'DB_CACHE_LOCK_TABLE': 'cache_locks'}
-if os.path.exists(os.path.join(BE, '.env')):
+env = os.path.join(BE, '.env')
+if os.path.exists(env):
     # sul computer di sviluppo si usa http://localhost: il cookie non può essere "solo HTTPS"
-    imposta(os.path.join(BE, '.env'), {**comuni, 'DB_PASSWORD': pws['equo_api'], 'DB_IMPORT_PASSWORD': pws['equo_import'],
-                                       'DB_SCHEMA_PASSWORD': pws['equo_schema'], 'SESSION_SECURE_COOKIE': 'false'})
+    sviluppo = {'SESSION_SECURE_COOKIE': 'false'}
+    if re.search(r'^APP_ENV=production\s*$', open(env, encoding='utf-8').read(), flags=re.M):
+        # .env appena copiato da .env.example (impostazioni di produzione): si passa a quelle di sviluppo.
+        # Solo la prima volta: un .env già adattato a mano non si tocca.
+        sviluppo.update({'APP_ENV': 'local', 'APP_DEBUG': 'true', 'LOG_LEVEL': 'debug', 'EQUO_FORZA_HTTPS': 'false',
+                         'EQUO_GESTIONE_DUE_FATTORI': 'false', 'EQUO_SOLO_MODELLI_COMPLETI': 'false'})
+    imposta(env, {**comuni, 'DB_PASSWORD': pws['equo_api'], 'DB_IMPORT_PASSWORD': pws['equo_import'],
+                  'DB_SCHEMA_PASSWORD': pws['equo_schema'], **sviluppo})
 imposta(os.path.join(BE, '.env.example'), {**comuni, 'DB_PASSWORD': '', 'DB_IMPORT_PASSWORD': '', 'DB_SCHEMA_PASSWORD': '',
                                            'SESSION_SECURE_COOKIE': 'true'})
 print('ok:', ', '.join(f'{u} ({len(p)} caratteri)' for u, p in pws.items()))
